@@ -1,40 +1,39 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using FoodKept.Data;
-using FoodKept.Models;
+using FoodKept.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 
 namespace FoodKept.Pages
 {
     public class LoginModel : PageModel
     {
-
-        private readonly SignInManager<IdentityUser> _signInManager; 
-
-        public LoginModel(SignInManager<IdentityUser> signInManager)
-        {
-            _signInManager = signInManager;
-        }
+        private readonly SignInManager<IdentityUser> signInManager;
 
         [BindProperty]
         public Login Model { get; set; }
+
+        public LoginModel(SignInManager<IdentityUser> signInManager)
+        {
+            this.signInManager = signInManager;
+        }
+
         public void OnGet()
         {
         }
+
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(Model.Username, Model.Password, false, false);
-                if (result.Succeeded)
+                var identityResult = await signInManager.PasswordSignInAsync(Model.Email, Model.Password, Model.RememberMe, false);
+
+                if (identityResult.Succeeded)
                 {
-                    if (returnUrl == null || returnUrl == "/")
+                    if(returnUrl == null || returnUrl == "/")
                     {
                         return RedirectToPage("Index");
                     }
@@ -44,18 +43,10 @@ namespace FoodKept.Pages
                     }
                 }
 
-                ModelState.AddModelError("", "Username or password is incorrect");
+                ModelState.AddModelError("", "Username or Password incorrect");
             }
+
             return Page();
         }
-    }
-
-    public class Login
-    {
-        [Required]
-        public string Username { get; set; }
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
     }
 }

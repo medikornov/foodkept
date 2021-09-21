@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FoodKept.Migrations
 {
-    [DbContext(typeof(FoodContext))]
-    [Migration("20210920210520_AddAuthentication")]
+    [DbContext(typeof(ShopContext))]
+    [Migration("20210921124512_AddAuthentication")]
     partial class AddAuthentication
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,30 @@ namespace FoodKept.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("FoodKept.Models.Food", b =>
+                {
+                    b.Property<int>("FoodID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Discount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FoodName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FoodID");
+
+                    b.ToTable("Food");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
