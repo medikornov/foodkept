@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using FoodKept.Data;
-using FoodKept.Models;
+using FoodKept.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -12,20 +12,18 @@ namespace FoodKept.Pages
 {
     public class RegisterModel : PageModel
     {
-        //private readonly FoodContext _context;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-
-
-        public RegisterModel (SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
-        {
-            _signInManager = signInManager;
-            _userManager = userManager;
-        }
-
+        private  UserManager<IdentityUser> userManager { get; }
+        private SignInManager<IdentityUser> signInManager { get; }
 
         [BindProperty]
-        public User login { get; set; }
+        public Register RegModel { get; set; }
+       
+        public RegisterModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        {
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+        }
+
         public void OnGet()
         {
         }
@@ -36,21 +34,24 @@ namespace FoodKept.Pages
             {
                 var user = new IdentityUser()
                 {
-                    UserName = login.Username,
-                    Email = login.Email
+                    UserName = RegModel.Email,
+                    Email = RegModel.Email
                 };
-                var result = await _userManager.CreateAsync(user, login.Password);
+
+                var result = await userManager.CreateAsync(user, RegModel.Password);
+
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, false);
+                    await signInManager.SignInAsync(user, false);
                     return RedirectToPage("Index");
                 }
 
-                foreach(var error in result.Errors)
+                foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
                 }
             }
+
             return Page();
         }
     }

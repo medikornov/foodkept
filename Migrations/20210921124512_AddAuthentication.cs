@@ -47,6 +47,22 @@ namespace FoodKept.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Food",
+                columns: table => new
+                {
+                    FoodID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FoodName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    Discount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Food", x => x.FoodID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -208,6 +224,9 @@ namespace FoodKept.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Food");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -21,6 +21,7 @@ namespace FoodKept
 
             host.Run();
         }
+
         private static void CreateDbIfNotExists(IHost host)
         {
             using (var scope = host.Services.CreateScope())
@@ -28,9 +29,9 @@ namespace FoodKept
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<FoodContext>();
+                    var context = services.GetRequiredService<ShopContext>();
                     context.Database.EnsureCreated();
-                    //InitData.Initialize(context);
+                    //DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)
                 {
@@ -46,7 +47,5 @@ namespace FoodKept
                 {
                     webBuilder.UseStartup<Startup>();
                 });
-
-      
     }
 }
