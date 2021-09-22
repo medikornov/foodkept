@@ -6,6 +6,15 @@
 }
 
 <h1>Index</h1>
+<!--Markup to add search field on the page-->
+<form>
+    <p>
+        Food Name: <input type = "text" asp-for = "SearchString" />
+        <input type = "submit" value = "Filter" />
+    </p>
+</form>
+
+<!--end of the form markup-->
 
 <p>
     <a asp-page="Create">Create New</a>

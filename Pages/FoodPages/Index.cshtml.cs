@@ -24,12 +24,22 @@ namespace FoodKept.Pages.FoodPages
             _userManager = userManager;
         }
 
-        public IList<Food> Food { get;set; }
+        public IList<Food> Food { get; set; }
         public string id { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string SearchString { get; set; }
 
         public async Task OnGetAsync()
         {
-            Food = await _context.FoodData.ToListAsync();
+            var foods = from m in _context.FoodData
+                        select m;
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                foods = foods.Where(s => s.FoodName.Contains(SearchString));
+            }
+            Food = await foods.ToListAsync();
+            //Food = await _context.FoodData.ToListAsync();
 
             id = _userManager.GetUserId(User);
         }
