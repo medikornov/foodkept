@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FoodKept.Data;
 using FoodKept.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FoodKept.Pages.FoodPages
 {
+    [Authorize(Roles = "Admin, Restaurant")]
     public class EditModel : PageModel
     {
         private readonly FoodKept.Data.ShopContext _context;

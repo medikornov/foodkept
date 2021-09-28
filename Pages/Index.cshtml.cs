@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,15 +12,28 @@ namespace FoodKept.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
+        private readonly UserManager<IdentityUser> userManager;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(ILogger<IndexModel> logger, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
+            this.userManager = userManager;
         }
+
+        private string name;
+        private string role;
 
         public void OnGet()
         {
-
+            /*var user = userManager.GetUserAsync(HttpContext.User).Result;
+            name = user.UserName;
+            if (user != null)
+            {
+                role = userManager.GetRolesAsync(user).Result[0];
+            }
+            //var user = userManager.GetUserName(HttpContext.User);
+            //var role = userManager.GetRolesAsync(user);
+            */
         }
     }
 }

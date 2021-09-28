@@ -27,7 +27,7 @@ namespace FoodKept
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
+            services.AddRazorPages().AddRazorRuntimeCompilation();
 
             services.AddDbContext<ShopContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("ShopContext")));
@@ -77,7 +77,6 @@ namespace FoodKept
 
             app.UseAuthorization();
             //Roles.CreateRoles(app.ApplicationServices).Wait();
-
 
             app.UseEndpoints(endpoints =>
             {
