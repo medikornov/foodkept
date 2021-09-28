@@ -45,7 +45,6 @@ namespace FoodKept.Pages
 
                 ModelState.AddModelError("", "Username or Password incorrect");
             }
-
             return Page();
         }
     }

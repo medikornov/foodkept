@@ -11,7 +11,7 @@ namespace FoodKept.Models
     public class Food
     {
         public int FoodID { get; set; }
-        public String UserID { get; set; }
+        public string UserID { get; set; }
         public string FoodName { get; set; }
         public double Price { get; set; }
         public int Discount { get; set; }

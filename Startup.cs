@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using FoodKept.Data;
 using Microsoft.AspNetCore.Identity;
+using FoodKept.Models;
 
 namespace FoodKept
 {
@@ -31,7 +32,18 @@ namespace FoodKept
             services.AddDbContext<ShopContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("ShopContext")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ShopContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>(
+                options =>
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequiredLength = 1;
+                }
+                )
+                //.AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ShopContext>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -64,11 +76,15 @@ namespace FoodKept
             app.UseAuthentication();
 
             app.UseAuthorization();
+            //Roles.CreateRoles(app.ApplicationServices).Wait();
+
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
             });
+
         }
     }
 }
+
