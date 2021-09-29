@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using FoodKept.Data;
 using FoodKept.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FoodKept.Pages.FoodPages
 {
+    [Authorize(Roles = "Admin, Restaurant")]
     public class DetailsModel : PageModel
     {
         private readonly FoodKept.Data.ShopContext _context;

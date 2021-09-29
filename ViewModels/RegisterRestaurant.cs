@@ -14,6 +14,7 @@ namespace FoodKept.ViewModels
         [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+<<<<<<< HEAD:ViewModels/RegisterRestaurant.cs
 
         [Required]
         public string RestaurantName { get; set; }
@@ -26,6 +27,8 @@ namespace FoodKept.ViewModels
 
         [Required]
         public string Address { get; set; }
+=======
+>>>>>>> main:ViewModels/Register.cs
 
         [Required]
         [DataType(DataType.Password)]
@@ -35,5 +38,11 @@ namespace FoodKept.ViewModels
         [DataType(DataType.Password)]
         [Compare(nameof(Password), ErrorMessage = "Password and confirmation password did not match")]
         public string ConfirmPassword { get; set; }
+<<<<<<< HEAD:ViewModels/RegisterRestaurant.cs
+=======
+
+        [Required]
+        public string Role { get; set; }
+>>>>>>> main:ViewModels/Register.cs
     }
 }

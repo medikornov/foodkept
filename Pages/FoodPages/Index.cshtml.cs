@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace FoodKept.Pages.FoodPages
 {
-    [Authorize]
+    [Authorize(Roles ="Admin, Restaurant")]
     public class IndexModel : PageModel
     {
         private readonly FoodKept.Data.ShopContext _context;
