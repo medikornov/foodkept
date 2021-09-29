@@ -27,6 +27,15 @@
                     <span asp-validation-for="RegModel.ConfirmPassword" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
+                    <label class="form-label" asp-for="RegModel.Role">Register as:</label>
+                </div>
+                <div class="mb-3">
+                    <input type="radio" asp-for="RegModel.Role" id="Customer" value="Customer" />
+                    <label class="form-label" for="Customer">Customer</label>
+                    <input type="radio" asp-for="RegModel.Role" id="Restaurant" value="Restaurant" />
+                    <label class="form-label" for="Restaurant">Restaurant</label>
+                </div>
+                <div class="mb-3">
                     <button type="submit" class="btn btn-primary">Register</button>
                 </div>
             </form>

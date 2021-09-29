@@ -1,24 +1,23 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using FoodKept.Data;
 using FoodKept.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
-namespace FoodKept.Pages.FoodPages
+namespace FoodKept.Pages
 {
-    [Authorize(Roles ="Admin, Restaurant")]
-    public class IndexModel : PageModel
+    [Authorize(Roles ="Customer, Admin, Restaurant")]
+    public class FoodModel : PageModel
     {
         private readonly FoodKept.Data.ShopContext _context;
         private UserManager<IdentityUser> _userManager;
 
-        public IndexModel(FoodKept.Data.ShopContext context, UserManager<IdentityUser> userManager)
+        public FoodModel(FoodKept.Data.ShopContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using FoodKept.Data;
 using FoodKept.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,14 +15,18 @@ namespace FoodKept.Pages
     {
         private  UserManager<IdentityUser> userManager { get; }
         private SignInManager<IdentityUser> signInManager { get; }
+        private RoleManager<IdentityRole> roleManager { get; }
 
         [BindProperty]
         public Register RegModel { get; set; }
        
-        public RegisterModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public RegisterModel(UserManager<IdentityUser> userManager,
+                             SignInManager<IdentityUser> signInManager,
+                             RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.roleManager = roleManager;
         }
 
         public void OnGet()
@@ -40,7 +45,15 @@ namespace FoodKept.Pages
 
                 var result = await userManager.CreateAsync(user, RegModel.Password);
 
-                if (result.Succeeded)
+
+                if (!await roleManager.RoleExistsAsync(RegModel.Role))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(RegModel.Role));
+                }
+                var assign_role = await userManager.AddToRoleAsync(user, RegModel.Role);
+
+
+                if (result.Succeeded && assign_role.Succeeded)
                 {
                     await signInManager.SignInAsync(user, false);
                     return RedirectToPage("Index");

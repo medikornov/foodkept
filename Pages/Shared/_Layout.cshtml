@@ -1,5 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> userManager
 @inject SignInManager<IdentityUser> signInManager
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,18 +24,39 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     @if (signInManager.IsSignedIn(User))
                     {
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="FoodPages/Index">Food Shop</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                        <ul class="navbar-nav d-flex justify-content-end">
+                        @if (User != null)
+                        {
+                            var user = userManager.GetUserAsync(User).Result;
+                            var role = userManager.GetRolesAsync(user).Result[0];
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                                </li>
+                                @if (role == "Restaurant")
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="FoodPages/Index">Your Food Shop</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="Food">Food Shop</a>
+                                    </li>
+                                }
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                                </li>
+                            </ul>
+                            <ul class="navbar-nav col-md-auto justify-content-end">
+                                @role
+                            </ul>
+                            <ul class="navbar-nav col-md-auto justify-content-end">
+                                Hello, @user.UserName!
+                            </ul>
+                            
+                        }
+                        <ul class="navbar-nav d-flex">
                             <li class="nav-item">
                                 <a class="btn btn-primary" asp-area="" asp-page="/Logout">Logout</a>
                             </li>
