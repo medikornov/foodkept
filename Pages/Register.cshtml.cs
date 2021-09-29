@@ -12,16 +12,16 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FoodKept.Pages
 {
-    public class RegisterModell : PageModel
+    public class RegisterModel : PageModel
     {
         private UserManager<ApplicationUser> userManager { get; }
         private SignInManager<ApplicationUser> signInManager { get; }
         private RoleManager<IdentityRole> roleManager { get; }
 
         [BindProperty]
-        public RegisterRestaurant RegModell { get; set; }
-       
-        public RegisterModell(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
+        public Register RegModel { get; set; }
+
+        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -38,22 +38,22 @@ namespace FoodKept.Pages
             {
                 var user = new ApplicationUser()
                 {
-                    UserName = RegModell.Email,
-                    Email = RegModell.Email,
-                    RestaurantName = RegModell.RestaurantName,
-                    Country = RegModell.Country,
-                    City = RegModell.City,
-                    Address = RegModell.Address
+                    UserName = RegModel.Email,
+                    Email = RegModel.Email,
+                    RestaurantName = RegModel.RestaurantName,
+                    Country = RegModel.Country,
+                    City = RegModel.City,
+                    Address = RegModel.Address
                 };
 
-                var result = await userManager.CreateAsync(user, RegModell.Password);
+                var result = await userManager.CreateAsync(user, RegModel.Password);
 
 
-                if (!await roleManager.RoleExistsAsync(RegModell.Role))
+                if (!await roleManager.RoleExistsAsync(RegModel.Role))
                 {
-                    await roleManager.CreateAsync(new IdentityRole(RegModell.Role));
+                    await roleManager.CreateAsync(new IdentityRole(RegModel.Role));
                 }
-                var assign_role = await userManager.AddToRoleAsync(user, RegModell.Role);
+                var assign_role = await userManager.AddToRoleAsync(user, RegModel.Role);
 
 
                 if (result.Succeeded && assign_role.Succeeded)

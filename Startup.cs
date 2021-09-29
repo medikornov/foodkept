@@ -32,10 +32,7 @@ namespace FoodKept
             services.AddDbContext<ShopContext>(options =>
                     options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("ShopContext")));
 
-<<<<<<< HEAD
-            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ShopContext>();
-=======
-            services.AddIdentity<IdentityUser, IdentityRole>(
+            services.AddIdentity<ApplicationUser, IdentityRole>(
                 options =>
                 {
                     options.Password.RequireDigit = false;
@@ -47,7 +44,6 @@ namespace FoodKept
                 )
                 //.AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ShopContext>();
->>>>>>> main
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 

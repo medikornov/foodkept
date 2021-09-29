@@ -15,9 +15,9 @@ namespace FoodKept.Pages
     public class FoodModel : PageModel
     {
         private readonly FoodKept.Data.ShopContext _context;
-        private UserManager<IdentityUser> _userManager;
+        private UserManager<ApplicationUser> _userManager;
 
-        public FoodModel(FoodKept.Data.ShopContext context, UserManager<IdentityUser> userManager)
+        public FoodModel(FoodKept.Data.ShopContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;

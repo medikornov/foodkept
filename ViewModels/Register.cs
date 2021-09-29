@@ -9,22 +9,22 @@ using System.Threading.Tasks;
 
 namespace FoodKept.ViewModels
 {
-    public class RegisterRestaurant
+    public class Register
     {
         [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Required]
+        
         public string RestaurantName { get; set; }
 
-        [Required]
+        
         public string Country { get; set; }
 
-        [Required]
+        
         public string City { get; set; }
 
-        [Required]
+        
         public string Address { get; set; }
 
         [Required]
