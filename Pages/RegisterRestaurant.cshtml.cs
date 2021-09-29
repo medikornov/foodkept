@@ -36,7 +36,11 @@ namespace FoodKept.Pages
                 var user = new ApplicationUser()
                 {
                     UserName = RegModel.Email,
-                    Email = RegModel.Email
+                    Email = RegModel.Email,
+                    RestaurantName = RegModel.RestaurantName,
+                    Country = RegModel.Country,
+                    City = RegModel.City,
+                    Address = RegModel.Address
                 };
 
                 var result = await userManager.CreateAsync(user, RegModel.Password);

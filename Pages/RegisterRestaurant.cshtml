@@ -1,0 +1,61 @@
+﻿@page
+@model FoodKept.Pages.RegisterModel
+@{
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-sm-12 col-md-12 col-lg-4">
+            <h1 class="mb-3">Register</h1>
+
+            <form method="post">
+                <div asp-validation-summary="All" class="text-danger">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RegModel.Email">Email Address</label>
+                    <input type="text" asp-for="RegModel.Email" class="form-control" />
+                    <span asp-validation-for="RegModel.Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RegModel.RestaurantName">Restaurant Name</label>
+                    <input type="text" asp-for="RegModel.RestaurantName" class="form-control" />
+                    <span asp-validation-for="RegModel.RestaurantName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <div class="container ml-0 pl-0 mr-0 pr-0">
+                        <div class="row">
+                            <div class="col ml-auto">
+                                <label class="form-label" asp-for="RegModel.Country">Country</label>
+                                <input type="text" asp-for="RegModel.Country" class="form-control" />
+                                <span asp-validation-for="RegModel.Country" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label class="form-label" asp-for="RegModel.City">City</label>
+                                <input type="text" asp-for="RegModel.City" class="form-control" />
+                                <span asp-validation-for="RegModel.City" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RegModel.Address">Street Adress</label>
+                    <input type="text" asp-for="RegModel.Address" class="form-control" />
+                    <span asp-validation-for="RegModel.Address" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RegModel.Password">Password</label>
+                    <input type="password" asp-for="RegModel.Password" class="form-control" />
+                    <span asp-validation-for="RegModel.Password" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RegModel.ConfirmPassword">Confirm Password</label>
+                    <input type="password" asp-for="RegModel.ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="RegModel.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </form>
+        </div>
+    </div> 
+</div>
