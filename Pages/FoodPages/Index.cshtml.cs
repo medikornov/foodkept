@@ -16,32 +16,33 @@ namespace FoodKept.Pages.FoodPages
     public class IndexModel : PageModel
     {
         private readonly FoodKept.Data.ShopContext _context;
-        private UserManager<IdentityUser> _userManager;
+        private UserManager<ApplicationUser> _userManager;
 
-        public IndexModel(FoodKept.Data.ShopContext context, UserManager<IdentityUser> userManager)
+        public IndexModel(FoodKept.Data.ShopContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
         public IList<Food> Food { get; set; }
-        public string id { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; }
 
         public async Task OnGetAsync()
         {
+            //Query for food from current user
+            ApplicationUser applicationUser = await _userManager.GetUserAsync(User);
+            Food = _context.FoodData.Include(c => c.ApplicationUser).Where(c => c.ApplicationUserId == applicationUser.Id).ToList();
+
+            //Filter food
             var foods = from m in _context.FoodData
                         select m;
             if (!string.IsNullOrEmpty(SearchString))
             {
-                foods = foods.Where(s => s.FoodName.Contains(SearchString));
+                foods = foods.Where(s => s.FoodName.Contains(SearchString) && s.ApplicationUserId == applicationUser.Id);
+                Food = await foods.ToListAsync();
             }
-            Food = await foods.ToListAsync();
-            //Food = await _context.FoodData.ToListAsync();
-
-            id = _userManager.GetUserId(User);
         }
     }
 }

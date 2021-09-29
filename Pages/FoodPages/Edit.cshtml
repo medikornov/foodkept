@@ -13,7 +13,8 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Food.FoodID" />
+            <input type="hidden" asp-for="Food.ID" />
+            <input type="hidden" asp-for="Food.ApplicationUserId" />
             <div class="form-group">
                 <label asp-for="Food.FoodName" class="control-label"></label>
                 <input asp-for="Food.FoodName" class="form-control" />

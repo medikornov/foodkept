@@ -13,15 +13,15 @@ namespace FoodKept.ViewModels
     {
         [Required]
         [DataType(DataType.EmailAddress)]
-        public String Email { get; set; }
+        public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        public String Password { get; set; }
+        public string Password { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         [Compare(nameof(Password), ErrorMessage = "Password and confirmation password did not match")]
-        public String ConfirmPassword { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 }

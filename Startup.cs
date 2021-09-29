@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using FoodKept.Data;
 using Microsoft.AspNetCore.Identity;
+using FoodKept.Models;
 
 namespace FoodKept
 {
@@ -29,9 +30,9 @@ namespace FoodKept
             services.AddRazorPages();
 
             services.AddDbContext<ShopContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("ShopContext")));
+                    options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("ShopContext")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ShopContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ShopContext>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
