@@ -35,8 +35,5 @@ namespace FoodKept.ViewModels
         [DataType(DataType.Password)]
         [Compare(nameof(Password), ErrorMessage = "Password and confirmation password did not match")]
         public string ConfirmPassword { get; set; }
-
-        [Required]
-        public string Role { get; set; }
     }
 }

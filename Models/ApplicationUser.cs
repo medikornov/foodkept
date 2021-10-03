@@ -19,6 +19,6 @@ namespace FoodKept.Models
         public string City { get; set; }
         public string Address { get; set; }
 
-        public virtual ICollection<Food> FoodList { get; set; }
+        public virtual IList<Food> FoodList { get; set; }
     }
 }

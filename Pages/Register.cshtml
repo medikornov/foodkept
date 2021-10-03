@@ -1,44 +1,139 @@
 ﻿@page
 @model FoodKept.Pages.RegisterModel
 @{
+    ViewData["Title"] = "Register";
 }
 
 <div class="container mt-5">
     <div class="row justify-content-center align-items-center">
         <div class="col-sm-12 col-md-12 col-lg-4">
             <h1 class="mb-3">Register</h1>
+            <ul class="nav nav-tabs">
+                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#customer" role="button" aria-expanded="false" aria-controls="customer">Customer</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#restaurant" role="button" aria-expanded="false" aria-controls="restaurant">Restaurant</a></li>
+            </ul>
+            <div class="tab-content pt-0">
+                <div class="tab-pane active fade show" id="customer">
+                    <div class="row border rounded shadow-sm">
+                        <div class="col">
+                            <form method="post">
+                                <div asp-validation-summary="All" class="text-danger">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" asp-for="CusRegModel.Email">Email Address</label>
+                                    <input type="text" asp-for="CusRegModel.Email" class="form-control" />
+                                    <span asp-validation-for="CusRegModel.Email" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="container ml-0 pl-0 mr-0 pr-0">
+                                        <div class="row">
+                                            <div class="col ml-auto">
+                                                <label class="form-label" asp-for="CusRegModel.FirstName">First Name</label>
+                                                <input type="text" asp-for="CusRegModel.FirstName" class="form-control" />
+                                                <span asp-validation-for="CusRegModel.FirstName" class="text-danger"></span>
+                                            </div>
+                                            <div class="col">
+                                                <label class="form-label" asp-for="CusRegModel.LastName">Last Name</label>
+                                                <input type="text" asp-for="CusRegModel.LastName" class="form-control" />
+                                                <span asp-validation-for="CusRegModel.LastName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="container ml-0 pl-0 mr-0 pr-0">
+                                        <div class="row">
+                                            <div class="col ml-auto">
+                                                <label class="form-label" asp-for="CusRegModel.Country">Country</label>
+                                                <input type="text" asp-for="CusRegModel.Country" class="form-control" />
+                                                <span asp-validation-for="CusRegModel.Country" class="text-danger"></span>
+                                            </div>
+                                            <div class="col">
+                                                <label class="form-label" asp-for="CusRegModel.City">City</label>
+                                                <input type="text" asp-for="CusRegModel.City" class="form-control" />
+                                                <span asp-validation-for="CusRegModel.City" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" asp-for="CusRegModel.Address">Street Adress</label>
+                                    <input type="text" asp-for="CusRegModel.Address" class="form-control" />
+                                    <span asp-validation-for="CusRegModel.Address" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" asp-for="CusRegModel.Password">Password</label>
+                                    <input type="password" asp-for="CusRegModel.Password" class="form-control" />
+                                    <span asp-validation-for="CusRegModel.Password" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" asp-for="CusRegModel.ConfirmPassword">Confirm Password</label>
+                                    <input type="password" asp-for="CusRegModel.ConfirmPassword" class="form-control" />
+                                    <span asp-validation-for="CusRegModel.ConfirmPassword" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-primary" asp-page-handler="Customer" asp-route-sessioncount="15">Register</button>
+                                </div>
+                            </form>
+                        </div>
 
-            <form method="post">
-                <div asp-validation-summary="All" class="text-danger">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" asp-for="RegModel.Email">Email Address</label>
-                    <input type="text" asp-for="RegModel.Email" class="form-control" />
-                    <span asp-validation-for="RegModel.Email" class="text-danger"></span>
+                <div class="tab-pane fade" id="restaurant">
+                    <div class="row border rounded shadow-sm">
+                        <div class="col">
+                            <form method="post">
+                                <div asp-validation-summary="All" class="text-danger">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" asp-for="ResRegModel.Email">Email Address</label>
+                                    <input type="text" asp-for="ResRegModel.Email" class="form-control" />
+                                    <span asp-validation-for="ResRegModel.Email" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" asp-for="ResRegModel.RestaurantName">Restaurant Name</label>
+                                    <input type="text" asp-for="ResRegModel.RestaurantName" class="form-control" />
+                                    <span asp-validation-for="ResRegModel.RestaurantName" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="container ml-0 pl-0 mr-0 pr-0">
+                                        <div class="row">
+                                            <div class="col ml-auto">
+                                                <label class="form-label" asp-for="ResRegModel.Country">Country</label>
+                                                <input type="text" asp-for="ResRegModel.Country" class="form-control" />
+                                                <span asp-validation-for="ResRegModel.Country" class="text-danger"></span>
+                                            </div>
+                                            <div class="col">
+                                                <label class="form-label" asp-for="ResRegModel.City">City</label>
+                                                <input type="text" asp-for="ResRegModel.City" class="form-control" />
+                                                <span asp-validation-for="ResRegModel.City" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" asp-for="ResRegModel.Address">Street Adress</label>
+                                    <input type="text" asp-for="ResRegModel.Address" class="form-control" />
+                                    <span asp-validation-for="ResRegModel.Address" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" asp-for="ResRegModel.Password">Password</label>
+                                    <input type="password" asp-for="ResRegModel.Password" class="form-control" />
+                                    <span asp-validation-for="ResRegModel.Password" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" asp-for="ResRegModel.ConfirmPassword">Confirm Password</label>
+                                    <input type="password" asp-for="ResRegModel.ConfirmPassword" class="form-control" />
+                                    <span asp-validation-for="ResRegModel.ConfirmPassword" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-primary" asp-page-handler="Restaurant" asp-route-sessioncount="10">Register</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" asp-for="RegModel.Password">Password</label>
-                    <input type="password" asp-for="RegModel.Password" class="form-control" />
-                    <span asp-validation-for="RegModel.Password" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" asp-for="RegModel.ConfirmPassword">Confirm Password</label>
-                    <input type="password" asp-for="RegModel.ConfirmPassword" class="form-control" />
-                    <span asp-validation-for="RegModel.ConfirmPassword" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" asp-for="RegModel.Role">Register as:</label>
-                </div>
-                <div class="mb-3">
-                    <input type="radio" asp-for="RegModel.Role" id="Customer" value="Customer" />
-                    <label class="form-label" for="Customer">Customer</label>
-                    <input type="radio" asp-for="RegModel.Role" id="Restaurant" value="Restaurant" />
-                    <label class="form-label" for="Restaurant">Restaurant</label>
-                </div>
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-primary">Register</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
