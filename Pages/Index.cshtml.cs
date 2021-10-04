@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using FoodKept.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -12,9 +13,9 @@ namespace FoodKept.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public IndexModel(ILogger<IndexModel> logger, UserManager<IdentityUser> userManager)
+        public IndexModel(ILogger<IndexModel> logger, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             this.userManager = userManager;

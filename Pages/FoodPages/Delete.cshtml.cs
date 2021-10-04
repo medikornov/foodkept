@@ -31,7 +31,7 @@ namespace FoodKept.Pages.FoodPages
                 return NotFound();
             }
 
-            Food = await _context.FoodData.FirstOrDefaultAsync(m => m.FoodID == id);
+            Food = await _context.FoodData.FirstOrDefaultAsync(m => m.ID == id);
 
             if (Food == null)
             {

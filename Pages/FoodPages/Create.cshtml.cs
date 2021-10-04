@@ -16,9 +16,9 @@ namespace FoodKept.Pages.FoodPages
     public class CreateModel : PageModel
     {
         private readonly FoodKept.Data.ShopContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CreateModel(FoodKept.Data.ShopContext context, UserManager<IdentityUser> userManager)
+        public CreateModel(FoodKept.Data.ShopContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -31,6 +31,7 @@ namespace FoodKept.Pages.FoodPages
 
         [BindProperty]
         public Food Food { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
@@ -41,7 +42,7 @@ namespace FoodKept.Pages.FoodPages
             }
 
             //If the user creates a food, that food is linked to the user by id
-            Food.UserID = _userManager.GetUserId(User);
+            Food.ApplicationUserId = _userManager.GetUserId(User);
 
             _context.FoodData.Add(Food);
             await _context.SaveChangesAsync();

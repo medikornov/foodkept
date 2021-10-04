@@ -9,14 +9,17 @@ using System.Threading.Tasks;
 
 namespace FoodKept.ViewModels
 {
-    public class Register
+    public class RegisterLogin
     {
         [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required]
-        public string RestaurantName { get; set; }
+        public string FirstName { get; set; }
+
+        [Required]
+        public string LastName { get; set; }
 
         [Required]
         public string Country { get; set; }
@@ -35,8 +38,5 @@ namespace FoodKept.ViewModels
         [DataType(DataType.Password)]
         [Compare(nameof(Password), ErrorMessage = "Password and confirmation password did not match")]
         public string ConfirmPassword { get; set; }
-
-        [Required]
-        public string Role { get; set; }
     }
 }

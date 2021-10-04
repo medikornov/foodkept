@@ -32,7 +32,7 @@ namespace FoodKept.Pages.FoodPages
                 return NotFound();
             }
 
-            Food = await _context.FoodData.FirstOrDefaultAsync(m => m.FoodID == id);
+            Food = await _context.FoodData.FirstOrDefaultAsync(m => m.ID == id);
 
             if (Food == null)
             {
@@ -58,7 +58,7 @@ namespace FoodKept.Pages.FoodPages
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!FoodExists(Food.FoodID))
+                if (!FoodExists(Food.ID))
                 {
                     return NotFound();
                 }
@@ -73,7 +73,7 @@ namespace FoodKept.Pages.FoodPages
 
         private bool FoodExists(int id)
         {
-            return _context.FoodData.Any(e => e.FoodID == id);
+            return _context.FoodData.Any(e => e.ID == id);
         }
     }
 }

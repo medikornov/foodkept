@@ -30,9 +30,9 @@ namespace FoodKept
             services.AddRazorPages().AddRazorRuntimeCompilation();
 
             services.AddDbContext<ShopContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("ShopContext")));
+                    options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("ShopContext")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(
+            services.AddIdentity<ApplicationUser, IdentityRole>(
                 options =>
                 {
                     options.Password.RequireDigit = false;
