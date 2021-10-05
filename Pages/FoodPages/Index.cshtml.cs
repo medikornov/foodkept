@@ -35,8 +35,6 @@ namespace FoodKept.Pages.FoodPages
             ApplicationUser applicationUser = await _userManager.GetUserAsync(User);
             Food = _context.FoodData.Include(c => c.ApplicationUser).Where(c => c.ApplicationUserId == applicationUser.Id).ToList();
 
-
-
             //Filter food
             var foods = from m in _context.FoodData
                         select m;
