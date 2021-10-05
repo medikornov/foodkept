@@ -9,6 +9,7 @@ using FoodKept.Data;
 using FoodKept.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FoodKept.Pages.FoodPages
 {
@@ -25,7 +26,6 @@ namespace FoodKept.Pages.FoodPages
         }
 
         public IList<Food> Food { get; set; }
-
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; }
 
@@ -34,6 +34,8 @@ namespace FoodKept.Pages.FoodPages
             //Query for food from current user
             ApplicationUser applicationUser = await _userManager.GetUserAsync(User);
             Food = _context.FoodData.Include(c => c.ApplicationUser).Where(c => c.ApplicationUserId == applicationUser.Id).ToList();
+
+
 
             //Filter food
             var foods = from m in _context.FoodData

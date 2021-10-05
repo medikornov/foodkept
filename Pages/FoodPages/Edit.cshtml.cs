@@ -9,6 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using FoodKept.Data;
 using FoodKept.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using FoodKept.Extensions;
+using System.IO;
 
 namespace FoodKept.Pages.FoodPages
 {
@@ -24,6 +28,11 @@ namespace FoodKept.Pages.FoodPages
 
         [BindProperty]
         public Food Food { get; set; }
+        [BindProperty]
+        [Display(Name = "Image")]
+        [Required(ErrorMessage = "Pick an Image")]
+        [AllowedImgExtensions(new string[] { ".jpg", ".jpeg", ".png" })]
+        public IFormFile FoodImage { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -50,6 +59,9 @@ namespace FoodKept.Pages.FoodPages
                 return Page();
             }
 
+            //Convert image file to byte array and add to model
+            Food.FoodImage = GetByteArrayFromImage(FoodImage);
+
             _context.Attach(Food).State = EntityState.Modified;
 
             try
@@ -74,6 +86,15 @@ namespace FoodKept.Pages.FoodPages
         private bool FoodExists(int id)
         {
             return _context.FoodData.Any(e => e.ID == id);
+        }
+
+        private byte[] GetByteArrayFromImage(IFormFile file)
+        {
+            using (var target = new MemoryStream())
+            {
+                file.CopyTo(target);
+                return target.ToArray();
+            }
         }
     }
 }
