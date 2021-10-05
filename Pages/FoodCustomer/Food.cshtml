@@ -1,0 +1,57 @@
+﻿@page
+@model FoodKept.Pages.FoodModel
+@{
+    ViewData["Title"] = "Food";
+}
+
+<form>
+    <p>
+        Food Name: <input type="text" asp-for="SearchString" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Food[0].FoodName)
+            </th>
+            <th>
+                Restaurant
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Food[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Food[0].Discount)
+            </th>
+            <th>
+                Food Image
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var food in Model.Food)
+        {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => food.FoodName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => food.ApplicationUser.RestaurantName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => food.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => food.Discount)
+                    </td>
+                    <td>
+                        <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(food.FoodImage)" width="80" height="80" />
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>

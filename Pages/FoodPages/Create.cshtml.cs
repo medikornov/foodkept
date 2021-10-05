@@ -9,6 +9,10 @@ using FoodKept.Data;
 using FoodKept.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using System.ComponentModel.DataAnnotations;
+using FoodKept.Extensions;
 
 namespace FoodKept.Pages.FoodPages
 {
@@ -31,6 +35,11 @@ namespace FoodKept.Pages.FoodPages
 
         [BindProperty]
         public Food Food { get; set; }
+        [BindProperty]
+        [Display(Name = "Image")]
+        [Required(ErrorMessage = "Pick an Image")]
+        [AllowedImgExtensions(new string[] { ".jpg", ".jpeg", ".png" })]
+        public IFormFile FoodImage { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
@@ -44,10 +53,22 @@ namespace FoodKept.Pages.FoodPages
             //If the user creates a food, that food is linked to the user by id
             Food.ApplicationUserId = _userManager.GetUserId(User);
 
+            //Convert image file to byte array and add to model
+            Food.FoodImage = GetByteArrayFromImage(FoodImage);
+
             _context.FoodData.Add(Food);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
+        }
+
+        private byte[] GetByteArrayFromImage(IFormFile file)
+        {
+            using (var target = new MemoryStream())
+            {
+                file.CopyTo(target);
+                return target.ToArray();
+            }
         }
     }
 }

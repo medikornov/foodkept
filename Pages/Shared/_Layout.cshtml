@@ -13,9 +13,9 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-secondary border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">FoodKept</a>
+                <a class="navbar-brand text-light" asp-area="" asp-page="/Index">FoodKept</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -29,28 +29,28 @@
                             var role = userManager.GetRolesAsync(user).Result[0];
                             <ul class="navbar-nav flex-grow-1">
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                                    <a class="nav-link text-light" asp-area="" asp-page="/Index">Home</a>
                                 </li>
                                 @if (role == "Restaurant")
                                 {
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-page="FoodPages/Index">Your Food Shop</a>
+                                        <a class="nav-link text-light" asp-area="" asp-page="FoodPages/Index">Your Food Shop</a>
                                     </li>
                                 }
                                 else
                                 {
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-page="Food">Food Shop</a>
+                                        <a class="nav-link text-light" asp-area="" asp-page="/FoodCustomer/Food">Food Shop</a>
                                     </li>
                                 }
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                                    <a class="nav-link text-light" asp-area="" asp-page="/Privacy">Privacy</a>
                                 </li>
                             </ul>
-                            <ul class="navbar-nav col-md-auto justify-content-end">
+                            <ul class="navbar-nav col-md-auto justify-content-end text-light">
                                 @role
                             </ul>
-                            <ul class="navbar-nav col-md-auto justify-content-end">
+                            <ul class="navbar-nav col-md-auto justify-content-end text-light">
                                 Hello, @user.UserName!
                             </ul>
 

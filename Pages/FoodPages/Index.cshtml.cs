@@ -9,6 +9,7 @@ using FoodKept.Data;
 using FoodKept.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FoodKept.Pages.FoodPages
 {
@@ -25,7 +26,6 @@ namespace FoodKept.Pages.FoodPages
         }
 
         public IList<Food> Food { get; set; }
-
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; }
 

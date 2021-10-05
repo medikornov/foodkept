@@ -25,7 +25,6 @@ namespace FoodKept.Pages
 
         public IList<Food> Food { get; set; }
         public string id { get; set; }
-
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; }
 
