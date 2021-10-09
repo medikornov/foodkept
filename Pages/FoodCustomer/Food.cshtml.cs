@@ -41,5 +41,9 @@ namespace FoodKept.Pages
 
             id = _userManager.GetUserId(User);
         }
+        public IActionResult OnPostAddToCart(string name)
+        {
+            return new JsonResult(name);
+        }
     }
 }

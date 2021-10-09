@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Food";
 }
-
+@Html.AntiForgeryToken()
 <form>
     <p>
         Food Name: <input type="text" asp-for="SearchString" />
@@ -51,7 +51,33 @@
                     <td>
                         <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(food.FoodImage)" width="80" height="80" />
                     </td>
+                    <td>
+                        <button type="button" class="btn btn-primary text-light" id="addToCart" value="@food.ID">Add to Cart</button>
+                    </td>
                 </tr>
         }
     </tbody>
 </table>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#addToCart").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/FoodCustomer/Cart?handler=AddToCart",
+                data: { "name": "af" },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                success: function (response) {
+                    alert(response)
+                },
+                error: function () {
+                    alert("error")
+                }
+            })
+        })
+    })
+</script>
