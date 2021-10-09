@@ -23,9 +23,10 @@ namespace FoodKept.Pages.FoodCustomer
             /*cart = SessionHelper.GetObjectFromJson<List<Food>>(HttpContext.Session, "cart");*/
         }
 
-        public IActionResult OnPostAddToCart(string name)
+        public IActionResult OnPostAddToCart(string id)
         {
-            return new JsonResult(name);
+            return new JsonResult(id);
         }
     }
 }
+
