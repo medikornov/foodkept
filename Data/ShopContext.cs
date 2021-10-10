@@ -17,12 +17,14 @@ namespace FoodKept.Data
 
         public DbSet<FoodKept.Models.Food> FoodData { get; set; }
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<FoodKept.Models.ShoppingCart> Cart { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Food>().ToTable("Food");
+            modelBuilder.Entity<ShoppingCart>().ToTable("ShoppingCart");
         }
     }
 }
