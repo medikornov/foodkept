@@ -25,7 +25,17 @@ namespace FoodKept.Pages.FoodCustomer
 
         public IActionResult OnPostAddToCart(string id)
         {
-            return new JsonResult(id);
+            Food food = context.FoodData.FirstOrDefault(db => db.ID.ToString() == id);
+            Food new_food = new Food
+            {
+                ID = food.ID,
+                FoodName = food.FoodName,
+                Price = food.Price,
+                Discount = food.Discount,
+                FoodImage = food.FoodImage
+            };
+
+            return new JsonResult(new_food);
         }
     }
 }

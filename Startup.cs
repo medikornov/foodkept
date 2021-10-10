@@ -28,7 +28,9 @@ namespace FoodKept
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages().AddRazorRuntimeCompilation();
+
             services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
+
             services.AddDbContext<ShopContext>(options =>
                     options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("ShopContext")));
 
@@ -78,7 +80,6 @@ namespace FoodKept
             app.UseAuthentication();
 
             app.UseAuthorization();
-            //Roles.CreateRoles(app.ApplicationServices).Wait();
 
             app.UseEndpoints(endpoints =>
             {
