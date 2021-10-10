@@ -17,40 +17,31 @@
                Price
             </th>
             <th>
-                Discount
+                Quantity
             </th>
 
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>
-                1
-            </td>
-            <td>
-                2
-            </td>
-            <td>
-                3
-            </td>
-            <td>
-                4
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Html.DisplayFor(Model => Model.Food.FoodName)
-            </td>
-            <td>
-                @Html.DisplayFor(Model => Model.Food.ApplicationUser.RestaurantName)
-            </td>
-            <td>
-                @Html.DisplayFor(Model => Model.Food.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(Model => Model.Food.Discount)
-            </td>
-        </tr>
-
+        @foreach (var food in Model.Cart)
+        { 
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => food.Food.FoodName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => food.Food.ApplicationUser.RestaurantName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => food.Food.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => food.Quantity)
+                </td>
+            </tr>
+            <tr>
+            
+            </tr>
+        }
     </tbody>
 </table>

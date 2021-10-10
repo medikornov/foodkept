@@ -11,9 +11,9 @@ namespace FoodKept.Models
     public class ShoppingCart
     {
         public int Id { get; set; }
-
-        public string FoodId { get; set; }
+        public int FoodId { get; set; }
         public string ApplicationUserId { get; set; }
         public int Quantity { get; set; }
+        public virtual Food Food { get; set; }
     }
 }
