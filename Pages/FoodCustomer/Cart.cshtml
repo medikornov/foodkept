@@ -43,7 +43,11 @@
                     @Html.DisplayFor(modelItem => food.Food.Price)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => food.Quantity)
+                    <div class="number">
+                        <button type="button" class="minus">-</button>
+                        <input type="text" style="width: 50px; text-align: center;" value="@food.Quantity" />
+                        <button type="button" class="plus">+</button>
+                    </div>
                 </td>
             </tr>
             <tr>
@@ -51,3 +55,24 @@
         }
     </tbody>
 </table>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.minus').click(function () {
+            var $input = $(this).parent().find('input');
+            var count = parseInt($input.val()) - 1;
+            count = count < 1 ? 1 : count;
+            $input.val(count);
+            $input.change();
+            return false;
+        });
+        $('.plus').click(function () {
+            var $input = $(this).parent().find('input');
+            $input.val(parseInt($input.val()) + 1);
+            $input.change();
+            return false;
+        });
+    });
+</script>
+
+
