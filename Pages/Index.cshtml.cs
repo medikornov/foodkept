@@ -21,8 +21,6 @@ namespace FoodKept.Pages
             this.userManager = userManager;
         }
 
-        private string name;
-        private string role;
 
         public void OnGet()
         {

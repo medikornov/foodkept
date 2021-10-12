@@ -37,7 +37,7 @@ namespace FoodKept.Pages.FoodPages
         public Food Food { get; set; }
         [BindProperty]
         [Display(Name = "Image")]
-        [Required(ErrorMessage = "Pick an Image")]
+        //[Required(ErrorMessage = "Pick an Image")]
         [AllowedImgExtensions(new string[] { ".jpg", ".jpeg", ".png" })]
         public IFormFile FoodImage { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
@@ -53,8 +53,11 @@ namespace FoodKept.Pages.FoodPages
             //If the user creates a food, that food is linked to the user by id
             Food.ApplicationUserId = _userManager.GetUserId(User);
 
-            //Convert image file to byte array and add to model
-            Food.FoodImage = GetByteArrayFromImage(FoodImage);
+            if (FoodImage != null)
+            {
+                //Convert image file to byte array and add to model
+                Food.FoodImage = GetByteArrayFromImage(FoodImage);
+            }
 
             _context.FoodData.Add(Food);
             await _context.SaveChangesAsync();

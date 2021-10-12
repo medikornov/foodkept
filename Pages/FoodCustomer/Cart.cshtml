@@ -1,0 +1,47 @@
+﻿@page
+@model FoodKept.Pages.FoodCustomer.CartModel
+@{
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Restaurant
+            </th>
+            <th>
+               Price
+            </th>
+            <th>
+                Quantity
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var food in Model.Cart)
+        { 
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => food.Food.FoodName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => food.Food.ApplicationUser.RestaurantName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => food.Food.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => food.Quantity)
+                </td>
+            </tr>
+            <tr>
+            
+            </tr>
+        }
+    </tbody>
+</table>
