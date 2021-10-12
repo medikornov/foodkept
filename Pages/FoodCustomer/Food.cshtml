@@ -35,23 +35,26 @@
     <tbody>
         @foreach (var food in Model.Food)
         {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => food.FoodName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => food.ApplicationUser.RestaurantName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => food.Price)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => food.Discount)
-                    </td>
-                    <td>
-                        <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(food.FoodImage)" width="80" height="80" />
-                    </td>
-                </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => food.FoodName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => food.ApplicationUser.RestaurantName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => food.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => food.Discount)
+            </td>
+            <td>
+                <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(food.FoodImage)" width="80" height="80" />
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-id="@food.ID">Details</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
