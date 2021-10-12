@@ -60,6 +60,18 @@ namespace FoodKept.Pages.FoodCustomer
             }
 
         }
+        public async Task<IActionResult> OnPostRemoveFromCartAsync(int id)
+        {
+            var cart = context.Cart.FirstOrDefault(op => op.Id == id);
+
+            if (cart != null)
+            {
+                context.Cart.Remove(cart);
+                await context.SaveChangesAsync();
+            }
+            OnGet();
+            return Page();
+        }
     }
 
 }
