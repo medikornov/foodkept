@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using FoodKept.Data;
 using FoodKept.Models;
@@ -71,6 +72,50 @@ namespace FoodKept.Pages.FoodCustomer
             }
             OnGet();
             return Page();
+        }
+
+        public IActionResult OnPostReserve()
+        {
+            OnGet();
+            SmtpClient smtpClient = new SmtpClient();
+            smtpClient.Credentials = new System.Net.NetworkCredential("foodkepterino@gmail.com", "foodkept4");
+
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.EnableSsl = true;
+            MailMessage mail = new MailMessage();
+            mail.IsBodyHtml = true;
+            mail.From = new MailAddress("foodkepterino@gmail.com", "FoodKept");
+            mail.To.Add(new MailAddress("foodkepterino@gmail.com"));
+            mail.CC.Add(new MailAddress("foodkepterino@gmail.com"));
+            smtpClient.Port = 587;
+            smtpClient.Host = "smtp.gmail.com";
+
+            string message = "";
+            foreach (var food in Cart)
+            {
+                message +=
+                    "name: " + food.Food.FoodName + "   |  " +
+                    "restaurantName: " + food.Food.ApplicationUser.RestaurantName + "   |  " +
+                    "price: " + food.Food.Price + "   |  " +
+                    "quantity: " + food.Quantity + "<br />";
+            }
+
+            mail.Body = message;
+            try
+            {
+                smtpClient.Send(mail);
+            }
+            catch (Exception e)
+            {
+
+            }
+            return Page();
+        }
+
+        public IActionResult OnPostChangeQuantity(int minus_plus)
+        {
+            //var cart = context.Cart.FirstOrDefault(op => op.Id)
+            return new JsonResult(minus_plus);
         }
     }
 

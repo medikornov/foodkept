@@ -3,7 +3,14 @@
 @{
     ViewData["Cart"] = "Cart";
 }
-
+@Html.AntiForgeryToken()
+<div>
+    <form method="post">
+        <div class="nav nav-link">
+            <button type="submit" class="btn btn-primary text-light justify-content-end" asp-page-handler="Reserve">Reserve</button>
+        </div>
+    </form>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -64,14 +71,36 @@
             count = count < 1 ? 1 : count;
             $input.val(count);
             $input.change();
+            changeQuantity($input.val());
             return false;
         });
         $('.plus').click(function () {
             var $input = $(this).parent().find('input');
             $input.val(parseInt($input.val()) + 1);
             $input.change();
+            changeQuantity($input.val());
             return false;
         });
+        function changeQuantity(minus_plus) {
+            $.ajax({
+                type: "POST",
+                url: "/FoodCustomer/Cart?handler=ChangeQuantity",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: {
+                    
+                    "minus_plus": minus_plus
+                },
+                success: function (response) {
+                    alert("Change " + response);
+                },
+                error: function (error) {
+                    alert("error " + error);
+                }
+            })
+        };
     });
 </script>
 
