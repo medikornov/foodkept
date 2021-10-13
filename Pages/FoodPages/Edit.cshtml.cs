@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using FoodKept.Extensions;
 using System.IO;
+using FoodKept.ViewModels;
 
 namespace FoodKept.Pages.FoodPages
 {
@@ -33,6 +34,8 @@ namespace FoodKept.Pages.FoodPages
         [Required(ErrorMessage = "Pick an Image")]
         [AllowedImgExtensions(new string[] { ".jpg", ".jpeg", ".png" })]
         public IFormFile FoodImage { get; set; }
+        [BindProperty]
+        public List<SelectListItem> EnumCategories { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -42,6 +45,11 @@ namespace FoodKept.Pages.FoodPages
             }
 
             Food = await _context.FoodData.FirstOrDefaultAsync(m => m.ID == id);
+            EnumCategories = Enum.GetValues(typeof(FoodCategories.Category)).Cast<FoodCategories.Category>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = v.ToString()
+            }).ToList();
 
             if (Food == null)
             {

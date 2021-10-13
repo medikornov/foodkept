@@ -91,3 +91,19 @@ body {
 .tab-content {
     padding: 15px;
 }
+
+#map {
+    height: 50%;
+    margin: 0px;
+    padding: 10px
+}
+
+#buttonContent {
+    min-height: 250px;
+}
+
+#buttonLink {
+    min-width: 80px;
+    bottom: 0;
+    left: 0;
+}
