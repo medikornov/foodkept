@@ -29,7 +29,12 @@
             <th>
                 Food Image
             </th>
-            <th></th>
+            <th>
+                Details
+            </th>
+            <th>
+                Add to Cart
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -53,6 +58,9 @@
                         {
                             <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(food.FoodImage)" width="80" height="80" />
                         }
+                    </td>
+                    <td>
+                        <a asp-page="./Details" asp-route-id="@food.ID">Details</a>
                     </td>
                     <td>
                         <button type="button" class="btn btn-primary text-light" id="addToCart" onclick="addToCart(@food.ID)" value="@food.ID">Add to Cart @food.ID</button>

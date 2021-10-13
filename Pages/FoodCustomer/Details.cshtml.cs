@@ -23,8 +23,8 @@ namespace FoodKept.Pages.FoodCustomer
         }
 
         public Food Food { get; set; }
-        public static XElement Lat { get; set; }
-        public static XElement Lng { get; set; }
+        public static double Lat { get; set; }
+        public static double Lng { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -40,19 +40,17 @@ namespace FoodKept.Pages.FoodCustomer
                 return NotFound();
             }
 
-            //Configure google map api
-            //string address = Food.ApplicationUser.Address;
-            //string requestUri = string.Format("https://maps.googleapis.com/maps/api/geocode/xml?key={1}&address={0}&sensor=false", Uri.EscapeDataString(address), "AIzaSyARsUsTCeN6f-yW0mzaLbz03vnNcmAiK58");
-
-            //WebRequest request = WebRequest.Create(requestUri);
-            //WebResponse response = request.GetResponse();
-            //XDocument xdoc = XDocument.Load(response.GetResponseStream());
-            //Console.WriteLine(response);
-
-            //XElement result = xdoc.Element("GeocodeResponse").Element("result");
-            //XElement locationElement = result.Element("geometry").Element("location");
-            //Lat = locationElement.Element("lat");
-            //Lng = locationElement.Element("lng");
+            //Configure Lat Lng
+            if(Food.ApplicationUser.Lat != 0 && Food.ApplicationUser.Lng != 0)
+            {
+                Lat = Food.ApplicationUser.Lat;
+                Lng = Food.ApplicationUser.Lng;
+            }
+            else
+            {
+                Lat = 54.68587937724495;
+                Lng = 25.278637513732985;
+            }
 
             return Page();
         }

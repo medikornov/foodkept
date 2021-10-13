@@ -48,10 +48,14 @@
                                 </li>
                             </ul>
                             <ul class="navbar-nav col-md-auto justify-content-end text-light">
-                                @role
+                                <li class="nav-item">
+                                    @role
+                                </li>
                             </ul>
                             <ul class="navbar-nav col-md-auto justify-content-end text-light">
-                                Hello, @user.UserName!
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-page="/Profile">@user.UserName</a>
+                                </li>
                             </ul>
                             @if (role == "Customer")
                             {
