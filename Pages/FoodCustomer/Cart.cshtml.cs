@@ -5,6 +5,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using FoodKept.Data;
 using FoodKept.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -12,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FoodKept.Pages.FoodCustomer
 {
+    [Authorize(Roles = "Customer, Admin")]
     public class CartModel : PageModel
     {
         public IList<ShoppingCart> Cart { get; set; }
@@ -23,11 +25,14 @@ namespace FoodKept.Pages.FoodCustomer
             this.context = context;
             this.userManager = userManager;
         }
+
+
         public void OnGet()
         {
             var userId = userManager.GetUserId(User);
             Cart = context.Cart.Include(c => c.Food).Where(c => c.ApplicationUserId == userId).ToList();
         }
+
 
         public async Task<IActionResult> OnPostAddToCart(string id)
         {
@@ -35,7 +40,6 @@ namespace FoodKept.Pages.FoodCustomer
             ShoppingCart result = context.Cart.FirstOrDefault(c =>
                     c.ApplicationUserId == userManager.GetUserId(User) &&
                     c.FoodId == food.ID);
-            
 
             if (result != null)
             {
@@ -74,6 +78,7 @@ namespace FoodKept.Pages.FoodCustomer
             return Page();
         }
 
+
         public IActionResult OnPostReserve()
         {
             OnGet();
@@ -105,7 +110,7 @@ namespace FoodKept.Pages.FoodCustomer
             {
                 smtpClient.Send(mail);
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }

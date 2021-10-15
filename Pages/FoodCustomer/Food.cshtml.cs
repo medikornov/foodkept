@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FoodKept.Pages
 {
-    [Authorize(Roles ="Customer, Admin, Restaurant")]
+    [Authorize(Roles ="Customer, Admin")]
     public class FoodModel : PageModel
     {
         private readonly FoodKept.Data.ShopContext _context;
@@ -27,6 +27,7 @@ namespace FoodKept.Pages
         public string id { get; set; }
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; }
+
 
         public async Task OnGetAsync()
         {
