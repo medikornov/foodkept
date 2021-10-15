@@ -16,6 +16,7 @@ namespace FoodKept.Models
         public string FoodName { get; set; }
         public double Price { get; set; }
         public int Discount { get; set; }
+        public string FoodCategory { get; set; }
         public byte[] FoodImage { get; set; }
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }

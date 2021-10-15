@@ -27,37 +27,51 @@
                 @Html.DisplayNameFor(model => model.Food[0].Discount)
             </th>
             <th>
+                Food Category
+            </th>
+            <th>
                 Food Image
             </th>
-            <th></th>
+            <th>
+                Details
+            </th>
+            <th>
+                Add to Cart
+            </th>
         </tr>
     </thead>
     <tbody>
         @foreach (var food in Model.Food)
         {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => food.FoodName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => food.ApplicationUser.RestaurantName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => food.Price)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => food.Discount)
-                    </td>
-                    <td>
-                        @if (food.FoodImage != null)
-                        {
-                            <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(food.FoodImage)" width="80" height="80" />
-                        }
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-primary text-light" id="addToCart" onclick="addToCart(@food.ID)" value="@food.ID">Add to Cart @food.ID</button>
-                    </td>
-                </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => food.FoodName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => food.ApplicationUser.RestaurantName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => food.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => food.Discount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => food.FoodCategory)
+            </td>
+            <td>
+                @if (food.FoodImage != null)
+                {
+                    <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(food.FoodImage)" width="80" height="80" />
+                }
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-id="@food.ID">Details</a>
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary text-light" id="addToCart" onclick="addToCart(@food.ID)" value="@food.ID">Add to Cart @food.ID</button>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

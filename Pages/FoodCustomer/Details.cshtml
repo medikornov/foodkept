@@ -1,0 +1,109 @@
+﻿@page
+@model FoodKept.Pages.FoodCustomer.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Food</h4>
+    <hr />
+    <div class="container">
+        <div class="row">
+            <div id="detailsContent" class="col-6 d-flex align-items-start flex-column">
+                <dl class="row p-2">
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.Food.FoodName)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Food.FoodName)
+                    </dd>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.Food.Price)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Food.Price)
+                    </dd>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.Food.Discount)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Food.Discount)
+                    </dd>
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.Food.FoodCategory)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Food.FoodCategory)
+                    </dd>
+                    <dt class="col-sm-10">
+                        Food Image
+                    </dt>
+                    <dd class="col-sm-2">
+                    </dd>
+                    <dt class="col-sm-1">
+
+                    </dt>
+                    <dd class="col-sm-11 mt-sm-4">
+                        @if (Model.Food.FoodImage != null)
+                        {
+                            <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(Model.Food.FoodImage)" width="250" height="250" />
+                        }
+                    </dd>
+                </dl>
+                <div id="buttonContent" class="position-relative">
+                    <a id="buttonLink" class="position-absolute" asp-page="./Food">Back to List</a>
+                </div>
+            </div>
+            <div class="col-6">
+                <dl class="row p-2">
+                    <dt class="col-sm-2">
+                        Restaurant
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Food.ApplicationUser.RestaurantName)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Food.ApplicationUser.Country)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Food.ApplicationUser.Country)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Food.ApplicationUser.City)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Food.ApplicationUser.City)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Food.ApplicationUser.Address)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Food.ApplicationUser.Address)
+                    </dd>
+                </dl>
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+                    let map;
+
+                    function initMap() {
+                        const myLatLng = { lat: @DetailsModel.Lat, lng: @DetailsModel.Lng }
+                        map = new google.maps.Map(document.getElementById("map"), {
+                            center: myLatLng,
+                            zoom: 12,
+                        });
+
+                        new google.maps.Marker({
+                            position: myLatLng,
+                            map,
+                            title: "Restaurant",
+                        });
+                    }
+
+</script>

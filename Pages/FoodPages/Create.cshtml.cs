@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.ComponentModel.DataAnnotations;
 using FoodKept.Extensions;
+using FoodKept.ViewModels;
 
 namespace FoodKept.Pages.FoodPages
 {
@@ -28,11 +29,6 @@ namespace FoodKept.Pages.FoodPages
             _userManager = userManager;
         }
 
-        public IActionResult OnGet()
-        {
-            return Page();
-        }
-
         [BindProperty]
         public Food Food { get; set; }
         [BindProperty]
@@ -41,6 +37,19 @@ namespace FoodKept.Pages.FoodPages
         [AllowedImgExtensions(new string[] { ".jpg", ".jpeg", ".png" })]
         public IFormFile FoodImage { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
+        [BindProperty]
+        public List<SelectListItem> EnumCategories { get; set; }
+
+        public IActionResult OnGet()
+        {
+            EnumCategories = Enum.GetValues(typeof(FoodCategories.Category)).Cast<FoodCategories.Category>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = v.ToString()
+            }).ToList();
+
+            return Page();
+        }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
