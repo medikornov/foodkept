@@ -1,11 +1,21 @@
 ﻿@page
 @model FoodKept.Pages.FoodCustomer.CartModel
 @{
+    ViewData["Cart"] = "Cart";
 }
-
+@Html.AntiForgeryToken()
+<div>
+    <form method="post">
+        <div class="nav nav-link">
+            <button type="submit" class="btn btn-primary text-light justify-content-end" asp-page-handler="Reserve">Reserve</button>
+        </div>
+    </form>
+</div>
 <table class="table">
     <thead>
         <tr>
+
+            <th></th>
             <th>
                 Name
             </th>
@@ -13,7 +23,7 @@
                 Restaurant
             </th>
             <th>
-               Price
+                Price
             </th>
             <th>
                 Quantity
@@ -23,8 +33,13 @@
     </thead>
     <tbody>
         @foreach (var food in Model.Cart)
-        { 
+        {
             <tr>
+                <td>
+                    <form method="post">
+                        <button type="submit" class="btn btn-light" id="removeFromCart" asp-page-handler="RemoveFromCart" asp-route-id="@food.Id">X</button>
+                    </form>
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => food.Food.FoodName)
                 </td>
@@ -35,12 +50,57 @@
                     @Html.DisplayFor(modelItem => food.Food.Price)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => food.Quantity)
+                    <div class="number">
+                        <button type="button" class="minus">-</button>
+                        <input type="text" style="width: 50px; text-align: center;" value="@food.Quantity" />
+                        <button type="button" class="plus">+</button>
+                    </div>
                 </td>
             </tr>
             <tr>
-            
             </tr>
         }
     </tbody>
 </table>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.minus').click(function () {
+            var $input = $(this).parent().find('input');
+            var count = parseInt($input.val()) - 1;
+            count = count < 1 ? 1 : count;
+            $input.val(count);
+            $input.change();
+            changeQuantity($input.val());
+            return false;
+        });
+        $('.plus').click(function () {
+            var $input = $(this).parent().find('input');
+            $input.val(parseInt($input.val()) + 1);
+            $input.change();
+            changeQuantity($input.val());
+            return false;
+        });
+        function changeQuantity(minus_plus) {
+            $.ajax({
+                type: "POST",
+                url: "/FoodCustomer/Cart?handler=ChangeQuantity",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: {
+                    "minus_plus": minus_plus
+                },
+                success: function (response) {
+                    alert("Change " + response);
+                },
+                error: function (error) {
+                    alert("error " + error);
+                }
+            })
+        };
+    });
+</script>
+
+
