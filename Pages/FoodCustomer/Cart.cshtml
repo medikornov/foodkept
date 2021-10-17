@@ -50,7 +50,7 @@
                     @Html.DisplayFor(modelItem => food.Food.Price)
                 </td>
                 <td>
-                    <div class="number" data-arg="@food.Id">
+                    <div class="number" data-arg-id="@food.Id" data-arg-quantity="@food.Food.Quantity">
                         <button type="button" class="minus">-</button>
                         <label style="width: 50px; text-align: center;">@food.Quantity</label>
                         <button type="button" class="plus">+</button>
@@ -67,7 +67,7 @@
     $(document).ready(function () {
         $('.minus').click(function () {
             var $input = $(this).parent().find('label');
-            var $id = $(this).parent().attr('data-arg');
+            var $id = $(this).parent().attr('data-arg-id');
             var count = parseInt($input.text()) - 1;
             count = count < 1 ? 1 : count;
             $input.text(count);
@@ -77,8 +77,9 @@
         });
         $('.plus').click(function () {
             var $input = $(this).parent().find('label');
-            var $id = $(this).parent().attr('data-arg');
-            $input.text(parseInt($input.text()) + 1);
+            var $id = $(this).parent().attr('data-arg-id');
+            var $quantity = $(this).parent().attr('data-arg-quantity');
+            $input.text((parseInt($input.text()) < $quantity) ? (parseInt($input.text()) + 1) : $quantity);
             $input.change();
             changeQuantity($input.text(), $id);
             return false;

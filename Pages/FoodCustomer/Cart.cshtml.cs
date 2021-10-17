@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
@@ -43,9 +44,11 @@ namespace FoodKept.Pages.FoodCustomer
 
             if (result != null)
             {
-                result.Quantity++;
+                result.Quantity = (result.Quantity < food.Quantity) ? result.Quantity + 1 : food.Quantity
+                    ;
                 context.Attach(result).State = EntityState.Modified;
                 await context.SaveChangesAsync();
+                
                 
                 return new JsonResult(result.Quantity);
             }
@@ -82,6 +85,7 @@ namespace FoodKept.Pages.FoodCustomer
         public IActionResult OnPostReserve()
         {
             OnGet();
+
             SmtpClient smtpClient = new SmtpClient();
             smtpClient.Credentials = new System.Net.NetworkCredential("foodkepterino@gmail.com", "foodkept4");
 
