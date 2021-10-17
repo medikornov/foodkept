@@ -21,5 +21,6 @@ namespace FoodKept.Models
         public byte[] FoodImage { get; set; }
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
+        public virtual IList<Discount> DiscountList { get; set; }
     }
 }
