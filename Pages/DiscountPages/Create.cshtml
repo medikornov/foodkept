@@ -1,0 +1,49 @@
+﻿@page
+@model FoodKept.Pages.DiscountPages.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Discount</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Discount.DiscountPrice" class="control-label"></label>
+                <input asp-for="Discount.DiscountPrice" class="form-control" />
+                <span asp-validation-for="Discount.DiscountPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Discount.DiscountPercent" class="control-label"></label>
+                <input asp-for="Discount.DiscountPercent" class="form-control" />
+                <span asp-validation-for="Discount.DiscountPercent" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Discount.FromTime" class="control-label"></label>
+                <input asp-for="Discount.FromTime" class="form-control" />
+                <span asp-validation-for="Discount.FromTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Discount.ToTime" class="control-label"></label>
+                <input asp-for="Discount.ToTime" class="form-control" />
+                <span asp-validation-for="Discount.ToTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" asp-route-id="@Model.Food.ID"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

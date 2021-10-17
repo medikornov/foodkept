@@ -11,6 +11,11 @@ namespace FoodKept.Models
     public class Discount
     {
         public int ID { get; set; }
+        public double DiscountPrice { get; set; }
+        public int DiscountPercent { get; set; }
+        public TimeSpan FromTime { get; set; }
+        public TimeSpan ToTime { get; set; }
+        public int FoodId { get; set; }
         public virtual Food Food { get; set; }
     }
 }

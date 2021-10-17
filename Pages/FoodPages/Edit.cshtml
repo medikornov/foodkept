@@ -52,7 +52,8 @@
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index">Back to List</a> |
+    <a asp-page="/DiscountPages/Index" asp-route-id="@Model.Food.ID">Edit Discounts</a>
 </div>
 
 @section Scripts {
