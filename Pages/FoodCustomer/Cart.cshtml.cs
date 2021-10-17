@@ -117,10 +117,19 @@ namespace FoodKept.Pages.FoodCustomer
             return Page();
         }
 
-        public IActionResult OnPostChangeQuantity(int minus_plus)
+        public async Task<IActionResult> OnPostChangeQuantity(int minus_plus, int id)
         {
+            var cart = context.Cart.FirstOrDefault(op => op.Id == id);
+            if (cart != null)
+            {
+                cart.Quantity = minus_plus;
+                context.Attach(cart).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+            }
             //var cart = context.Cart.FirstOrDefault(op => op.Id)
-            return new JsonResult(minus_plus);
+            return new JsonResult(new {
+                minus_plus = minus_plus,
+                id = id });
         }
     }
 
