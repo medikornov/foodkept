@@ -60,7 +60,7 @@
                 @Html.DisplayNameFor(model => model.Food[0].Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Food[0].Discount)
+                Discount
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Food[0].Quantity)
@@ -106,7 +106,7 @@
                         if (item.CurrentPrice.IsDiscount)
                         {
                             <span>
-                                @item.CurrentPrice.DiscountPercent
+                                @item.CurrentPrice.DiscountPercent %
                             </span>
                         }
                         else

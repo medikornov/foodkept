@@ -20,7 +20,6 @@ namespace FoodKept.Models
         public int ID { get; set; }
         public string FoodName { get; set; }
         public double Price { get; set; }
-        public int Discount { get; set; }
         public int Quantity { get; set; }
         public string FoodCategory { get; set; }
         public byte[] FoodImage { get; set; }

@@ -38,7 +38,7 @@ namespace FoodKept.Pages.FoodPages
             Food = _context.FoodData.Include(c => c.ApplicationUser).Where(c => c.ApplicationUserId == applicationUser.Id).ToList();
 
             //Calculate Discounts
-            CalculateCurrentPrice.CalculatePrice(Food);
+            CalculateCurrentPrice.CalculatePriceForFoodList(Food);
 
             //Filter food
             var foods = from m in _context.FoodData

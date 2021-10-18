@@ -11,14 +11,14 @@ namespace FoodKept.Helpers
 {
     public static class CalculateCurrentPrice
     {
-        public static void CalculatePrice(IList<Food> Food)
+        public static void CalculatePriceForFoodList(IList<Food> Food)
         {
             if (Food is null)
             {
                 throw new ArgumentNullException(nameof(Food));
             }
 
-            //Get current 
+            //Get current time
             TimeSpan CurrentTime = DateTime.Now.TimeOfDay;
 
             foreach (var item in Food)
@@ -36,6 +36,32 @@ namespace FoodKept.Helpers
 
                         break;
                     }
+                }
+            }
+        }
+
+        public static void CalculatePriceForFood(Food Food)
+        {
+            if (Food is null)
+            {
+                throw new ArgumentNullException(nameof(Food));
+            }
+
+            //Get current time
+            TimeSpan CurrentTime = DateTime.Now.TimeOfDay;
+
+            Food.CurrentPrice.OldPrice = Food.Price;
+            Food.CurrentPrice.IsDiscount = false;
+
+            foreach (var discount in Food.DiscountList)
+            {
+                if (TimeSpan.Compare(CurrentTime, discount.FromTime) == 1 && TimeSpan.Compare(CurrentTime, discount.ToTime) == -1)
+                {
+                    Food.CurrentPrice.DiscountPrice = discount.DiscountPrice;
+                    Food.CurrentPrice.DiscountPercent = discount.DiscountPercent;
+                    Food.CurrentPrice.IsDiscount = true;
+
+                    break;
                 }
             }
         }

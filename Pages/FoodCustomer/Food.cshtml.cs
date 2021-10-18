@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FoodKept.Helpers;
 using FoodKept.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -31,6 +32,12 @@ namespace FoodKept.Pages
 
         public async Task OnGetAsync()
         {
+            //Query food
+            Food = _context.FoodData.ToList();
+
+            //Calculate Discounts
+            CalculateCurrentPrice.CalculatePriceForFoodList(Food);
+
             var foods = from m in _context.FoodData
                         select m;
             if (!string.IsNullOrEmpty(SearchString))
@@ -38,7 +45,6 @@ namespace FoodKept.Pages
                 foods = foods.Where(s => s.FoodName.Contains(SearchString));
             }
             Food = await foods.ToListAsync();
-            //Food = await _context.FoodData.ToListAsync();
 
             id = _userManager.GetUserId(User);
         }
