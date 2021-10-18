@@ -35,7 +35,7 @@
                                 @if (role == "Restaurant")
                                 {
                                     <li class="nav-item">
-                                        <a class="nav-link text-light" asp-area="" asp-page="FoodPages/Index">Your Food Shop</a>
+                                        <a class="nav-link text-light" asp-area="" asp-page="/FoodPages/Index">Your Food Shop</a>
                                     </li>
                                 }
                                 else
@@ -60,7 +60,7 @@
                             </ul>
                             @if (role == "Customer")
                             {
-                                
+
                                 <ul style="padding-left: 30px; padding-right: 35px;" class="navbar-nav d-flex">
                                     <li class="nav-item">
                                         <a class="nav-link text-light" asp-area="" asp-page="/FoodCustomer/Cart">Shoppping Cart</a>
@@ -68,7 +68,7 @@
 
                                 </ul>
                             }
-                            
+
                         }
                         <ul class="navbar-nav d-flex">
                             <li class="nav-item">

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using FoodKept.Helpers;
 using FoodKept.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,7 @@ namespace FoodKept.Pages.FoodCustomer
             }
 
             Food = await _context.FoodData.FirstOrDefaultAsync(m => m.ID == id);
+            CalculateCurrentPrice.CalculatePriceForFood(Food);
 
             if (Food == null)
             {

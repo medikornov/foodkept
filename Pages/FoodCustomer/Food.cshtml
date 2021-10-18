@@ -24,7 +24,7 @@
                 @Html.DisplayNameFor(model => model.Food[0].Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Food[0].Discount)
+                Discount
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Food[0].Quantity)
@@ -54,10 +54,39 @@
                 @Html.DisplayFor(modelItem => food.ApplicationUser.RestaurantName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => food.Price)
+                @{
+                    if (food.CurrentPrice.IsDiscount)
+                    {
+                        <span class="oldPrice">
+                            @food.CurrentPrice.OldPrice&euro;
+                        </span>
+                        <span class="newPrice ml-2">
+                            @food.CurrentPrice.DiscountPrice&euro;
+                        </span>
+                    }
+                    else
+                    {
+                        <span>
+                            @food.Price&euro;
+                        </span>
+                    }
+                }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => food.Discount)
+                @{
+                    if (food.CurrentPrice.IsDiscount)
+                    {
+                        <span>
+                            @food.CurrentPrice.DiscountPercent %
+                        </span>
+                    }
+                    else
+                    {
+                        <span>
+                            None
+                        </span>
+                    }
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => food.Quantity)

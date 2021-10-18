@@ -1,17 +1,47 @@
 ﻿@page
 @model FoodKept.Pages.FoodPages.IndexModel
-
+@using FoodKept.Models
 
 @{
     ViewData["Title"] = "Index";
 }
+@*@functions{
+        public static void DisplayDiscountPrice(TimeSpan currentTime, Food food)
+        {
+            var discountFlag = false;
 
-<h1>Index</h1>
+            foreach (var discount in food.DiscountList)
+            {
+                if (TimeSpan.Compare(currentTime, discount.FromTime) == 1 && TimeSpan.Compare(currentTime, discount.ToTime) == -1)
+                {
+                    <span class="oldPrice">
+                        @food.Price&euro;
+                    </span>
+                    <span class="newPrice ml-2">
+                        @discount.DiscountPrice&euro;
+                    </span>
+
+                    discountFlag = true;
+
+                    break;
+                }
+            }
+
+            if (!discountFlag)
+            {
+                <span>
+                    @food.Price&euro;
+                </span>
+            }
+        }
+    }*@
+
+<h1>Your Food List</h1>
 <!--Markup to add search field on the page-->
 <form>
     <p>
-        Food Name: <input type = "text" asp-for = "SearchString" />
-        <input type = "submit" value = "Filter" />
+        Food Name: <input type="text" asp-for="SearchString" />
+        <input type="submit" value="Filter" />
     </p>
 </form>
 
@@ -30,7 +60,7 @@
                 @Html.DisplayNameFor(model => model.Food[0].Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Food[0].Discount)
+                Discount
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Food[0].Quantity)
@@ -48,34 +78,64 @@
         @foreach (var item in Model.Food)
         {
 
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FoodName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Discount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FoodCategory)
-            </td>
-            <td>
-                @if (item.FoodImage != null)
-                {
-                    <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(item.FoodImage)" width="80" height="80" />
-                }
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FoodName)
+                </td>
+                <td>
+                    @{
+                        if (item.CurrentPrice.IsDiscount)
+                        {
+                            <span class="oldPrice">
+                                @item.CurrentPrice.OldPrice&euro;
+                            </span>
+                            <span class="newPrice ml-2">
+                                @item.CurrentPrice.DiscountPrice&euro;
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                @item.Price&euro;
+                            </span>
+                        }
+                    }
+                </td>
+                <td>
+                    @{
+                        if (item.CurrentPrice.IsDiscount)
+                        {
+                            <span>
+                                @item.CurrentPrice.DiscountPercent %
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                None
+                            </span>
+                        }
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FoodCategory)
+                </td>
+                <td>
+                    @if (item.FoodImage != null)
+                    {
+                        <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(item.FoodImage)" width="80" height="80" />
+                    }
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-page="/DiscountPages/Index" asp-route-id="@item.ID">Discounts</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

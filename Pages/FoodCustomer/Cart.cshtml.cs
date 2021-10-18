@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using FoodKept.Data;
+using FoodKept.Helpers;
 using FoodKept.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -31,6 +32,11 @@ namespace FoodKept.Pages.FoodCustomer
         {
             var userId = userManager.GetUserId(User);
             Cart = context.Cart.Include(c => c.Food).Where(c => c.ApplicationUserId == userId).ToList();
+
+            foreach(var cartItem in Cart)
+            {
+                CalculateCurrentPrice.CalculatePriceForFood(cartItem.Food);
+            }
         }
 
 
@@ -98,10 +104,17 @@ namespace FoodKept.Pages.FoodCustomer
             string message = "";
             foreach (var food in Cart)
             {
+                var foodPrice = food.Food.Price;
+
+                if (food.Food.CurrentPrice.IsDiscount)
+                {
+                    foodPrice = food.Food.CurrentPrice.DiscountPrice;
+                }
+
                 message +=
                     "name: " + food.Food.FoodName + "   |  " +
                     "restaurantName: " + food.Food.ApplicationUser.RestaurantName + "   |  " +
-                    "price: " + food.Food.Price + "   |  " +
+                    "price: " + foodPrice + "   |  " +
                     "quantity: " + food.Quantity + "<br />";
             }
 
