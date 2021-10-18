@@ -68,6 +68,9 @@ namespace FoodKept.Pages.FoodPages
                 Food.FoodImage = GetByteArrayFromImage(FoodImage);
             }
 
+            //Initialize CurrentPrice
+            Food.CurrentPrice = new CurrentPrice();
+
             _context.FoodData.Add(Food);
             await _context.SaveChangesAsync();
 

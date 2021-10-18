@@ -107,3 +107,12 @@ body {
     bottom: 0;
     left: 0;
 }
+
+.oldPrice {
+    text-decoration: line-through;
+    color: darkgrey;
+}
+
+.newPrice {
+    color: red;
+}

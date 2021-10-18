@@ -47,7 +47,23 @@
                     @Html.DisplayFor(modelItem => food.Food.ApplicationUser.RestaurantName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => food.Food.Price)
+                    @{
+                        if (food.Food.CurrentPrice.IsDiscount)
+                        {
+                            <span class="oldPrice">
+                                @food.Food.CurrentPrice.OldPrice&euro;
+                            </span>
+                            <span class="newPrice ml-2">
+                                @food.Food.CurrentPrice.DiscountPrice&euro;
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                @food.Food.Price&euro;
+                            </span>
+                        }
+                    }
                 </td>
                 <td>
                     <div class="number" data-arg-id="@food.Id" data-arg-quantity="@food.Food.Quantity">
