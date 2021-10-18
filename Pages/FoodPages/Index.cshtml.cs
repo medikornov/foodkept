@@ -10,6 +10,8 @@ using FoodKept.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using static System.Net.Mime.MediaTypeNames;
+using FoodKept.ViewModels;
+using FoodKept.Helpers;
 
 namespace FoodKept.Pages.FoodPages
 {
@@ -35,6 +37,9 @@ namespace FoodKept.Pages.FoodPages
             ApplicationUser applicationUser = await _userManager.GetUserAsync(User);
             Food = _context.FoodData.Include(c => c.ApplicationUser).Where(c => c.ApplicationUserId == applicationUser.Id).ToList();
 
+            //Calculate Discounts
+            CalculateCurrentPrice.CalculatePrice(Food);
+
             //Filter food
             var foods = from m in _context.FoodData
                         select m;
@@ -44,5 +49,7 @@ namespace FoodKept.Pages.FoodPages
                 Food = await foods.ToListAsync();
             }
         }
+
+        private void CalculatePrice(IList<Food> food) => throw new NotImplementedException();
     }
 }

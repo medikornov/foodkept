@@ -13,6 +13,7 @@
     <div class="col-md-4">
         <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Food.CurrentPrice" />
             <div class="form-group">
                 <label asp-for="Food.FoodName" class="control-label"></label>
                 <input asp-for="Food.FoodName" class="form-control" />

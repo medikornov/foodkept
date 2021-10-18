@@ -5,7 +5,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Discounts of @Model.Food.FoodName</h1>
 
 <p>
     <a asp-page="Create" asp-route-id="@Model.Food.ID">Create New</a>
@@ -53,3 +53,6 @@
         }
     </tbody>
 </table>
+<div>
+    <a asp-page="/FoodPages/Index">Back to Food List</a>
+</div>

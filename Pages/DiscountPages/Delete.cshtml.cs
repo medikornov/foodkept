@@ -26,7 +26,7 @@ namespace FoodKept.Pages.DiscountPages
 
         public async Task<IActionResult> OnGetAsync(int? id, int? foodID)
         {
-            if (id == null)
+            if (id == null || foodID == null)
             {
                 return NotFound();
             }
@@ -34,7 +34,7 @@ namespace FoodKept.Pages.DiscountPages
             Food = await _context.FoodData.FirstOrDefaultAsync(m => m.ID == foodID);
             Discount = await _context.DiscountData.FirstOrDefaultAsync(m => m.ID == id);
 
-            if (Discount == null)
+            if (Discount == null || Food == null)
             {
                 return NotFound();
             }

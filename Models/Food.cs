@@ -4,9 +4,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using FoodKept.Models;
+using FoodKept.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
@@ -24,5 +27,6 @@ namespace FoodKept.Models
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual IList<Discount> DiscountList { get; set; }
+        public virtual CurrentPrice CurrentPrice { get; set; }
     }
 }
