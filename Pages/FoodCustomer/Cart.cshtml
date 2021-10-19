@@ -66,9 +66,9 @@
                     }
                 </td>
                 <td>
-                    <div class="number">
+                    <div class="number" data-arg-id="@food.Id" data-arg-quantity="@food.Food.Quantity">
                         <button type="button" class="minus">-</button>
-                        <input type="text" style="width: 50px; text-align: center;" value="@food.Quantity" />
+                        <label style="width: 50px; text-align: center;">@food.Quantity</label>
                         <button type="button" class="plus">+</button>
                     </div>
                 </td>
@@ -82,22 +82,25 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('.minus').click(function () {
-            var $input = $(this).parent().find('input');
-            var count = parseInt($input.val()) - 1;
+            var $input = $(this).parent().find('label');
+            var $id = $(this).parent().attr('data-arg-id');
+            var count = parseInt($input.text()) - 1;
             count = count < 1 ? 1 : count;
-            $input.val(count);
+            $input.text(count);
             $input.change();
-            changeQuantity($input.val());
+            changeQuantity($input.text(), $id);
             return false;
         });
         $('.plus').click(function () {
-            var $input = $(this).parent().find('input');
-            $input.val(parseInt($input.val()) + 1);
+            var $input = $(this).parent().find('label');
+            var $id = $(this).parent().attr('data-arg-id');
+            var $quantity = $(this).parent().attr('data-arg-quantity');
+            $input.text((parseInt($input.text()) < $quantity) ? (parseInt($input.text()) + 1) : $quantity);
             $input.change();
-            changeQuantity($input.val());
+            changeQuantity($input.text(), $id);
             return false;
         });
-        function changeQuantity(minus_plus) {
+        function changeQuantity(minus_plus, id) {
             $.ajax({
                 type: "POST",
                 url: "/FoodCustomer/Cart?handler=ChangeQuantity",
@@ -106,10 +109,11 @@
                         $('input:hidden[name="__RequestVerificationToken"]').val());
                 },
                 data: {
-                    "minus_plus": minus_plus
+                    "minus_plus": minus_plus,
+                    "id": id
                 },
                 success: function (response) {
-                    alert("Change " + response);
+                    alert("Quantity change: " + response.minus_plus + ", Id: " + response.id);
                 },
                 error: function (error) {
                     alert("error " + error);

@@ -1,12 +1,16 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.Text;
 using System.Threading.Tasks;
 using FoodKept.Data;
 using FoodKept.Helpers;
 using FoodKept.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -20,11 +24,13 @@ namespace FoodKept.Pages.FoodCustomer
         public IList<ShoppingCart> Cart { get; set; }
         private readonly ShopContext context;
         private readonly UserManager<ApplicationUser> userManager;
-        
-        public CartModel(ShopContext context, UserManager<ApplicationUser> userManager)
+        private readonly IWebHostEnvironment environment;
+
+        public CartModel(ShopContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment environment)
         {
             this.context = context;
             this.userManager = userManager;
+            this.environment = environment;
         }
 
 
@@ -49,9 +55,11 @@ namespace FoodKept.Pages.FoodCustomer
 
             if (result != null)
             {
-                result.Quantity++;
+                result.Quantity = (result.Quantity < food.Quantity) ? result.Quantity + 1 : food.Quantity
+                    ;
                 context.Attach(result).State = EntityState.Modified;
                 await context.SaveChangesAsync();
+                
                 
                 return new JsonResult(result.Quantity);
             }
@@ -88,6 +96,7 @@ namespace FoodKept.Pages.FoodCustomer
         public IActionResult OnPostReserve()
         {
             OnGet();
+
             SmtpClient smtpClient = new SmtpClient();
             smtpClient.Credentials = new System.Net.NetworkCredential("foodkepterino@gmail.com", "foodkept4");
 
@@ -98,10 +107,14 @@ namespace FoodKept.Pages.FoodCustomer
             mail.From = new MailAddress("foodkepterino@gmail.com", "FoodKept");
             mail.To.Add(new MailAddress("foodkepterino@gmail.com"));
             mail.CC.Add(new MailAddress("foodkepterino@gmail.com"));
+            mail.Subject = userManager.GetUserAsync(User).Result.FirstName + " reservation"; 
             smtpClient.Port = 587;
             smtpClient.Host = "smtp.gmail.com";
 
             string message = "";
+            //message = ReadFromFile("")
+            string path = Path.Combine(environment.ContentRootPath, "App_Data\\emailTemplate.txt");
+            message = ReadFromFile(path);
             foreach (var food in Cart)
             {
                 var foodPrice = food.Food.Price;
@@ -130,10 +143,40 @@ namespace FoodKept.Pages.FoodCustomer
             return Page();
         }
 
-        public IActionResult OnPostChangeQuantity(int minus_plus)
+        private string ReadFromFile(string path)
         {
+            string message;
+            try
+            {
+                StreamReader sr = new StreamReader(path);
+                message = sr.ReadLine();
+                string newLine;
+                while((newLine = sr.ReadLine()) != null)
+                {
+                    message += newLine;
+                }
+                sr.Close();
+            }
+            catch(Exception)
+            {
+                return "";
+            }
+            return message;
+        }
+
+        public async Task<IActionResult> OnPostChangeQuantity(int minus_plus, int id)
+        {
+            var cart = context.Cart.FirstOrDefault(op => op.Id == id);
+            if (cart != null)
+            {
+                cart.Quantity = minus_plus;
+                context.Attach(cart).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+            }
             //var cart = context.Cart.FirstOrDefault(op => op.Id)
-            return new JsonResult(minus_plus);
+            return new JsonResult(new {
+                minus_plus = minus_plus,
+                id = id });
         }
     }
 
