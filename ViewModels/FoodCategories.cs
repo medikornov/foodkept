@@ -12,11 +12,15 @@ namespace FoodKept.ViewModels
 {
     public class FoodCategories
     {
+        [Flags]
         public enum Category
         {
-            Fruit,
-            FastFood,
-            Pastries
+            None = 0,
+            Fruit = 1,
+            FastFood = 2,
+            Pastries = 4,
+            Meat = 8,
+            Other = 16
         }
     }
 }

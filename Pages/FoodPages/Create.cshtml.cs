@@ -77,7 +77,7 @@ namespace FoodKept.Pages.FoodPages
             return RedirectToPage("./Index");
         }
 
-        private byte[] GetByteArrayFromImage(IFormFile file)
+        private static byte[] GetByteArrayFromImage(IFormFile file)
         {
             using (var target = new MemoryStream())
             {
