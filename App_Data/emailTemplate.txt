@@ -1,0 +1,2 @@
+﻿<p>Hello, Thank you for using our new website! </p>
+<p>This is your reserved food, show this email to the restaurant's administrator</p>
