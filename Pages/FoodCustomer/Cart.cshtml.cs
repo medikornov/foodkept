@@ -22,22 +22,22 @@ namespace FoodKept.Pages.FoodCustomer
     public class CartModel : PageModel
     {
         public IList<ShoppingCart> Cart { get; set; }
-        private readonly ShopContext context;
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly IWebHostEnvironment environment;
+        private readonly ShopContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IWebHostEnvironment _environment;
 
         public CartModel(ShopContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment environment)
         {
-            this.context = context;
-            this.userManager = userManager;
-            this.environment = environment;
+            _context = context;
+            _userManager = userManager;
+            _environment = environment;
         }
 
 
         public void OnGet()
         {
-            var userId = userManager.GetUserId(User);
-            Cart = context.Cart.Include(c => c.Food).Where(c => c.ApplicationUserId == userId).ToList();
+            var userId = _userManager.GetUserId(User);
+            Cart = _context.Cart.Include(c => c.Food).Where(c => c.ApplicationUserId == userId).ToList();
 
             foreach(var cartItem in Cart)
             {
@@ -48,17 +48,17 @@ namespace FoodKept.Pages.FoodCustomer
 
         public async Task<IActionResult> OnPostAddToCart(string id)
         {
-            Food food = context.FoodData.FirstOrDefault(db => db.ID.ToString() == id);
-            ShoppingCart result = context.Cart.FirstOrDefault(c =>
-                    c.ApplicationUserId == userManager.GetUserId(User) &&
+            Food food = _context.FoodData.FirstOrDefault(db => db.ID.ToString() == id);
+            ShoppingCart result = _context.Cart.FirstOrDefault(c =>
+                    c.ApplicationUserId == _userManager.GetUserId(User) &&
                     c.FoodId == food.ID);
 
             if (result != null)
             {
                 result.Quantity = (result.Quantity < food.Quantity) ? result.Quantity + 1 : food.Quantity
                     ;
-                context.Attach(result).State = EntityState.Modified;
-                await context.SaveChangesAsync();
+                _context.Attach(result).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
                 
                 
                 return new JsonResult(result.Quantity);
@@ -68,12 +68,12 @@ namespace FoodKept.Pages.FoodCustomer
                 ShoppingCart cart = new ShoppingCart
                 {
                     FoodId = food.ID,
-                    ApplicationUserId = userManager.GetUserId(User),
+                    ApplicationUserId = _userManager.GetUserId(User),
                     Quantity = 1
                 };
 
-                context.Cart.Add(cart);
-                await context.SaveChangesAsync();
+                _context.Cart.Add(cart);
+                await _context.SaveChangesAsync();
 
                 return new JsonResult(cart.Quantity);
             }
@@ -81,12 +81,12 @@ namespace FoodKept.Pages.FoodCustomer
         }
         public async Task<IActionResult> OnPostRemoveFromCartAsync(int id)
         {
-            var cart = context.Cart.FirstOrDefault(op => op.Id == id);
+            var cart = _context.Cart.FirstOrDefault(op => op.Id == id);
 
             if (cart != null)
             {
-                context.Cart.Remove(cart);
-                await context.SaveChangesAsync();
+                _context.Cart.Remove(cart);
+                await _context.SaveChangesAsync();
             }
             OnGet();
             return Page();
@@ -107,13 +107,13 @@ namespace FoodKept.Pages.FoodCustomer
             mail.From = new MailAddress("foodkepterino@gmail.com", "FoodKept");
             mail.To.Add(new MailAddress("foodkepterino@gmail.com"));
             mail.CC.Add(new MailAddress("foodkepterino@gmail.com"));
-            mail.Subject = userManager.GetUserAsync(User).Result.FirstName + " reservation"; 
+            mail.Subject = _userManager.GetUserAsync(User).Result.FirstName + " reservation"; 
             smtpClient.Port = 587;
             smtpClient.Host = "smtp.gmail.com";
 
             string message = "";
             //message = ReadFromFile("")
-            string path = Path.Combine(environment.ContentRootPath, "App_Data\\emailTemplate.txt");
+            string path = Path.Combine(_environment.ContentRootPath, "App_Data\\emailTemplate.txt");
             message = ReadFromFile(path);
             foreach (var food in Cart)
             {
@@ -143,7 +143,7 @@ namespace FoodKept.Pages.FoodCustomer
             return Page();
         }
 
-        private string ReadFromFile(string path)
+        private static string ReadFromFile(string path)
         {
             string message;
             try
@@ -166,12 +166,12 @@ namespace FoodKept.Pages.FoodCustomer
 
         public async Task<IActionResult> OnPostChangeQuantity(int minus_plus, int id)
         {
-            var cart = context.Cart.FirstOrDefault(op => op.Id == id);
+            var cart = _context.Cart.FirstOrDefault(op => op.Id == id);
             if (cart != null)
             {
                 cart.Quantity = minus_plus;
-                context.Attach(cart).State = EntityState.Modified;
-                await context.SaveChangesAsync();
+                _context.Attach(cart).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
             }
             //var cart = context.Cart.FirstOrDefault(op => op.Id)
             return new JsonResult(new {

@@ -19,7 +19,7 @@ namespace FoodKept.Pages.FoodPages
     public class IndexModel : PageModel
     {
         private readonly FoodKept.Data.ShopContext _context;
-        private UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public IndexModel(FoodKept.Data.ShopContext context, UserManager<ApplicationUser> userManager)
         {
@@ -49,7 +49,5 @@ namespace FoodKept.Pages.FoodPages
                 Food = await foods.ToListAsync();
             }
         }
-
-        private void CalculatePrice(IList<Food> food) => throw new NotImplementedException();
     }
 }

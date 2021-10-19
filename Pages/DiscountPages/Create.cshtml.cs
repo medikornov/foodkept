@@ -59,10 +59,10 @@ namespace FoodKept.Pages.DiscountPages
             return Redirect(url);
         }
 
-        private static void CalculatePercentage(Food Food, Discount Discount)
+        private static void CalculatePercentage(Food food, Discount discount)
         {
-            int discountpart = (int) Math.Round((1 - (Discount.DiscountPrice / Food.Price)) * 100);
-            Discount.DiscountPercent = discountpart;
+            int discountpart = (int) Math.Round((1 - (discount.DiscountPrice / food.Price)) * 100);
+            discount.DiscountPercent = discountpart;
         }
     }
 }

@@ -11,11 +11,11 @@ namespace FoodKept.Pages
 {
     public class LogoutModel : PageModel
     {
-        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public LogoutModel(SignInManager<ApplicationUser> signInManager)
         {
-            this.signInManager = signInManager;
+            _signInManager = signInManager;
         }
 
         public void OnGet()
@@ -24,7 +24,7 @@ namespace FoodKept.Pages
 
         public async Task<IActionResult> OnPostLogoutAsync()
         {
-            await signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return RedirectToPage("Login");
         }
 
