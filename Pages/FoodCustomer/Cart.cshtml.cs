@@ -111,9 +111,18 @@ namespace FoodKept.Pages.FoodCustomer
 
             string path = Path.Combine(_environment.ContentRootPath, "App_Data\\emailTemplate.txt");
 
+            var foodsInfo = _context.FoodData.ToList().Join(
+                cart,
+                food => food.ID, crt => crt.FoodId,
+                (food, crt) => new
+                {
+                    foodId = food.ID,
+                    foodName = food.FoodName,
+                    quantity = crt.Quantity,
+                    foodsOwner = food.ApplicationUserId
+                }).ToList();
 
-
-            /******************************** Group join *******************************/
+            // group join
             var infoForCustomer = _context.ApplicationUsers.ToList().GroupJoin(
                 foodsInfo,
                 appUser => appUser.Id, foodInfo => foodInfo.foodsOwner,
