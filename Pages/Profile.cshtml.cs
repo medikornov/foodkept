@@ -16,15 +16,11 @@ namespace FoodKept.Pages
     [Authorize(Roles = "Admin, Restaurant, Customer")]
     public class ProfileModel : PageModel
     {
-        private readonly FoodKept.Data.ShopContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public ProfileModel(FoodKept.Data.ShopContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public ProfileModel(UserManager<ApplicationUser> userManager)
         {
-            _context = context;
             _userManager = userManager;
-            _signInManager = signInManager;
         }
 
         [BindProperty]

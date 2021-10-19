@@ -13,12 +13,12 @@ namespace FoodKept.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public IndexModel(ILogger<IndexModel> logger, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
-            this.userManager = userManager;
+            _userManager = userManager;
         }
 
 

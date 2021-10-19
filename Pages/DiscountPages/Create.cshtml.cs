@@ -60,20 +60,10 @@ namespace FoodKept.Pages.DiscountPages
             return Redirect(url);
         }
 
-        private static void CalculatePercentage(Food Food, Discount Discount)
+        private static void CalculatePercentage(Food food, Discount discount)
         {
-            int discountpart = (int) Math.Round((1 - (Discount.DiscountPrice / Food.Price)) * 100);
-            Discount.DiscountPercent = discountpart;
-        }
-    }
-    public struct DiscountTime
-    {
-        public TimeSpan _fromTime;
-        public TimeSpan _toTime;
-        public DiscountTime(TimeSpan fromTime, TimeSpan toTime)
-        {
-            _fromTime = fromTime;
-            _toTime = toTime;
+            int discountpart = (int) Math.Round((1 - (discount.DiscountPrice / food.Price)) * 100);
+            discount.DiscountPercent = discountpart;
         }
     }
 }

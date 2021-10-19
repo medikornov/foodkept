@@ -13,14 +13,14 @@ namespace FoodKept.Pages
     
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         [BindProperty]
         public Login Model { get; set; }
 
         public LoginModel(SignInManager<ApplicationUser> signInManager)
         {
-            this.signInManager = signInManager;
+            _signInManager = signInManager;
         }
 
         public void OnGet()
@@ -32,7 +32,7 @@ namespace FoodKept.Pages
         {
             if (ModelState.IsValid)
             {
-                var identityResult = await signInManager.PasswordSignInAsync(Model.Email, Model.Password, Model.RememberMe, false);
+                var identityResult = await _signInManager.PasswordSignInAsync(Model.Email, Model.Password, Model.RememberMe, false);
 
                 if (identityResult.Succeeded)
                 {

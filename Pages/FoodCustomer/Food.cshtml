@@ -27,7 +27,9 @@
                 Discount
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Food[0].Quantity)
+                <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.QuantitySort">
+                    @Html.DisplayNameFor(model => model.Food[0].Quantity)
+                </a>
             </th>
             <th>
                 Food Category
@@ -46,16 +48,15 @@
     <tbody>
         @foreach (var food in Model.Food)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => food.FoodName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => food.ApplicationUser.RestaurantName)
-            </td>
-            <td>
-                @{
-                    if (food.CurrentPrice.IsDiscount)
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => food.FoodName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => food.ApplicationUser.RestaurantName)
+                </td>
+                <td>
+                    @if (food.CurrentPrice.IsDiscount)
                     {
                         <span class="oldPrice">
                             @food.CurrentPrice.OldPrice&euro;
@@ -70,11 +71,9 @@
                             @food.Price&euro;
                         </span>
                     }
-                }
-            </td>
-            <td>
-                @{
-                    if (food.CurrentPrice.IsDiscount)
+                </td>
+                <td>
+                    @if (food.CurrentPrice.IsDiscount)
                     {
                         <span>
                             @food.CurrentPrice.DiscountPercent %
@@ -86,27 +85,26 @@
                             None
                         </span>
                     }
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => food.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => food.FoodCategory)
-            </td>
-            <td>
-                @if (food.FoodImage != null)
-                {
-                    <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(food.FoodImage)" width="80" height="80" />
-                }
-            </td>
-            <td>
-                <a asp-page="./Details" asp-route-id="@food.ID">Details</a>
-            </td>
-            <td>
-                <button type="button" class="btn btn-primary text-light" id="addToCart" onclick="addToCart(@food.ID)" value="@food.ID">Add to Cart @food.ID</button>
-            </td>
-        </tr>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => food.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => food.FoodCategory)
+                </td>
+                <td>
+                    @if (food.FoodImage != null)
+                    {
+                        <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(food.FoodImage)" width="80" height="80" />
+                    }
+                </td>
+                <td>
+                    <a asp-page="./Details" asp-route-id="@food.ID">Details</a>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary text-light" id="addToCart" onclick="addToCart(@food.ID)" value="@food.ID">Add to Cart @food.ID</button>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
