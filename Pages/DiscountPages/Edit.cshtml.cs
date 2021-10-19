@@ -49,6 +49,10 @@ namespace FoodKept.Pages.DiscountPages
                 return Page();
             }
 
+            Food = await _context.FoodData.FirstOrDefaultAsync(m => m.ID == foodID);
+
+            //Calculate Discount Percent
+            CalculatePercentage(Food, Discount);
             _context.Attach(Discount).State = EntityState.Modified;
 
             try
@@ -74,6 +78,12 @@ namespace FoodKept.Pages.DiscountPages
         private bool DiscountExists(int id)
         {
             return _context.DiscountData.Any(e => e.ID == id);
+        }
+
+        private static void CalculatePercentage(Food Food, Discount Discount)
+        {
+            int discountpart = (int)Math.Round((1 - (Discount.DiscountPrice / Food.Price)) * 100);
+            Discount.DiscountPercent = discountpart;
         }
     }
 }

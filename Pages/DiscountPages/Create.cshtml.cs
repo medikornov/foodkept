@@ -49,11 +49,20 @@ namespace FoodKept.Pages.DiscountPages
             Food = await _context.FoodData.FirstOrDefaultAsync(m => m.ID == id);
             Discount.FoodId = Food.ID;
 
+            //Calculate Discount Percent
+            CalculatePercentage(Food, Discount);
+
             _context.DiscountData.Add(Discount);
             await _context.SaveChangesAsync();
 
             string url = "/DiscountPages?id=" + id;
             return Redirect(url);
+        }
+
+        private static void CalculatePercentage(Food Food, Discount Discount)
+        {
+            int discountpart = (int) Math.Round((1 - (Discount.DiscountPrice / Food.Price)) * 100);
+            Discount.DiscountPercent = discountpart;
         }
     }
 }

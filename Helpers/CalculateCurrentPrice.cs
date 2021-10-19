@@ -13,43 +13,29 @@ namespace FoodKept.Helpers
     {
         public static void CalculatePriceForFoodList(IList<Food> Food)
         {
-            if (Food is null)
-            {
-                throw new ArgumentNullException(nameof(Food));
-            }
-
             //Get current time
             TimeSpan CurrentTime = DateTime.Now.TimeOfDay;
 
+            IsNull(Food);
+
             foreach (var item in Food)
             {
-                item.CurrentPrice.OldPrice = item.Price;
-                item.CurrentPrice.IsDiscount = false;
-
-                foreach (var discount in item.DiscountList)
-                {
-                    if (TimeSpan.Compare(CurrentTime, discount.FromTime) == 1 && TimeSpan.Compare(CurrentTime, discount.ToTime) == -1)
-                    {
-                        item.CurrentPrice.DiscountPrice = discount.DiscountPrice;
-                        item.CurrentPrice.DiscountPercent = discount.DiscountPercent;
-                        item.CurrentPrice.IsDiscount = true;
-
-                        break;
-                    }
-                }
+                AddDiscountToFood(CurrentTime, item);
             }
         }
 
         public static void CalculatePriceForFood(Food Food)
         {
-            if (Food is null)
-            {
-                throw new ArgumentNullException(nameof(Food));
-            }
-
             //Get current time
             TimeSpan CurrentTime = DateTime.Now.TimeOfDay;
 
+            IsNull(Food);
+
+            AddDiscountToFood(CurrentTime, Food);
+        }
+
+        private static void AddDiscountToFood(TimeSpan CurrentTime, Food Food)
+        {
             Food.CurrentPrice.OldPrice = Food.Price;
             Food.CurrentPrice.IsDiscount = false;
 
@@ -63,6 +49,14 @@ namespace FoodKept.Helpers
 
                     break;
                 }
+            }
+        }
+
+        private static void IsNull(object Object)
+        {
+            if (Object is null)
+            {
+                throw new ArgumentNullException(nameof(Object));
             }
         }
     }
