@@ -27,7 +27,9 @@
                 Discount
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Food[0].Quantity)
+                <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.QuantitySort">
+                    @Html.DisplayNameFor(model => model.Food[0].Quantity)
+                </a>
             </th>
             <th>
                 Food Category

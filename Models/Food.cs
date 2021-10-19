@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 
 namespace FoodKept.Models
 {
-    public class Food
+    public class Food : IComparable<Food>
     {
         public int ID { get; set; }
         public string FoodName { get; set; }
@@ -27,5 +27,11 @@ namespace FoodKept.Models
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual IList<Discount> DiscountList { get; set; }
         public virtual CurrentPrice CurrentPrice { get; set; }
+
+        //Compare Food by quantity
+        public int CompareTo(Food other)
+        {
+            return Quantity.CompareTo(other.Quantity);
+        }
     }
 }
