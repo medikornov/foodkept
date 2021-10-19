@@ -24,41 +24,37 @@
                         @Html.DisplayNameFor(model => model.Food.Price)
                     </dt>
                     <dd class="col-sm-9">
-                        @{
-                            if (Model.Food.CurrentPrice.IsDiscount)
-                            {
-                                <span class="oldPrice">
-                                    @Model.Food.CurrentPrice.OldPrice&euro;
-                                </span>
-                                <span class="newPrice ml-2">
-                                    @Model.Food.CurrentPrice.DiscountPrice&euro;
-                                </span>
-                            }
-                            else
-                            {
-                                <span>
-                                    @Model.Food.Price&euro;
-                                </span>
-                            }
+                        @if (Model.Food.CurrentPrice.IsDiscount)
+                        {
+                            <span class="oldPrice">
+                                @Model.Food.CurrentPrice.OldPrice&euro;
+                            </span>
+                            <span class="newPrice ml-2">
+                                @Model.Food.CurrentPrice.DiscountPrice&euro;
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                @Model.Food.Price&euro;
+                            </span>
                         }
                     </dd>
                     <dt class="col-sm-3">
                         Discount
                     </dt>
                     <dd class="col-sm-9">
-                        @{
-                            if (Model.Food.CurrentPrice.IsDiscount)
-                            {
-                                <span>
-                                    @Model.Food.CurrentPrice.DiscountPercent %
-                                </span>
-                            }
-                            else
-                            {
-                                <span>
-                                    None
-                                </span>
-                            }
+                        @if (Model.Food.CurrentPrice.IsDiscount)
+                        {
+                            <span>
+                                @Model.Food.CurrentPrice.DiscountPercent %
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                None
+                            </span>
                         }
                     </dd>
                     <dt class="col-sm-3">

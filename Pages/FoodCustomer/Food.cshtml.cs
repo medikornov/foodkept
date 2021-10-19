@@ -16,7 +16,7 @@ namespace FoodKept.Pages
     public class FoodModel : PageModel
     {
         private readonly FoodKept.Data.ShopContext _context;
-        private UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public FoodModel(FoodKept.Data.ShopContext context, UserManager<ApplicationUser> userManager)
         {
@@ -24,16 +24,30 @@ namespace FoodKept.Pages
             _userManager = userManager;
         }
 
-        public IList<Food> Food { get; set; }
+        public List<Food> Food { get; set; }
         public string id { get; set; }
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; }
+        public string QuantitySort { get; set; }
 
-
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(string sortOrder)
         {
-            //Query food
-            Food = _context.FoodData.ToList();
+            //Sorting by quantity
+            QuantitySort = sortOrder == "Quantity" ? "quantity_desc" : "Quantity";
+
+            switch(sortOrder)
+            {
+                case "Quantity":
+                    Food = _context.FoodData.ToList();
+                    break;
+                case "quantity_desc":
+                    Food = _context.FoodData.ToList();
+                    Food.Sort();
+                    break;
+                default:
+                    Food = _context.FoodData.ToList();
+                    break;
+            }
 
             //Calculate Discounts
             CalculateCurrentPrice.CalculatePriceForFoodList(Food);
@@ -43,8 +57,8 @@ namespace FoodKept.Pages
             if (!string.IsNullOrEmpty(SearchString))
             {
                 foods = foods.Where(s => s.FoodName.Contains(SearchString));
+                Food = await foods.ToListAsync();
             }
-            Food = await foods.ToListAsync();
 
             id = _userManager.GetUserId(User);
         }

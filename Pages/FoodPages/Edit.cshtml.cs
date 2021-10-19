@@ -96,7 +96,7 @@ namespace FoodKept.Pages.FoodPages
             return _context.FoodData.Any(e => e.ID == id);
         }
 
-        private byte[] GetByteArrayFromImage(IFormFile file)
+        private static byte[] GetByteArrayFromImage(IFormFile file)
         {
             using (var target = new MemoryStream())
             {

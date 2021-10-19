@@ -19,7 +19,7 @@ namespace FoodKept.Pages.FoodPages
     public class IndexModel : PageModel
     {
         private readonly FoodKept.Data.ShopContext _context;
-        private UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public IndexModel(FoodKept.Data.ShopContext context, UserManager<ApplicationUser> userManager)
         {
@@ -27,7 +27,7 @@ namespace FoodKept.Pages.FoodPages
             _userManager = userManager;
         }
 
-        public IList<Food> Food { get; set; }
+        public ModifiedList<Food> Food { get; set; }
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; }
 
@@ -35,7 +35,7 @@ namespace FoodKept.Pages.FoodPages
         {
             //Query for food from current user
             ApplicationUser applicationUser = await _userManager.GetUserAsync(User);
-            Food = _context.FoodData.Include(c => c.ApplicationUser).Where(c => c.ApplicationUserId == applicationUser.Id).ToList();
+            Food = new ModifiedList<Food>(_context.FoodData.Include(c => c.ApplicationUser).Where(c => c.ApplicationUserId == applicationUser.Id).ToList());
 
             //Calculate Discounts
             CalculateCurrentPrice.CalculatePriceForFoodList(Food);
@@ -46,10 +46,8 @@ namespace FoodKept.Pages.FoodPages
             if (!string.IsNullOrEmpty(SearchString))
             {
                 foods = foods.Where(s => s.FoodName.Contains(SearchString) && s.ApplicationUserId == applicationUser.Id);
-                Food = await foods.ToListAsync();
+                Food = new ModifiedList<Food>(await foods.ToListAsync());
             }
         }
-
-        private void CalculatePrice(IList<Food> food) => throw new NotImplementedException();
     }
 }
