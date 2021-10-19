@@ -36,7 +36,7 @@ namespace FoodKept.Pages
             Food = _context.FoodData.ToList();
 
             //Calculate Discounts
-            CalculateCurrentPrice.CalculatePriceForFoodList(Food);
+            CalculateCurrentPrice.CalculatePriceForFoodList(Food: Food);
 
             var foods = from m in _context.FoodData
                         select m;

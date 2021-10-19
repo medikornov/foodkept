@@ -9,6 +9,7 @@ using FoodKept.Data;
 using FoodKept.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using FoodKept.ViewModels;
 
 namespace FoodKept.Pages.DiscountPages
 {
@@ -21,7 +22,7 @@ namespace FoodKept.Pages.DiscountPages
             _context = context;
         }
 
-        [BindProperty]
+        ///[BindProperty]
         public Discount Discount { get; set; }
         [BindProperty]
         public Food Food { get; set; }
@@ -54,6 +55,16 @@ namespace FoodKept.Pages.DiscountPages
 
             string url = "/DiscountPages?id=" + id;
             return Redirect(url);
+        }
+    }
+    public struct DiscountTime
+    {
+        public TimeSpan _fromTime;
+        public TimeSpan _toTime;
+        public DiscountTime(TimeSpan fromTime, TimeSpan toTime)
+        {
+            _fromTime = fromTime;
+            _toTime = toTime;
         }
     }
 }

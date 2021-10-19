@@ -55,11 +55,9 @@ namespace FoodKept.Pages.FoodCustomer
 
             if (result != null)
             {
-                result.Quantity = (result.Quantity < food.Quantity) ? result.Quantity + 1 : food.Quantity
-                    ;
+                result.Quantity = (result.Quantity < food.Quantity) ? result.Quantity + 1 : food.Quantity;
                 context.Attach(result).State = EntityState.Modified;
                 await context.SaveChangesAsync();
-                
                 
                 return new JsonResult(result.Quantity);
             }
@@ -96,7 +94,6 @@ namespace FoodKept.Pages.FoodCustomer
         public IActionResult OnPostReserve()
         {
             OnGet();
-
             SmtpClient smtpClient = new SmtpClient();
             smtpClient.Credentials = new System.Net.NetworkCredential("foodkepterino@gmail.com", "foodkept4");
 
@@ -113,17 +110,18 @@ namespace FoodKept.Pages.FoodCustomer
 
             string message = "";
             //message = ReadFromFile("")
-            string path = Path.Combine(environment.ContentRootPath, "App_Data\\emailTemplate.txt");
-            message = ReadFromFile(path);
+            string path = Path.Combine(path1: environment.ContentRootPath, path2: "App_Data\\emailTemplate.txt");
+
+            //var infoAboutReservation = context.
+            // named argument usage
+            message = ReadFromFile(filePath: path);
             foreach (var food in Cart)
             {
                 var foodPrice = food.Food.Price;
-
                 if (food.Food.CurrentPrice.IsDiscount)
                 {
                     foodPrice = food.Food.CurrentPrice.DiscountPrice;
                 }
-
                 message +=
                     "name: " + food.Food.FoodName + "   |  " +
                     "restaurantName: " + food.Food.ApplicationUser.RestaurantName + "   |  " +
@@ -134,7 +132,7 @@ namespace FoodKept.Pages.FoodCustomer
             mail.Body = message;
             try
             {
-                smtpClient.Send(mail);
+                smtpClient.Send(message: mail);
             }
             catch (Exception)
             {
@@ -143,12 +141,12 @@ namespace FoodKept.Pages.FoodCustomer
             return Page();
         }
 
-        private string ReadFromFile(string path)
+        private string ReadFromFile(string filePath)
         {
             string message;
             try
             {
-                StreamReader sr = new StreamReader(path);
+                StreamReader sr = new StreamReader(filePath);
                 message = sr.ReadLine();
                 string newLine;
                 while((newLine = sr.ReadLine()) != null)
