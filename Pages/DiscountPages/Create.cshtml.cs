@@ -22,7 +22,7 @@ namespace FoodKept.Pages.DiscountPages
             _context = context;
         }
 
-        ///[BindProperty]
+        [BindProperty]
         public Discount Discount { get; set; }
         [BindProperty]
         public Food Food { get; set; }

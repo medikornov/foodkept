@@ -21,7 +21,7 @@ namespace FoodKept.Pages.FoodCustomer
     [Authorize(Roles = "Customer, Admin")]
     public class CartModel : PageModel
     {
-        public IList<ShoppingCart> Cart { get; set; }
+        public IList<ShoppingCart> cart { get; set; }
         private readonly ShopContext context;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IWebHostEnvironment environment;
@@ -37,9 +37,9 @@ namespace FoodKept.Pages.FoodCustomer
         public void OnGet()
         {
             var userId = userManager.GetUserId(User);
-            Cart = context.Cart.Include(c => c.Food).Where(c => c.ApplicationUserId == userId).ToList();
+            cart = context.Cart.Include(c => c.Food).Where(c => c.ApplicationUserId == userId).ToList();
 
-            foreach(var cartItem in Cart)
+            foreach(var cartItem in cart)
             {
                 CalculateCurrentPrice.CalculatePriceForFood(cartItem.Food);
             }
@@ -108,25 +108,47 @@ namespace FoodKept.Pages.FoodCustomer
             smtpClient.Port = 587;
             smtpClient.Host = "smtp.gmail.com";
 
-            string message = "";
-            //message = ReadFromFile("")
             string path = Path.Combine(path1: environment.ContentRootPath, path2: "App_Data\\emailTemplate.txt");
 
-            //var infoAboutReservation = context.
-            // named argument usage
-            message = ReadFromFile(filePath: path);
-            foreach (var food in Cart)
-            {
-                var foodPrice = food.Food.Price;
-                if (food.Food.CurrentPrice.IsDiscount)
+            var foodsInfo = context.FoodData.ToList().Join(
+                cart,
+                food => food.ID, crt => crt.FoodId,
+                (food, crt) => new
                 {
-                    foodPrice = food.Food.CurrentPrice.DiscountPrice;
-                }
+                    foodId = food.ID,
+                    foodName = food.FoodName,
+                    quantity = crt.Quantity,
+                    foodsOwner = food.ApplicationUserId
+                }).ToList();
+
+            /******************************** Group join *******************************/
+            var infoForCustomer = context.ApplicationUsers.ToList().GroupJoin(
+                foodsInfo,
+                appUser => appUser.Id, foodInfo => foodInfo.foodsOwner,
+                (appUser, collection) => new
+                {
+                    Restaurant = appUser.RestaurantName,
+                    Country = appUser.Country,
+                    City = appUser.City,
+                    Address = appUser.Address,
+                    collection = collection
+                }).ToList();
+
+
+            // named argument usage
+            string message = ReadFromFile(filePath: path);
+            foreach(var restaurants in infoForCustomer)
+            {
+                if (!restaurants.collection.Any()) continue;
                 message +=
-                    "name: " + food.Food.FoodName + "   |  " +
-                    "restaurantName: " + food.Food.ApplicationUser.RestaurantName + "   |  " +
-                    "price: " + foodPrice + "   |  " +
-                    "quantity: " + food.Quantity + "<br />";
+                    $"<p>{restaurants.Restaurant}</p>" +
+                    $"<p1>Adress: {restaurants.Address}, {restaurants.City}    {restaurants.Country}</p1><br />";
+
+                foreach (var foods in restaurants.collection)
+                {
+                    message += $"<label>Meal: {foods.foodName}  ||  Quantity: {foods.quantity}</label><br />";
+                }
+                message += "<br />";
             }
 
             mail.Body = message;
@@ -141,6 +163,7 @@ namespace FoodKept.Pages.FoodCustomer
             return Page();
         }
 
+        // reading from file
         private string ReadFromFile(string filePath)
         {
             string message;
