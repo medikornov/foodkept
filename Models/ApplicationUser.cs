@@ -20,8 +20,8 @@ namespace FoodKept.Models
         public string Country { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
-        public double Lat { get; set; }
-        public double Lng { get; set; }
+        public float Lat { get; set; }
+        public float Lng { get; set; }
         public virtual IList<Food> FoodList { get; set; }
     }
 }
