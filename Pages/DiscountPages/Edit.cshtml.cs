@@ -52,7 +52,7 @@ namespace FoodKept.Pages.DiscountPages
             Food = await _context.FoodData.FirstOrDefaultAsync(m => m.ID == foodID);
 
             //Calculate Discount Percent
-            CalculatePercentage(Food, Discount);
+            CalculatePercentage(Discount: Discount, Food: Food);
             _context.Attach(Discount).State = EntityState.Modified;
 
             try
