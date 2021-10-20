@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FoodKept.Pages
 {
+    
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -26,6 +27,7 @@ namespace FoodKept.Pages
         {
         }
 
+        // optional argument usage
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             if (ModelState.IsValid)
@@ -40,6 +42,7 @@ namespace FoodKept.Pages
                     }
                     else
                     {
+                        // for example /login?returnUrl=foodcustomer/food
                         return RedirectToPage(returnUrl);
                     }
                 }

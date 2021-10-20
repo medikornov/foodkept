@@ -9,6 +9,7 @@ using FoodKept.Data;
 using FoodKept.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using FoodKept.ViewModels;
 
 namespace FoodKept.Pages.DiscountPages
 {

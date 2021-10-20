@@ -21,7 +21,7 @@ namespace FoodKept.Pages.FoodCustomer
     [Authorize(Roles = "Customer, Admin")]
     public class CartModel : PageModel
     {
-        public IList<ShoppingCart> Cart { get; set; }
+        public IList<ShoppingCart> cart { get; set; }
         private readonly ShopContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _environment;
@@ -37,9 +37,9 @@ namespace FoodKept.Pages.FoodCustomer
         public void OnGet()
         {
             var userId = _userManager.GetUserId(User);
-            Cart = _context.Cart.Include(c => c.Food).Where(c => c.ApplicationUserId == userId).ToList();
+            cart = _context.Cart.Include(c => c.Food).Where(c => c.ApplicationUserId == userId).ToList();
 
-            foreach(var cartItem in Cart)
+            foreach(var cartItem in cart)
             {
                 CalculateCurrentPrice.CalculatePriceForFood(cartItem.Food);
             }
@@ -59,7 +59,6 @@ namespace FoodKept.Pages.FoodCustomer
                     ;
                 _context.Attach(result).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-                
                 
                 return new JsonResult(result.Quantity);
             }
@@ -96,7 +95,6 @@ namespace FoodKept.Pages.FoodCustomer
         public IActionResult OnPostReserve()
         {
             OnGet();
-
             SmtpClient smtpClient = new SmtpClient();
             smtpClient.Credentials = new System.Net.NetworkCredential("foodkepterino@gmail.com", "foodkept4");
 
@@ -111,30 +109,53 @@ namespace FoodKept.Pages.FoodCustomer
             smtpClient.Port = 587;
             smtpClient.Host = "smtp.gmail.com";
 
-            string message = "";
-            //message = ReadFromFile("")
             string path = Path.Combine(_environment.ContentRootPath, "App_Data\\emailTemplate.txt");
-            message = ReadFromFile(path);
-            foreach (var food in Cart)
-            {
-                var foodPrice = food.Food.Price;
 
-                if (food.Food.CurrentPrice.IsDiscount)
+            var foodsInfo = _context.FoodData.ToList().Join(
+                cart,
+                food => food.ID, crt => crt.FoodId,
+                (food, crt) => new
                 {
-                    foodPrice = food.Food.CurrentPrice.DiscountPrice;
-                }
+                    foodId = food.ID,
+                    foodName = food.FoodName,
+                    quantity = crt.Quantity,
+                    foodsOwner = food.ApplicationUserId
+                }).ToList();
 
+            // group join
+            var infoForCustomer = _context.ApplicationUsers.ToList().GroupJoin(
+                foodsInfo,
+                appUser => appUser.Id, foodInfo => foodInfo.foodsOwner,
+                (appUser, collection) => new
+                {
+                    Restaurant = appUser.RestaurantName,
+                    Country = appUser.Country,
+                    City = appUser.City,
+                    Address = appUser.Address,
+                    collection = collection
+                }).ToList();
+
+
+            // named argument usage
+            string message = ReadFromFile(filePath: path);
+            foreach(var restaurants in infoForCustomer)
+            {
+                if (!restaurants.collection.Any()) continue;
                 message +=
-                    "name: " + food.Food.FoodName + "   |  " +
-                    "restaurantName: " + food.Food.ApplicationUser.RestaurantName + "   |  " +
-                    "price: " + foodPrice + "   |  " +
-                    "quantity: " + food.Quantity + "<br />";
+                    $"<p>{restaurants.Restaurant}</p>" +
+                    $"<p1>Adress: {restaurants.Address}, {restaurants.City}    {restaurants.Country}</p1><br />";
+
+                foreach (var foods in restaurants.collection)
+                {
+                    message += $"<label>Meal: {foods.foodName}  ||  Quantity: {foods.quantity}</label><br />";
+                }
+                message += "<br />";
             }
 
             mail.Body = message;
             try
             {
-                smtpClient.Send(mail);
+                smtpClient.Send(message: mail);
             }
             catch (Exception)
             {
@@ -143,12 +164,12 @@ namespace FoodKept.Pages.FoodCustomer
             return Page();
         }
 
-        private static string ReadFromFile(string path)
+        private static string ReadFromFile(string filePath)
         {
             string message;
             try
             {
-                StreamReader sr = new StreamReader(path);
+                StreamReader sr = new StreamReader(filePath);
                 message = sr.ReadLine();
                 string newLine;
                 while((newLine = sr.ReadLine()) != null)
