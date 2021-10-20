@@ -44,6 +44,9 @@ namespace FoodKept.Pages.FoodCustomer
             //Configure Lat Lng
             if(Food.ApplicationUser.Lat != 0 && Food.ApplicationUser.Lng != 0)
             {
+                //Here happens type widening (float -> double)
+                //Reason: Food.ApplicationUser.Lat and Food.ApplicationUser.Lng variables are float type and
+                //they are assigned to Coordinates variables Lat and Lng that are double type
                 Coordinates = new Coordinates(Food.ApplicationUser.Lat, Food.ApplicationUser.Lng);
             }
             else
