@@ -24,8 +24,7 @@ namespace FoodKept.Pages.FoodCustomer
         }
 
         public Food Food { get; set; }
-        public static double Lat { get; set; }
-        public static double Lng { get; set; }
+        public static Coordinates Coordinates { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -45,13 +44,11 @@ namespace FoodKept.Pages.FoodCustomer
             //Configure Lat Lng
             if(Food.ApplicationUser.Lat != 0 && Food.ApplicationUser.Lng != 0)
             {
-                Lat = Food.ApplicationUser.Lat;
-                Lng = Food.ApplicationUser.Lng;
+                Coordinates = new Coordinates(Food.ApplicationUser.Lat, Food.ApplicationUser.Lng);
             }
             else
             {
-                Lat = 54.68587937724495;
-                Lng = 25.278637513732985;
+                Coordinates = new Coordinates(54.68587937724495, 25.278637513732985);
             }
 
             return Page();

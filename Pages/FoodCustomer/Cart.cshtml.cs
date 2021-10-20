@@ -55,8 +55,7 @@ namespace FoodKept.Pages.FoodCustomer
 
             if (result != null)
             {
-                result.Quantity = (result.Quantity < food.Quantity) ? result.Quantity + 1 : food.Quantity
-                    ;
+                result.Quantity = (result.Quantity < food.Quantity) ? result.Quantity + 1 : food.Quantity;
                 _context.Attach(result).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
                 

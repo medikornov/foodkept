@@ -124,7 +124,7 @@
                     let map;
 
                     function initMap() {
-                        const myLatLng = { lat: @DetailsModel.Lat, lng: @DetailsModel.Lng }
+                        const myLatLng = { lat: @DetailsModel.Coordinates.Lat, lng: @DetailsModel.Coordinates.Lng }
                         map = new google.maps.Map(document.getElementById("map"), {
                             center: myLatLng,
                             zoom: 12,
