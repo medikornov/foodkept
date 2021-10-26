@@ -23,7 +23,7 @@ namespace FoodKept.Pages.FeedbackPage
         {
             _context.Feedbacks.Add(Feedback);
             await _context.SaveChangesAsync();
-            return RedirectToPage("/Index");
+            return RedirectToPage("/FeedbackPage/Gratitude");
         }
 
     }
