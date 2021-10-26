@@ -21,7 +21,7 @@ namespace FoodKept.Pages.FoodCustomer
     [Authorize(Roles = "Customer, Admin")]
     public class CartModel : PageModel
     {
-        public IList<ShoppingCart> cart { get; set; }
+        public IList<ShoppingCart> Cart { get; set; }
         private readonly ShopContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _environment;
@@ -37,9 +37,9 @@ namespace FoodKept.Pages.FoodCustomer
         public void OnGet()
         {
             var userId = _userManager.GetUserId(User);
-            cart = _context.Cart.Include(c => c.Food).Where(c => c.ApplicationUserId == userId).ToList();
+            Cart = _context.Cart.Include(c => c.Food).Where(c => c.ApplicationUserId == userId).ToList();
 
-            foreach(var cartItem in cart)
+            foreach(var cartItem in Cart)
             {
                 CalculateCurrentPrice.CalculatePriceForFood(cartItem.Food);
             }
@@ -111,7 +111,7 @@ namespace FoodKept.Pages.FoodCustomer
             string path = Path.Combine(_environment.ContentRootPath, "App_Data\\emailTemplate.txt");
 
             var foodsInfo = _context.FoodData.ToList().Join(
-                cart,
+                Cart,
                 food => food.ID, crt => crt.FoodId,
                 (food, crt) => new
                 {

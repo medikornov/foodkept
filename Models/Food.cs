@@ -17,10 +17,20 @@ namespace FoodKept.Models
 {
     public class Food : IComparable<Food>
     {
+        private int _quantity;
+
         public int ID { get; set; }
         public string FoodName { get; set; }
         public double Price { get; set; }
-        public int Quantity { get; set; }
+        public int Quantity
+        {
+            get { return _quantity; }
+            set
+            {
+                if (value >= 20) { _quantity = 20; }
+                else { _quantity = value; }
+            }
+        }
         public string FoodCategory { get; set; }
         public byte[] FoodImage { get; set; }
         public string ApplicationUserId { get; set; }
