@@ -14,6 +14,7 @@ namespace FoodKept.Models
         public int FoodId { get; set; }
         public string ApplicationUserId { get; set; }
         public int Quantity { get; set; }
+        public bool Reserved { get; set; }
         public virtual Food Food { get; set; }
     }
 }

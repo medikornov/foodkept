@@ -31,6 +31,7 @@ namespace FoodKept.Pages.FoodPages
             var result = from a in restaurantsFoods
                          join b in _context.Cart.ToList()
                          on a.ID equals b.FoodId
+                         where b.Reserved = true
                          select b;
             cart = result.ToList();
         }

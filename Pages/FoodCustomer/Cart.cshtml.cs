@@ -37,7 +37,7 @@ namespace FoodKept.Pages.FoodCustomer
         public void OnGet()
         {
             var userId = _userManager.GetUserId(User);
-            cart = _context.Cart.Include(c => c.Food).Where(c => c.ApplicationUserId == userId).ToList();
+            cart = _context.Cart.Include(c => c.Food).Where(c => (c.ApplicationUserId == userId) && (c.Reserved == false)).ToList();
 
             foreach(var cartItem in cart)
             {
@@ -51,7 +51,8 @@ namespace FoodKept.Pages.FoodCustomer
             Food food = _context.FoodData.FirstOrDefault(db => db.ID.ToString() == id);
             ShoppingCart result = _context.Cart.FirstOrDefault(c =>
                     c.ApplicationUserId == _userManager.GetUserId(User) &&
-                    c.FoodId == food.ID);
+                    c.FoodId == food.ID &&
+                    c.Reserved == false);
 
             if (result != null)
             {
@@ -67,7 +68,8 @@ namespace FoodKept.Pages.FoodCustomer
                 {
                     FoodId = food.ID,
                     ApplicationUserId = _userManager.GetUserId(User),
-                    Quantity = 1
+                    Quantity = 1,
+                    Reserved = false
                 };
 
                 _context.Cart.Add(cart);
@@ -91,9 +93,19 @@ namespace FoodKept.Pages.FoodCustomer
         }
 
 
-        public IActionResult OnPostReserve()
+        public async Task <IActionResult> OnPostReserve()
         {
             OnGet();
+            foreach (var item in cart)
+            {
+                var food = item.Food;
+                food.Quantity = item.Food.Quantity - item.Quantity;
+                item.Reserved = true;
+                _context.Attach(food).State = EntityState.Modified;
+                _context.Attach(item).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+
             SmtpClient smtpClient = new SmtpClient();
             smtpClient.Credentials = new System.Net.NetworkCredential(userName: "foodkepterino@gmail.com", password: "foodkept4");
 
@@ -160,7 +172,7 @@ namespace FoodKept.Pages.FoodCustomer
             {
                 
             }
-
+            OnGet();
             return Page();
         }
 
