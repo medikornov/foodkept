@@ -4,12 +4,12 @@
     ViewData["Title"] = "Register";
 }
 
-<div class="container mt-5">
+<div class="container container_mt">
     <div class="row justify-content-center align-items-center">
         <div class="col-sm-12 col-md-12 col-lg-4">
             <h1 class="mb-3">Register</h1>
             <ul class="nav nav-tabs">
-                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#customer" role="button" aria-expanded="false" aria-controls="customer">Customer</a></li>
+                <li class="nav-item"><a class="nav-link text-dark btn-outline-dark active" id="btn-custom-nav" data-bs-toggle="tab" href="#customer" role="button" aria-expanded="false" aria-controls="customer">Customer</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#restaurant" role="button" aria-expanded="false" aria-controls="restaurant">Restaurant</a></li>
             </ul>
             <div class="tab-content pt-0">
@@ -72,7 +72,7 @@
                                     <span asp-validation-for="CusRegModel.ConfirmPassword" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3">
-                                    <button type="submit" class="btn btn-primary" asp-page-handler="Customer" asp-route-sessioncount="15">Register</button>
+                                    <button type="submit" class="btn btn-dark" asp-page-handler="Customer" asp-route-sessioncount="15">Register</button>
                                 </div>
                             </form>
                         </div>
@@ -127,7 +127,7 @@
                                     <span asp-validation-for="ResRegModel.ConfirmPassword" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3">
-                                    <button type="submit" class="btn btn-primary" asp-page-handler="Restaurant" asp-route-sessioncount="10">Register</button>
+                                    <button type="submit" class="btn btn-dark" asp-page-handler="Restaurant" asp-route-sessioncount="10">Register</button>
                                 </div>
                             </form>
                         </div>

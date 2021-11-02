@@ -6,102 +6,104 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Your Food List</h1>
-<!--Markup to add search field on the page-->
-<form>
+<div class="container container_mt">
+    <h1>Your Food List</h1>
+    <!--Markup to add search field on the page-->
+    <form>
+        <p>
+            Food Name: <input type="text" asp-for="SearchString" />
+            <input type="submit" value="Filter" />
+        </p>
+    </form>
+
+    <!--end of the form markup-->
+
     <p>
-        Food Name: <input type="text" asp-for="SearchString" />
-        <input type="submit" value="Filter" />
+        <a asp-page="Create">Create New</a>
     </p>
-</form>
-
-<!--end of the form markup-->
-
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Food[0].FoodName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Food[0].Price)
-            </th>
-            <th>
-                Discount
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Food[0].Quantity)
-            </th>
-            <th>
-                Category
-            </th>
-            <th>
-                Food Image
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Food)
-        {
-
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FoodName)
-                </td>
-                <td>
-                    @if (item.CurrentPrice.IsDiscount)
-                    {
-                        <span class="oldPrice">
-                            @item.CurrentPrice.OldPrice&euro;
-                        </span>
-                        <span class="newPrice ml-2">
-                            @item.CurrentPrice.DiscountPrice&euro;
-                        </span>
-                    }
-                    else
-                    {
-                        <span>
-                            @item.Price&euro;
-                        </span>
-                    }
-                </td>
-                <td>
-                    @if (item.CurrentPrice.IsDiscount)
-                    {
-                        <span>
-                            @item.CurrentPrice.DiscountPercent %
-                        </span>
-                    }
-                    else
-                    {
-                        <span>
-                            None
-                        </span>
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Quantity)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FoodCategory)
-                </td>
-                <td>
-                    @if (item.FoodImage != null)
-                    {
-                        <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(item.FoodImage)" width="80" height="80" />
-                    }
-                </td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-page="/DiscountPages/Index" asp-route-id="@item.ID">Discounts</a> |
-                    <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Food[0].FoodName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Food[0].Price)
+                </th>
+                <th>
+                    Discount
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Food[0].Quantity)
+                </th>
+                <th>
+                    Category
+                </th>
+                <th>
+                    Food Image
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Food)
+            {
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FoodName)
+                    </td>
+                    <td>
+                        @if (item.CurrentPrice.IsDiscount)
+                        {
+                            <span class="oldPrice">
+                                @item.CurrentPrice.OldPrice&euro;
+                            </span>
+                            <span class="newPrice ml-2">
+                                @item.CurrentPrice.DiscountPrice&euro;
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                @item.Price&euro;
+                            </span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.CurrentPrice.IsDiscount)
+                        {
+                            <span>
+                                @item.CurrentPrice.DiscountPercent %
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                None
+                            </span>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FoodCategory)
+                    </td>
+                    <td>
+                        @if (item.FoodImage != null)
+                        {
+                            <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(item.FoodImage)" width="80" height="80" />
+                        }
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                        <a asp-page="/DiscountPages/Index" asp-route-id="@item.ID">Discounts</a> |
+                        <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
