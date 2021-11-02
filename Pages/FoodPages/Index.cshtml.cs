@@ -36,7 +36,7 @@ namespace FoodKept.Pages.FoodPages
             //Query for food from current user
             ApplicationUser applicationUser = await _userManager.GetUserAsync(User);
             Food = new ModifiedList<Food>(_context.FoodData.Include(c => c.ApplicationUser).Where(c => c.ApplicationUserId == applicationUser.Id).ToList());
-
+           
             //Calculate Discounts
             CalculateCurrentPrice.CalculatePriceForFoodList(Food);
 

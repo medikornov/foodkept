@@ -95,7 +95,7 @@ namespace FoodKept.Pages.FoodCustomer
         {
             OnGet();
             SmtpClient smtpClient = new SmtpClient();
-            smtpClient.Credentials = new System.Net.NetworkCredential("foodkepterino@gmail.com", "foodkept4");
+            smtpClient.Credentials = new System.Net.NetworkCredential(userName: "foodkepterino@gmail.com", password: "foodkept4");
 
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.EnableSsl = true;
@@ -108,7 +108,7 @@ namespace FoodKept.Pages.FoodCustomer
             smtpClient.Port = 587;
             smtpClient.Host = "smtp.gmail.com";
 
-            string path = Path.Combine(_environment.ContentRootPath, "App_Data\\emailTemplate.txt");
+            string path = Path.Combine(path1: _environment.ContentRootPath, path2: "App_Data\\emailTemplate.txt");
 
             var foodsInfo = _context.FoodData.ToList().Join(
                 cart,
@@ -158,10 +158,12 @@ namespace FoodKept.Pages.FoodCustomer
             }
             catch (Exception)
             {
-
+                
             }
+
             return Page();
         }
+
 
         private static string ReadFromFile(string filePath)
         {
