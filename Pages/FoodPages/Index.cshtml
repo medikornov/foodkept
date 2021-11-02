@@ -9,10 +9,10 @@
 <div class="container container_mt">
     <h1>Your Food List</h1>
     <!--Markup to add search field on the page-->
-    <form>
+    <form class="form-inline">
         <p>
-            Food Name: <input type="text" asp-for="SearchString" />
-            <input type="submit" value="Filter" />
+            Food Name: <input class="form-control" type="text" asp-for="SearchString" />
+            <input class="btn btn-dark pl-3 pr-3 mt-0 mb-0" type="submit" value="Filter" />
         </p>
     </form>
 

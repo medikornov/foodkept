@@ -1,35 +1,55 @@
 ﻿@page
 @model IndexModel
+@using FoodKept.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> userManager
+@inject SignInManager<ApplicationUser> signInManager
 @{
     ViewData["Title"] = "Home page";
 }
 
-<!--<div class="text-center">
-    <h1 class="display-4">Welcome To FoodKept</h1>
-    <p>Buy food at a discount, while minimizing food waste.</p>
-</div>-->
-
 <!-- shop section -->
 
 <section class="shop_section layout_padding">
-        <div class="box">
-            <div class="detail-box ml-5 banner-text">
-                <h2>
-                    FoodKept
-                </h2>
-                <p>
-                    Buy food at a discount, while minimizing food waste.
-                </p>
-                <div class="btn-box">
-                    <a href="">
+    <div class="box">
+        <div class="detail-box ml-5 banner-text">
+            <h2>
+                FoodKept
+            </h2>
+            <p>
+                Buy food at a discount, while minimizing food waste.
+            </p>
+            <div class="btn-box">
+                @if (signInManager.IsSignedIn(User))
+                {
+                    var user = userManager.GetUserAsync(User).Result;
+                    var role = userManager.GetRolesAsync(user).Result[0];
+
+                    @if (role == "Customer")
+                    {
+                        <a asp-page="/FoodCustomer/Food">
+                            Buy Now
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-page="/FoodPages/Index">
+                            Buy Now
+                        </a>
+                    }
+                }
+                else
+                {
+                    <a asp-page="/Login">
                         Buy Now
                     </a>
-                </div>
-            </div>
-            <div class="img-box" id="bar">
-                <img src="images/shop-img.jpg" alt="">
+                }
             </div>
         </div>
+        <div class="img-box" id="bar">
+            <img src="images/shop-img.jpg" alt="">
+        </div>
+    </div>
 </section>
 
 <!-- end shop section -->
@@ -76,75 +96,225 @@
         </div>
     </div>
     <div class="container-fluid">
+        @if (signInManager.IsSignedIn(User))
+        {
+            var user = userManager.GetUserAsync(User).Result;
+            var role = userManager.GetRolesAsync(user).Result[0];
 
-        <div class="fruit_container">
-            <div class="box">
-                <img src="images/f-1.jpg" alt="">
-                <div class="link_box">
-                    <h5>
-                        Orange
-                    </h5>
-                    <a href="">
-                        Buy Now
-                    </a>
+            @if (role == "Customer")
+            {
+                <div class="fruit_container">
+                    <div class="box">
+                        <img src="images/f-1.jpg" alt="">
+                        <div class="link_box">
+                            <h5>
+                                Orange
+                            </h5>
+                            <a asp-page="/FoodCustomer/Food">
+                                Buy Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <img src="images/b-2.jpg" alt="">
+                        <div class="link_box">
+                            <h5>
+                                Pizza
+                            </h5>
+                            <a asp-page="/FoodCustomer/Food">
+                                Buy Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <img src="images/f-3.jpg" alt="">
+                        <div class="link_box">
+                            <h5>
+                                Banana
+                            </h5>
+                            <a asp-page="/FoodCustomer/Food">
+                                Buy Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <img src="images/b-4.jpg" alt="">
+                        <div class="link_box">
+                            <h5>
+                                Donut
+                            </h5>
+                            <a asp-page="/Login">
+                                Buy Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <img src="images/f-4.jpg" alt="">
+                        <div class="link_box">
+                            <h5>
+                                Apple
+                            </h5>
+                            <a asp-page="/Login">
+                                Buy Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <img src="images/b-6.jpg" alt="">
+                        <div class="link_box">
+                            <h5>
+                                Burger
+                            </h5>
+                            <a asp-page="/FoodCustomer/Food">
+                                Buy Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="fruit_container">
+                    <div class="box">
+                        <img src="images/f-1.jpg" alt="">
+                        <div class="link_box">
+                            <h5>
+                                Orange
+                            </h5>
+                            <a asp-page="/FoodPages/Index">
+                                Buy Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <img src="images/b-2.jpg" alt="">
+                        <div class="link_box">
+                            <h5>
+                                Pizza
+                            </h5>
+                            <a asp-page="/FoodPages/Index">
+                                Buy Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <img src="images/f-3.jpg" alt="">
+                        <div class="link_box">
+                            <h5>
+                                Banana
+                            </h5>
+                            <a asp-page="/FoodPages/Index">
+                                Buy Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <img src="images/b-4.jpg" alt="">
+                        <div class="link_box">
+                            <h5>
+                                Donut
+                            </h5>
+                            <a asp-page="/Login">
+                                Buy Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <img src="images/f-4.jpg" alt="">
+                        <div class="link_box">
+                            <h5>
+                                Apple
+                            </h5>
+                            <a asp-page="/Login">
+                                Buy Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <img src="images/b-6.jpg" alt="">
+                        <div class="link_box">
+                            <h5>
+                                Burger
+                            </h5>
+                            <a asp-page="/FoodPages/Index">
+                                Buy Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="fruit_container">
+                <div class="box">
+                    <img src="images/f-1.jpg" alt="">
+                    <div class="link_box">
+                        <h5>
+                            Orange
+                        </h5>
+                        <a asp-page="/Login">
+                            Buy Now
+                        </a>
+                    </div>
+                </div>
+                <div class="box">
+                    <img src="images/b-2.jpg" alt="">
+                    <div class="link_box">
+                        <h5>
+                            Pizza
+                        </h5>
+                        <a asp-page="/Login">
+                            Buy Now
+                        </a>
+                    </div>
+                </div>
+                <div class="box">
+                    <img src="images/f-3.jpg" alt="">
+                    <div class="link_box">
+                        <h5>
+                            Banana
+                        </h5>
+                        <a asp-page="/Login">
+                            Buy Now
+                        </a>
+                    </div>
+                </div>
+                <div class="box">
+                    <img src="images/b-4.jpg" alt="">
+                    <div class="link_box">
+                        <h5>
+                            Donut
+                        </h5>
+                        <a asp-page="/Login">
+                            Buy Now
+                        </a>
+                    </div>
+                </div>
+                <div class="box">
+                    <img src="images/f-4.jpg" alt="">
+                    <div class="link_box">
+                        <h5>
+                            Apple
+                        </h5>
+                        <a asp-page="/Login">
+                            Buy Now
+                        </a>
+                    </div>
+                </div>
+                <div class="box">
+                    <img src="images/b-6.jpg" alt="">
+                    <div class="link_box">
+                        <h5>
+                            Burger
+                        </h5>
+                        <a asp-page="/Login">
+                            Buy Now
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="box">
-                <img src="images/f-2.jpg" alt="">
-                <div class="link_box">
-                    <h5>
-                        Blueberry
-                    </h5>
-                    <a href="">
-                        Buy Now
-                    </a>
-                </div>
-            </div>
-            <div class="box">
-                <img src="images/f-3.jpg" alt="">
-                <div class="link_box">
-                    <h5>
-                        Banana
-                    </h5>
-                    <a href="">
-                        Buy Now
-                    </a>
-                </div>
-            </div>
-            <div class="box">
-                <img src="images/f-4.jpg" alt="">
-                <div class="link_box">
-                    <h5>
-                        Apple
-                    </h5>
-                    <a href="">
-                        Buy Now
-                    </a>
-                </div>
-            </div>
-            <div class="box">
-                <img src="images/f-5.jpg" alt="">
-                <div class="link_box">
-                    <h5>
-                        Mango
-                    </h5>
-                    <a href="">
-                        Buy Now
-                    </a>
-                </div>
-            </div>
-            <div class="box">
-                <img src="images/f-6.jpg" alt="">
-                <div class="link_box">
-                    <h5>
-                        Strawberry
-                    </h5>
-                    <a href="">
-                        Buy Now
-                    </a>
-                </div>
-            </div>
-        </div>
+        }
     </div>
 </section>
 
@@ -308,7 +478,7 @@
                     <a href="">
                         <img src="images/location.png" alt="">
                         <span>
-                            Passages of Lorem Ipsum available
+                            Vilnius, Lithuania
                         </span>
                     </a>
                 </div>
@@ -324,7 +494,7 @@
                     <a href="">
                         <img src="images/mail.png" alt="">
                         <span>
-                            demo@gmail.com
+                            support@foodkept.com
                         </span>
                     </a>
                 </div>
