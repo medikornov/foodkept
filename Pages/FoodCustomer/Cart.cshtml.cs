@@ -107,7 +107,7 @@ namespace FoodKept.Pages.FoodCustomer
             }
 
             SmtpClient smtpClient = new SmtpClient();
-            smtpClient.Credentials = new System.Net.NetworkCredential(userName: "foodkepterino@gmail.com", password: "foodkept4");
+            smtpClient.Credentials = new System.Net.NetworkCredential("foodkepterino@gmail.com", "foodkept4");
 
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.EnableSsl = true;
