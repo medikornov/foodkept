@@ -24,15 +24,9 @@ namespace FoodKept.Pages
 
         public void OnGet()
         {
-            /*var user = userManager.GetUserAsync(HttpContext.User).Result;
-            name = user.UserName;
-            if (user != null)
-            {
-                role = userManager.GetRolesAsync(user).Result[0];
-            }
-            //var user = userManager.GetUserName(HttpContext.User);
-            //var role = userManager.GetRolesAsync(user);
-            */
+
+           
         }
+
     }
 }

@@ -11,7 +11,7 @@ namespace FoodKept.Helpers
 {
     public class ModifiedList<T> : IList<T>
     {
-        readonly IList<T> _list;
+        public readonly IList<T> _list;
 
         public ModifiedList(IEnumerable<T> list)
         {
