@@ -96,7 +96,7 @@ namespace FoodKept.Pages.FoodCustomer
         public async Task <IActionResult> OnPostReserve()
         {
             OnGet();
-            foreach (var item in cart)
+            foreach (var item in Cart)
             {
                 var food = item.Food;
                 food.Quantity = item.Food.Quantity - item.Quantity;
