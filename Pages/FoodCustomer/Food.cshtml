@@ -48,6 +48,7 @@
     <tbody>
         @foreach (var food in Model.Food)
         {
+            @if (food.Quantity == 0) continue;
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => food.FoodName)
@@ -102,7 +103,7 @@
                     <a asp-page="./Details" asp-route-id="@food.ID">Details</a>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-primary text-light" id="addToCart" onclick="addToCart(@food.ID)" value="@food.ID">Add to Cart @food.ID</button>
+                    <button type="button" class="btn btn-primary text-light" id="addToCart" onclick="addToCart(@food.ID)" value="@food.ID">Add to Cart</button>
                 </td>
             </tr>
         }

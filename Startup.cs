@@ -54,6 +54,10 @@ namespace FoodKept
                 config.LoginPath = "/Login";
             });
 
+            //services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                //.AddEntityFrameworkStores<ShopContext>()
+                //.AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider);
+
 
         }
 

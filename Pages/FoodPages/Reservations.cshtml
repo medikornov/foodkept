@@ -5,9 +5,20 @@
 }
 
 <h1>Reservation history</h1>
+
+<form>
+    <p>
+        <input type="text" asp-for="searchString" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
 <table class= "table">
     <thead>
         <tr>
+            <th>
+                Who reserved
+            </th>
             <th>
                 Food name
             </th>
@@ -22,17 +33,20 @@
     <tbody>
         @foreach (var item in Model.cart)
         {
-            <tr>
-                <td>
-                    @item.Food.FoodName
-                </td>
-                <td>
-                    @item.Quantity
-                </td>
-                <td>
-                    @item.Food.Price
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @item.Customer.FirstName @item.Customer.LastName
+            </td>
+            <td>
+                @item.Food.FoodName
+            </td>
+            <td>
+                @item.Quantity
+            </td>
+            <td>
+                @item.Food.Price
+            </td>
+        </tr>
         }
     </tbody>
 </table>
