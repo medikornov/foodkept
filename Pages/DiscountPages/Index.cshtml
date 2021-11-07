@@ -5,54 +5,56 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Discounts of @Model.Food.FoodName</h1>
+<div class="container container_mt">
+    <h1>Discounts of @Model.Food.FoodName</h1>
 
-<p>
-    <a asp-page="Create" asp-route-id="@Model.Food.ID">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Discount[0].DiscountPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Discount[0].DiscountPercent)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Discount[0].FromTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Discount[0].ToTime)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Discount)
-        {
+    <p>
+        <a asp-page="Create" asp-route-id="@Model.Food.ID">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DiscountPrice)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DiscountPercent)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FromTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ToTime)
-                </td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.ID" asp-route-foodID="@Model.Food.ID">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.ID" asp-route-foodID="@Model.Food.ID">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.ID" asp-route-foodID="@Model.Food.ID">Delete</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Discount[0].DiscountPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Discount[0].DiscountPercent)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Discount[0].FromTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Discount[0].ToTime)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
-<div>
-    <a asp-page="/FoodPages/Index">Back to Food List</a>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Discount)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiscountPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiscountPercent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FromTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ToTime)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.ID" asp-route-foodID="@Model.Food.ID">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.ID" asp-route-foodID="@Model.Food.ID">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.ID" asp-route-foodID="@Model.Food.ID">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div>
+        <a asp-page="/FoodPages/Index">Back to Food List</a>
+    </div>
 </div>

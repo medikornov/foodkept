@@ -4,78 +4,80 @@
     ViewData["Cart"] = "Cart";
 }
 @Html.AntiForgeryToken()
-<div>
-    <form method="post">
-        <div class="nav nav-link">
-            <button type="submit" class="btn btn-primary text-light justify-content-end" asp-page-handler="Reserve">Reserve</button>
-        </div>
-    </form>
+<div class="container container_mt">
+    <div>
+        <form method="post">
+            <div class="nav nav-link">
+                <button type="submit" class="btn btn-dark pl-3 pr-3 mt-0 mb-0 justify-content-end" asp-page-handler="Reserve">Reserve</button>
+            </div>
+        </form>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th></th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Restaurant
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Quantity
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var food in Model.Cart)
+            {
+                <tr>
+                    <td>
+                        <form method="post">
+                            <button type="submit" class="btn btn-light" id="removeFromCart" asp-page-handler="RemoveFromCart" asp-route-id="@food.Id">X</button>
+                        </form>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => food.Food.FoodName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => food.Food.ApplicationUser.RestaurantName)
+                    </td>
+                    <td>
+                        @if (food.Food.CurrentPrice.IsDiscount)
+                        {
+                            <span class="oldPrice">
+                                @food.Food.CurrentPrice.OldPrice&euro;
+                            </span>
+                            <span class="newPrice ml-2">
+                                @food.Food.CurrentPrice.DiscountPrice&euro;
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                @food.Food.Price&euro;
+                            </span>
+                        }
+                    </td>
+                    <td>
+                        <div class="number" data-arg-id="@food.Id" data-arg-quantity="@food.Food.Quantity">
+                            <button type="button" class="minus">-</button>
+                            <label style="width: 50px; text-align: center;">@food.Quantity</label>
+                            <button type="button" class="plus">+</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
-<table class="table">
-    <thead>
-        <tr>
-
-            <th></th>
-            <th>
-                Name
-            </th>
-            <th>
-                Restaurant
-            </th>
-            <th>
-                Price
-            </th>
-            <th>
-                Quantity
-            </th>
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var food in Model.cart)
-        {
-            <tr>
-                <td>
-                    <form method="post">
-                        <button type="submit" class="btn btn-light" id="removeFromCart" asp-page-handler="RemoveFromCart" asp-route-id="@food.Id">X</button>
-                    </form>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => food.Food.FoodName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => food.Food.ApplicationUser.RestaurantName)
-                </td>
-                <td>
-                    @if (food.Food.CurrentPrice.IsDiscount)
-                    {
-                        <span class="oldPrice">
-                            @food.Food.CurrentPrice.OldPrice&euro;
-                        </span>
-                        <span class="newPrice ml-2">
-                            @food.Food.CurrentPrice.DiscountPrice&euro;
-                        </span>
-                    }
-                    else
-                    {
-                        <span>
-                            @food.Food.Price&euro;
-                        </span>
-                    }
-                </td>
-                <td>
-                    <div class="number" data-arg-id="@food.Id" data-arg-quantity="@food.Food.Quantity">
-                        <button type="button" class="minus">-</button>
-                        <label style="width: 50px; text-align: center;">@food.Quantity</label>
-                        <button type="button" class="plus">+</button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-            </tr>
-        }
-    </tbody>
-</table>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {

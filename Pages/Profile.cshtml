@@ -4,23 +4,86 @@
     ViewData["Title"] = "Profile";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-@if (User != null)
-{
-    <div>
-        <h4>@Model.Role</h4>
-        <hr />
-        @if (Model.Role == "Restaurant")
-        {
-            <div style="float:right">
-                <a asp-page="/FoodPages/Reservations">Reservations</a>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-6">
-                        <h4>Details</h4>
-                        <dl class="row mt-3">
+<div class="container container_mt">
+    <h1>@ViewData["Title"]</h1>
+    @if (User != null)
+    {
+        <div>
+            <h4>@Model.Role</h4>
+            <hr />
+            @if (Model.Role == "Restaurant")
+            {
+                <div style="float:right">
+                    <a asp-page="/FoodPages/Reservations">Reservations</a>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-6">
+                            <h4>Details</h4>
+                            <dl class="row mt-3">
+                                <dt class="col-sm-6">
+                                    User Name
+                                </dt>
+                                <dd class="col-sm-6">
+                                    @Html.DisplayFor(model => model.ApplicationUser.UserName)
+                                </dd>
+                                <dt class="col-sm-6">
+                                    @Html.DisplayNameFor(model => model.ApplicationUser.RestaurantName)
+                                </dt>
+                                <dd class="col-sm-6">
+                                    @Html.DisplayFor(model => model.ApplicationUser.RestaurantName)
+                                </dd>
+                                <dt class="col-sm-6">
+                                    @Html.DisplayNameFor(model => model.ApplicationUser.Country)
+                                </dt>
+                                <dd class="col-sm-6">
+                                    @Html.DisplayFor(model => model.ApplicationUser.Country)
+                                </dd>
+                                <dt class="col-sm-6">
+                                    @Html.DisplayNameFor(model => model.ApplicationUser.City)
+                                </dt>
+                                <dd class="col-sm-6">
+                                    @Html.DisplayFor(model => model.ApplicationUser.City)
+                                </dd>
+                                <dt class="col-sm-6">
+                                    @Html.DisplayNameFor(model => model.ApplicationUser.Address)
+                                </dt>
+                                <dd class="col-sm-6">
+                                    @Html.DisplayFor(model => model.ApplicationUser.Address)
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="col-6">
+                            <div class="container ml-5">
+                                <h4>Edit Coordinates</h4>
+                                <div class="row text-sm-left">
+                                    <form method="post">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <div class="form-group">
+                                            <label asp-for="ApplicationUser.Lat" class="control-label"></label>
+                                            <input asp-for="ApplicationUser.Lat" class="form-control" />
+                                            <span asp-validation-for="ApplicationUser.Lat" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="ApplicationUser.Lng" class="control-label"></label>
+                                            <input asp-for="ApplicationUser.Lng" class="form-control" />
+                                            <span asp-validation-for="ApplicationUser.Lng" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="submit" value="Save" class="btn btn-dark pl-3 pr-3 mt-0 mb-0" />
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (Model.Role == "Customer")
+            {
+                <div class="container">
+                    <div class="col">
+                        <dl class="row text-sm-left">
                             <dt class="col-sm-6">
                                 User Name
                             </dt>
@@ -28,11 +91,17 @@
                                 @Html.DisplayFor(model => model.ApplicationUser.UserName)
                             </dd>
                             <dt class="col-sm-6">
-                                @Html.DisplayNameFor(model => model.ApplicationUser.RestaurantName)
+                                @Html.DisplayNameFor(model => model.ApplicationUser.FirstName)
                             </dt>
                             <dd class="col-sm-6">
-                                @Html.DisplayFor(model => model.ApplicationUser.RestaurantName)
+                                @Html.DisplayFor(model => model.ApplicationUser.FirstName)
                             </dd>
+                            <dt class="col-sm-6">
+                                @Html.DisplayNameFor(model => model.ApplicationUser.LastName)
+                            </dt>
+                            <dd class="col-sm-6">
+                                @Html.DisplayFor(model => model.ApplicationUser.LastName)
+                            <dd />
                             <dt class="col-sm-6">
                                 @Html.DisplayNameFor(model => model.ApplicationUser.Country)
                             </dt>
@@ -52,79 +121,9 @@
                                 @Html.DisplayFor(model => model.ApplicationUser.Address)
                             </dd>
                         </dl>
-
-                    </div>
-
-                    <div class="col-6">
-                        <div class="container ml-5">
-                            <h4>Edit Coordinates</h4>
-                            <div class="row text-sm-left">
-                                <form method="post">
-                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                    <div class="form-group">
-                                        <label asp-for="ApplicationUser.Lat" class="control-label"></label>
-                                        <input asp-for="ApplicationUser.Lat" class="form-control" />
-                                        <span asp-validation-for="ApplicationUser.Lat" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="ApplicationUser.Lng" class="control-label"></label>
-                                        <input asp-for="ApplicationUser.Lng" class="form-control" />
-                                        <span asp-validation-for="ApplicationUser.Lng" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="submit" value="Save" class="btn btn-primary" />
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
                     </div>
                 </div>
-            </div>
-        }
-        @if (Model.Role == "Customer")
-        {
-            <div class="container">
-                <div class="col">
-                    <dl class="row text-sm-left">
-                        <dt class="col-sm-6">
-                            User Name
-                        </dt>
-                        <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.ApplicationUser.UserName)
-                        </dd>
-                        <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.ApplicationUser.FirstName)
-                        </dt>
-                        <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.ApplicationUser.FirstName)
-                        </dd>
-                        <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.ApplicationUser.LastName)
-                        </dt>
-                        <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.ApplicationUser.LastName)
-                        <dd />
-                        <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.ApplicationUser.Country)
-                        </dt>
-                        <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.ApplicationUser.Country)
-                        </dd>
-                        <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.ApplicationUser.City)
-                        </dt>
-                        <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.ApplicationUser.City)
-                        </dd>
-                        <dt class="col-sm-6">
-                            @Html.DisplayNameFor(model => model.ApplicationUser.Address)
-                        </dt>
-                        <dd class="col-sm-6">
-                            @Html.DisplayFor(model => model.ApplicationUser.Address)
-                        </dd>
-                    </dl>
-                </div>
-            </div>
-        }
-    </div>
-}
+            }
+        </div>
+    }
+</div>

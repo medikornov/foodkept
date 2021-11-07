@@ -32,20 +32,23 @@ namespace FoodKept.Pages
 
         public async Task OnGetAsync(string sortOrder)
         {
+            //Lazy Initialization
+            Lazy<List<Food>> getFood = new Lazy<List<Food>>(() => _context.FoodData.ToList());
+
             //Sorting by quantity
             QuantitySort = sortOrder == "Quantity" ? "quantity_desc" : "Quantity";
 
             switch(sortOrder)
             {
                 case "Quantity":
-                    Food = _context.FoodData.ToList();
+                    Food = getFood.Value;
                     break;
                 case "quantity_desc":
-                    Food = _context.FoodData.ToList();
+                    Food = getFood.Value;
                     Food.Sort();
                     break;
                 default:
-                    Food = _context.FoodData.ToList();
+                    Food = getFood.Value;
                     break;
             }
 

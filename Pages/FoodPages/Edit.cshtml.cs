@@ -37,14 +37,20 @@ namespace FoodKept.Pages.FoodPages
         [BindProperty]
         public List<SelectListItem> EnumCategories { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public IActionResult OnGet(int? id)
         {
+            //Lazy initialization
+            Lazy<Food> getFood = new Lazy<Food>(() => _context.FoodData.FirstOrDefault(m => m.ID == id));
+
             if (id == null)
             {
                 return NotFound();
             }
+            else
+            {
+                Food = getFood.Value;
+            }
 
-            Food = await _context.FoodData.FirstOrDefaultAsync(m => m.ID == id);
             EnumCategories = Enum.GetValues(typeof(FoodCategories.Category)).Cast<FoodCategories.Category>().Select(v => new SelectListItem
             {
                 Text = v.ToString(),
@@ -55,6 +61,7 @@ namespace FoodKept.Pages.FoodPages
             {
                 return NotFound();
             }
+
             return Page();
         }
 
