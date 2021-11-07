@@ -28,5 +28,12 @@ namespace FoodKept.Data
             modelBuilder.Entity<ShoppingCart>().ToTable("ShoppingCart");
             modelBuilder.Entity<Discount>().ToTable("Discount");
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+
+            base.OnConfiguring(optionsBuilder);
+        }
     }
 }
