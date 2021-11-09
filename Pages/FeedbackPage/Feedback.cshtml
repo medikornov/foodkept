@@ -4,33 +4,116 @@
     ViewData["Feedback"] = "Feedback";
 }
 
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Feedback.FirstName" class="control-label"></label>
-                <input asp-for="Feedback.FirstName" class="form-control" />
-                <span asp-validation-for="Feedback.FirstName" class="text-danger"></span>
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-sm-12 col-md-12 col-lg-4">
+            <h1 class="mb-3">Feedback</h1>
+            <ul class="nav nav-tabs">
+                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#customer" role="button" aria-expanded="false" aria-controls="customer">Customer</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#restaurant" role="button" aria-expanded="false" aria-controls="restaurant">Restaurant</a></li>
+            </ul>
+            <div class="tab-content pt-0">
+                <div class="tab-pane active fade show" id="customer">
+                    <div class="row border rounded shadow-sm">
+                        <div class="col">
+                            <form method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="mb-3">
+                                    <label asp-for="Feedback.Email" class="control-label"></label>
+                                    <input asp-for="Feedback.Email" class="form-control" />
+                                    <span asp-validation-for="Feedback.Email" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="Feedback.FirstName" class="control-label">First name</label>
+                                    <input asp-for="Feedback.FirstName" class="form-control" />
+                                    <span asp-validation-for="Feedback.FirstName" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="Feedback.LastName" class="control-label">Last Name</label>
+                                    <input asp-for="Feedback.LastName" class="form-control" />
+                                    <span asp-validation-for="Feedback.LastName" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="Feedback.Answer" class="control-label"></label>
+                                    <textarea asp-for="Feedback.Answer" class="form-control" rows="3"></textarea>
+                                    <span asp-validation-for="Feedback.Answer" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="Feedback.Points">Points (between 1 and 10):</label>
+                                    <input asp-for="Feedback.Points" type="range" value="1" min="1" max="10" oninput="this.nextElementSibling.value = this.value">
+                                    <output>1</output>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="submit" value="Submit" class="btn btn-primary" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="restaurant">
+                    <div class="row border rounded shadow-sm">
+                        <div class="col">
+                            <form method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="mb-3">
+                                    <label asp-for="Feedback.Email" class="control-label"></label>
+                                    <input asp-for="Feedback.Email" class="form-control" />
+                                    <span asp-validation-for="Feedback.Email" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="Feedback.RestaurantName" class="control-label">Restaurant Name</label>
+                                    <input asp-for="Feedback.RestaurantName" class="form-control" />
+                                    <span asp-validation-for="Feedback.RestaurantName" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="Feedback.Answer" class="control-label"></label>
+                                    <textarea asp-for="Feedback.Answer" class="form-control" rows="3"></textarea>
+                                    <span asp-validation-for="Feedback.Answer" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="Feedback.Points">Points (between 1 and 10):</label>
+                                    <input asp-for="Feedback.Points" type="range" value="1" min="1" max="10" oninput="this.nextElementSibling.value = this.value">
+                                    <output>1</output>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="submit" value="Submit" class="btn btn-primary" />
+                                </div>
+                            </form> 
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Feedback.LastName" class="control-label"></label>
-                <input asp-for="Feedback.LastName" class="form-control" />
-                <span asp-validation-for="Feedback.LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Feedback.Email" class="control-label"></label>
-                <input asp-for="Feedback.Email" class="form-control" />
-                <span asp-validation-for="Feedback.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Feedback.Answer" class="control-label"></label>
-                <input asp-for="Feedback.Answer" class="form-control" />
-                <span asp-validation-for="Feedback.Answer" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Submit" class="btn btn-primary"/>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
+
+            <!--<div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Feedback.FirstName" class="control-label"></label>
+                    <input asp-for="Feedback.FirstName" class="form-control" />
+                    <span asp-validation-for="Feedback.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Feedback.LastName" class="control-label"></label>
+                    <input asp-for="Feedback.LastName" class="form-control" />
+                    <span asp-validation-for="Feedback.LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Feedback.Email" class="control-label"></label>
+                    <input asp-for="Feedback.Email" class="form-control" />
+                    <span asp-validation-for="Feedback.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Feedback.Answer" class="control-label"></label>
+                    <input asp-for="Feedback.Answer" class="form-control" />
+                    <span asp-validation-for="Feedback.Answer" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Submit" class="btn btn-primary"/>
+                </div>
+            </form>
+        </div>
+    </div>-->
