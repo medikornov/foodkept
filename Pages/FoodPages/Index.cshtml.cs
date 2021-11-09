@@ -30,12 +30,60 @@ namespace FoodKept.Pages.FoodPages
         public ModifiedList<Food> Food { get; set; }
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; }
+        public string NameSort { get; set; }
+        public string PriceSort { get; set; }
+        public string DiscountSort { get; set; }
+        public string QuantitySort { get; set; }
+        public string FoodCategorySort { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(string sortOrder)
         {
+            //Sorting system
+            NameSort = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            PriceSort = sortOrder == "Price" ? "price_desc" : "Price";
+            DiscountSort = sortOrder == "Discount" ? "discount_desc" : "Discount";
+            QuantitySort = sortOrder == "Quantity" ? "quantity_desc" : "Quantity";
+            FoodCategorySort = string.IsNullOrEmpty(sortOrder) ? "category_desc" : "Category";
+
             //Query for food from current user
             ApplicationUser applicationUser = await _userManager.GetUserAsync(User);
-            Food = new ModifiedList<Food>(_context.FoodData.Include(c => c.ApplicationUser).Where(c => c.ApplicationUserId == applicationUser.Id).ToList());
+            IQueryable<Food> foodIQ = _context.FoodData.Include(c => c.ApplicationUser).Where(c => c.ApplicationUserId == applicationUser.Id);
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    foodIQ = foodIQ.OrderByDescending(s => s.FoodName);
+                    break;
+                case "Price":
+                    foodIQ = foodIQ.OrderBy(s => s.Price);
+                    break;
+                case "price_desc":
+                    foodIQ = foodIQ.OrderByDescending(s => s.Price);
+                    break;
+                case "Discount":
+                    foodIQ = foodIQ.OrderBy(s => s.CurrentPrice.DiscountPercent);
+                    break;
+                case "discount_desc":
+                    foodIQ = foodIQ.OrderByDescending(s => s.CurrentPrice.DiscountPercent);
+                    break;
+                case "Quantity":
+                    foodIQ = foodIQ.OrderBy(s => s.Quantity);
+                    break;
+                case "quantity_desc":
+                    foodIQ = foodIQ.OrderByDescending(s => s.Quantity);
+                    break;
+                case "Category":
+                    foodIQ = foodIQ.OrderBy(s => s.FoodCategory);
+                    break;
+                case "category_desc":
+                    foodIQ = foodIQ.OrderByDescending(s => s.FoodCategory);
+                    break;
+                default:
+                    foodIQ = foodIQ.OrderBy(s => s.FoodName);
+                    break;
+            }
+
+            Food = new ModifiedList<Food>(await foodIQ.ToListAsync());
            
             //Calculate Discounts
             CalculateCurrentPrice.CalculatePriceForFoodList(Food);

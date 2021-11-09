@@ -25,19 +25,29 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Food[0].FoodName)
+                    <a class="text-dark" asp-page="./Index" asp-route-sortOrder="@Model.NameSort">
+                        @Html.DisplayNameFor(model => model.Food[0].FoodName)
+                    </a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Food[0].Price)
+                    <a class="text-dark" asp-page="./Index" asp-route-sortOrder="@Model.PriceSort">
+                        @Html.DisplayNameFor(model => model.Food[0].Price)
+                    </a>
                 </th>
                 <th>
-                    Discount
+                    <a class="text-dark" asp-page="./Index" asp-route-sortOrder="@Model.DiscountSort">
+                        Discount
+                    </a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Food[0].Quantity)
+                    <a class="text-dark" asp-page="./Index" asp-route-sortOrder="@Model.QuantitySort">
+                        @Html.DisplayNameFor(model => model.Food[0].Quantity)
+                    </a>
                 </th>
                 <th>
-                    Category
+                    <a class="text-dark" asp-page="./Index" asp-route-sortOrder="@Model.FoodCategorySort">
+                        Food Category
+                    </a>
                 </th>
                 <th>
                     Food Image
