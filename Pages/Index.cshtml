@@ -22,7 +22,7 @@
             <div class="btn-box">
                 @if (signInManager.IsSignedIn(User))
                 {
-                    /*var user = userManager.GetUserAsync(User).Result;
+                    var user = userManager.GetUserAsync(User).Result;
                     var role = userManager.GetRolesAsync(user).Result[0];
 
                     @if (role == "Customer")
@@ -36,7 +36,7 @@
                         <a asp-page="/FoodPages/Index">
                             Buy Now
                         </a>
-                    }*/
+                    }
                 }
                 else
                 {
@@ -98,9 +98,8 @@
     <div class="container-fluid">
         @if (signInManager.IsSignedIn(User))
         {
-            //var user = userManager.GetUserAsync(User).Result;
-            //var role = userManager.GetRolesAsync(user).Result[0];
-            var role = "Customer";
+            var user = userManager.GetUserAsync(User).Result;
+            var role = userManager.GetRolesAsync(user).Result[0];
             @if (role == "Customer")
             {
                 <div class="fruit_container">
