@@ -11,6 +11,8 @@ namespace FoodKept.Models
     public class Feedback
     {
         public int ID { get; set; }
+        public string ApplicationUserId { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
         public int Points { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

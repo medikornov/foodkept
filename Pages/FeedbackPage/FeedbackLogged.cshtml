@@ -1,0 +1,37 @@
+﻿@page
+@model FoodKept.Pages.FeedbackPage.FeedbackLoggedModel
+@{
+    ViewData["Feedback"] = "Feedback";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-sm-12 col-md-12 col-lg-4">
+            <h1 class="mb-3">Feedback</h1>
+            <div class="tab-content pt-0">
+                <div class="tab-pane active fade show" id="customer">
+                    <div class="row border rounded shadow-sm">
+                        <div class="col">
+                            <form method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="mb-3">
+                                    <label asp-for="Feedback.Answer" class="control-label"></label>
+                                    <textarea asp-for="Feedback.Answer" class="form-control" rows="3"></textarea>
+                                    <span asp-validation-for="Feedback.Answer" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="Feedback.Points">Points (between 1 and 10):</label>
+                                    <input asp-for="Feedback.Points" type="range" value="1" min="1" max="10" oninput="this.nextElementSibling.value = this.value">
+                                    <output>1</output>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="submit" value="Submit" class="btn btn-primary" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
