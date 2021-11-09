@@ -17,16 +17,24 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Food[0].FoodName)
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.NameSort">
+                        @Html.DisplayNameFor(model => model.Food[0].FoodName)
+                    </a>
                 </th>
                 <th>
-                    Restaurant
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.RestaurantSort">
+                        Restaurant
+                    </a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Food[0].Price)
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.PriceSort">
+                        @Html.DisplayNameFor(model => model.Food[0].Price)
+                    </a>
                 </th>
                 <th>
-                    Discount
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.DiscountSort">
+                        Discount
+                    </a>
                 </th>
                 <th>
                     <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.QuantitySort">
@@ -34,7 +42,9 @@
                     </a>
                 </th>
                 <th>
-                    Food Category
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.FoodCategorySort">
+                        Food Category
+                    </a>
                 </th>
                 <th>
                     Food Image
