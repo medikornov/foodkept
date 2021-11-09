@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FoodKept.Helpers;
 using FoodKept.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -12,35 +13,39 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FoodKept.Pages
 {
-    [Authorize(Roles ="Customer, Admin")]
+    [Authorize(Roles = "Customer, Admin")]
     public class FoodModel : PageModel
     {
         private readonly FoodKept.Data.ShopContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public FoodModel(FoodKept.Data.ShopContext context, UserManager<ApplicationUser> userManager)
+        public FoodModel(FoodKept.Data.ShopContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             _context = context;
             _userManager = userManager;
+            _configuration = configuration;
         }
 
-        public List<Food> Food { get; set; }
+        [BindProperty]
+        public PaginatedList<Food> Food { get; set; }
         public string id { get; set; }
-        [BindProperty(SupportsGet = true)]
-        public string SearchString { get; set; }
         public string NameSort { get; set; }
         public string RestaurantSort { get; set; }
         public string PriceSort { get; set; }
         public string DiscountSort { get; set; }
         public string QuantitySort { get; set; }
         public string FoodCategorySort { get; set; }
+        public string CurrentFilter { get; set; }
+        public string CurrentSort { get; set; }
 
-        public async Task OnGetAsync(string sortOrder)
+        public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString, int? pageIndex)
         {
             //Lazy Initialization
             //Lazy<List<Food>> getFood = new Lazy<List<Food>>(() => _context.FoodData.ToList());
 
             //Sorting system
+            CurrentSort = sortOrder;
             NameSort = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             RestaurantSort = string.IsNullOrEmpty(sortOrder) ? "resName_desc" : "Restaurant";
             PriceSort = sortOrder == "Price" ? "price_desc" : "Price";
@@ -48,8 +53,24 @@ namespace FoodKept.Pages
             QuantitySort = sortOrder == "Quantity" ? "quantity_desc" : "Quantity";
             FoodCategorySort = string.IsNullOrEmpty(sortOrder) ? "category_desc" : "Category";
 
+            if(searchString != null)
+            {
+                pageIndex = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            CurrentFilter = searchString;
+
             IQueryable<Food> foodIQ = from s in _context.FoodData
                                              select s;
+
+            if(!string.IsNullOrEmpty(searchString))
+            {
+                foodIQ = foodIQ.Where(s => s.FoodName.Contains(searchString) || s.ApplicationUser.RestaurantName.Contains(searchString));
+            }
 
             switch (sortOrder)
             {
@@ -91,18 +112,10 @@ namespace FoodKept.Pages
                     break;
             }
 
-            Food = await foodIQ.ToListAsync();
-
             //Calculate Discounts
-            CalculateCurrentPrice.CalculatePriceForFoodList(Food: Food);
+            CalculateCurrentPrice.CalculatePriceForFoodList(Food: await foodIQ.ToListAsync());
 
-            var foods = from m in _context.FoodData
-                        select m;
-            if (!string.IsNullOrEmpty(SearchString))
-            {
-                foods = foods.Where(s => s.FoodName.Contains(SearchString));
-                Food = await foods.ToListAsync();
-            }
+            Food = await PaginatedList<Food>.CreateAsync(foodIQ, pageIndex ?? 1, 5);
 
             id = _userManager.GetUserId(User);
         }

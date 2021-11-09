@@ -27,27 +27,45 @@ namespace FoodKept.Pages.FoodPages
             _userManager = userManager;
         }
 
-        public ModifiedList<Food> Food { get; set; }
-        [BindProperty(SupportsGet = true)]
-        public string SearchString { get; set; }
+        public PaginatedList<Food> Food { get; set; }
         public string NameSort { get; set; }
         public string PriceSort { get; set; }
         public string DiscountSort { get; set; }
         public string QuantitySort { get; set; }
         public string FoodCategorySort { get; set; }
+        public string CurrentFilter { get; set; }
+        public string CurrentSort { get; set; }
 
-        public async Task OnGetAsync(string sortOrder)
+        public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString, int? pageIndex)
         {
             //Sorting system
+            CurrentSort = sortOrder;
             NameSort = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             PriceSort = sortOrder == "Price" ? "price_desc" : "Price";
             DiscountSort = sortOrder == "Discount" ? "discount_desc" : "Discount";
             QuantitySort = sortOrder == "Quantity" ? "quantity_desc" : "Quantity";
             FoodCategorySort = string.IsNullOrEmpty(sortOrder) ? "category_desc" : "Category";
 
+            if (searchString != null)
+            {
+                pageIndex = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            CurrentFilter = searchString;
+
             //Query for food from current user
             ApplicationUser applicationUser = await _userManager.GetUserAsync(User);
             IQueryable<Food> foodIQ = _context.FoodData.Include(c => c.ApplicationUser).Where(c => c.ApplicationUserId == applicationUser.Id);
+
+            //Filter food
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                foodIQ = foodIQ.Where(s => s.FoodName.Contains(searchString));
+            }
 
             switch (sortOrder)
             {
@@ -83,19 +101,10 @@ namespace FoodKept.Pages.FoodPages
                     break;
             }
 
-            Food = new ModifiedList<Food>(await foodIQ.ToListAsync());
-           
             //Calculate Discounts
-            CalculateCurrentPrice.CalculatePriceForFoodList(Food);
+            CalculateCurrentPrice.CalculatePriceForFoodList(Food: await foodIQ.ToListAsync());
 
-            //Filter food
-            var foods = from m in _context.FoodData
-                        select m;
-            if (!string.IsNullOrEmpty(SearchString))
-            {
-                foods = foods.Where(s => s.FoodName.Contains(SearchString) && s.ApplicationUserId == applicationUser.Id);
-                Food = new ModifiedList<Food>(await foods.ToListAsync());
-            }
+            Food = await PaginatedList<Food>.CreateAsync(foodIQ, pageIndex ?? 1, 5);
         }
     }
 }

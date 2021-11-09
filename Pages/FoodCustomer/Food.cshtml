@@ -6,9 +6,9 @@
 @Html.AntiForgeryToken()
 
 <div class="container container_mt">
-    <form class="form-inline">
+    <form class="form-inline" asp-page="./Food" method="get">
         <p>
-            Food Name: <input class="form-control" type="text" asp-for="SearchString"/>
+            Food Name: <input class="form-control" type="text" name="SearchString" value="@Model.CurrentFilter"/>
             <input class="btn btn-dark pl-3 pr-3 mt-0 mb-0" type="submit" value="Filter" />
         </p>
     </form>
@@ -17,12 +17,14 @@
         <thead>
             <tr>
                 <th>
-                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.NameSort">
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.NameSort"
+                       asp-route-currentFilter="@Model.CurrentFilter">
                         @Html.DisplayNameFor(model => model.Food[0].FoodName)
                     </a>
                 </th>
                 <th>
-                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.RestaurantSort">
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.RestaurantSort"
+                       asp-route-currentFilter="@Model.CurrentFilter">
                         Restaurant
                     </a>
                 </th>
@@ -120,6 +122,26 @@
             }
         </tbody>
     </table>
+
+    @{
+        var prevDisabled = !Model.Food.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.Food.HasNextPage ? "disabled" : "";
+    }
+
+    <a asp-page="./Food"
+       asp-route-sortOrder="@Model.CurrentSort"
+       asp-route-pageIndex="@(Model.Food.PageIndex - 1)"
+       asp-route-currentFilter="@Model.CurrentFilter"
+       class="btn btn-dark text-light @prevDisabled">
+        Previous
+    </a>
+    <a asp-page="./Food"
+       asp-route-sortOrder="@Model.CurrentSort"
+       asp-route-pageIndex="@(Model.Food.PageIndex + 1)"
+       asp-route-currentFilter="@Model.CurrentFilter"
+       class="btn btn-dark text-light @nextDisabled">
+        Next
+    </a>
 </div>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
