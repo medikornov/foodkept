@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using FoodKept.Helpers;
+using System.Web;
 
 namespace FoodKept.Pages
 {
@@ -77,7 +78,6 @@ namespace FoodKept.Pages
                     ModelState.AddModelError("", error.Description);
                 }
             }
-
             return Page();
         }
 
@@ -101,13 +101,12 @@ namespace FoodKept.Pages
 
                 var result = await userManager.CreateAsync(user, ResRegModel.Password);
 
-                /*var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                var confirmationLink = Url.Action(nameof(ConfirmEmail), "Register", new { token, email = user.Email }, Request.Scheme);
-                /*var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink, null);
-                await _emailSender.SendEmailAsync(message);
+                var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmationLink = "https://localhost:5001/Register?handler=ConfirmEmail&token="
+                    + HttpUtility.UrlEncode(token) + "&email=" + user.Email;
 
                 EmailSender emailSender = new EmailSender();
-                emailSender.sendEmail(user.Email, confirmationLink);*/
+                emailSender.sendEmail(user.Email, confirmationLink);
 
                 if (!await roleManager.RoleExistsAsync("Restaurant"))
                 {
@@ -130,15 +129,15 @@ namespace FoodKept.Pages
 
             return Page();
         }
-        /*[HttpGet]
-        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        
+        public async Task<IActionResult> OnGetConfirmEmailAsync(string token, string email)
         {
             var user = await userManager.FindByEmailAsync(email);
             if (user == null)
                 return RedirectToPage("./Register");
             var result = await userManager.ConfirmEmailAsync(user, token);
             return RedirectToPage("./index");
-        }*/
+        }
     }
 
 
