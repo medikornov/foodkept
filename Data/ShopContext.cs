@@ -30,5 +30,12 @@ namespace FoodKept.Data
             modelBuilder.Entity<Discount>().ToTable("Discount");
             modelBuilder.Entity<Feedback>().ToTable("Feedback");
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+
+            base.OnConfiguring(optionsBuilder);
+        }
     }
 }

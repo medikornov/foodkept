@@ -1,0 +1,40 @@
+﻿@page
+@model FoodKept.Pages.FoodPages.ReservationsModel
+@{
+    ViewData["Title"] = "Reservations";
+}
+
+<div class="container container_mt">
+    <h1>Reservation history</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Food name
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Price
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.cart)
+            {
+                <tr>
+                    <td>
+                        @item.Food.FoodName
+                    </td>
+                    <td>
+                        @item.Quantity
+                    </td>
+                    <td>
+                        @item.Food.Price
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -21,7 +21,7 @@ namespace FoodKept.Pages.FoodCustomer
     [Authorize(Roles = "Customer, Admin")]
     public class CartModel : PageModel
     {
-        public IList<ShoppingCart> cart { get; set; }
+        public IList<ShoppingCart> Cart { get; set; }
         private readonly ShopContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _environment;
@@ -37,9 +37,9 @@ namespace FoodKept.Pages.FoodCustomer
         public void OnGet()
         {
             var userId = _userManager.GetUserId(User);
-            cart = _context.Cart.Include(c => c.Food).Where(c => c.ApplicationUserId == userId).ToList();
+            Cart = _context.Cart.Include(c => c.Food).Where(c => (c.ApplicationUserId == userId) && (c.Reserved == false)).ToList();
 
-            foreach(var cartItem in cart)
+            foreach (var cartItem in Cart)
             {
                 CalculateCurrentPrice.CalculatePriceForFood(cartItem.Food);
             }
@@ -51,7 +51,8 @@ namespace FoodKept.Pages.FoodCustomer
             Food food = _context.FoodData.FirstOrDefault(db => db.ID.ToString() == id);
             ShoppingCart result = _context.Cart.FirstOrDefault(c =>
                     c.ApplicationUserId == _userManager.GetUserId(User) &&
-                    c.FoodId == food.ID);
+                    c.FoodId == food.ID &&
+                    c.Reserved == false);
 
             if (result != null)
             {
@@ -67,7 +68,8 @@ namespace FoodKept.Pages.FoodCustomer
                 {
                     FoodId = food.ID,
                     ApplicationUserId = _userManager.GetUserId(User),
-                    Quantity = 1
+                    Quantity = 1,
+                    Reserved = false
                 };
 
                 _context.Cart.Add(cart);
@@ -91,9 +93,19 @@ namespace FoodKept.Pages.FoodCustomer
         }
 
 
-        public IActionResult OnPostReserve()
+        public async Task <IActionResult> OnPostReserve()
         {
             OnGet();
+            foreach (var item in Cart)
+            {
+                var food = item.Food;
+                food.Quantity = item.Food.Quantity - item.Quantity;
+                item.Reserved = true;
+                _context.Attach(food).State = EntityState.Modified;
+                _context.Attach(item).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+
             SmtpClient smtpClient = new SmtpClient();
             smtpClient.Credentials = new System.Net.NetworkCredential("foodkepterino@gmail.com", "foodkept4");
 
@@ -108,10 +120,10 @@ namespace FoodKept.Pages.FoodCustomer
             smtpClient.Port = 587;
             smtpClient.Host = "smtp.gmail.com";
 
-            string path = Path.Combine(_environment.ContentRootPath, "App_Data\\emailTemplate.txt");
+            string path = Path.Combine(path1: _environment.ContentRootPath, path2: "App_Data\\emailTemplate.txt");
 
             var foodsInfo = _context.FoodData.ToList().Join(
-                cart,
+                Cart,
                 food => food.ID, crt => crt.FoodId,
                 (food, crt) => new
                 {
@@ -158,10 +170,12 @@ namespace FoodKept.Pages.FoodCustomer
             }
             catch (Exception)
             {
-
+                
             }
+            OnGet();
             return Page();
         }
+
 
         private static string ReadFromFile(string filePath)
         {
