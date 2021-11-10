@@ -19,6 +19,7 @@ namespace FoodKept.Data
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<ShoppingCart> Cart { get; set; }
         public DbSet<Discount> DiscountData { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +28,7 @@ namespace FoodKept.Data
             modelBuilder.Entity<Food>().ToTable("Food");
             modelBuilder.Entity<ShoppingCart>().ToTable("ShoppingCart");
             modelBuilder.Entity<Discount>().ToTable("Discount");
+            modelBuilder.Entity<Feedback>().ToTable("Feedback");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
