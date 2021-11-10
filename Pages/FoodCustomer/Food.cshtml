@@ -8,7 +8,8 @@
 <div class="container container_mt">
     <form class="form-inline" asp-page="./Food" method="get">
         <p>
-            Food Name: <input class="form-control" type="text" name="SearchString" value="@Model.CurrentFilter"/>
+            Food Name: <input class="form-control" type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <select asp-for="CurrentCategory" asp-items="Model.FoodCategory" class="form-control"></select>
             <input class="btn btn-dark pl-3 pr-3 mt-0 mb-0" type="submit" value="Filter" />
         </p>
     </form>
@@ -18,33 +19,39 @@
             <tr>
                 <th>
                     <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.NameSort"
-                       asp-route-currentFilter="@Model.CurrentFilter">
+                       asp-route-currentFilter="@Model.CurrentFilter"
+                       asp-route-currentCategory="@Model.CurrentCategory">
                         @Html.DisplayNameFor(model => model.Food[0].FoodName)
                     </a>
                 </th>
                 <th>
                     <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.RestaurantSort"
-                       asp-route-currentFilter="@Model.CurrentFilter">
+                       asp-route-currentFilter="@Model.CurrentFilter"
+                       asp-route-currentCategory="@Model.CurrentCategory">
                         Restaurant
                     </a>
                 </th>
                 <th>
-                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.PriceSort">
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.PriceSort"
+                       asp-route-currentCategory="@Model.CurrentCategory">
                         @Html.DisplayNameFor(model => model.Food[0].Price)
                     </a>
                 </th>
                 <th>
-                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.DiscountSort">
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.DiscountSort"
+                       asp-route-currentCategory="@Model.CurrentCategory">
                         Discount
                     </a>
                 </th>
                 <th>
-                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.QuantitySort">
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.QuantitySort"
+                       asp-route-currentCategory="@Model.CurrentCategory">
                         @Html.DisplayNameFor(model => model.Food[0].Quantity)
                     </a>
                 </th>
                 <th>
-                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.FoodCategorySort">
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.FoodCategorySort"
+                       asp-route-currentCategory="@Model.CurrentCategory">
                         Food Category
                     </a>
                 </th>
@@ -132,6 +139,7 @@
        asp-route-sortOrder="@Model.CurrentSort"
        asp-route-pageIndex="@(Model.Food.PageIndex - 1)"
        asp-route-currentFilter="@Model.CurrentFilter"
+       asp-route-currentCategory="@Model.CurrentCategory"
        class="btn btn-dark text-light @prevDisabled">
         Previous
     </a>
@@ -139,6 +147,7 @@
        asp-route-sortOrder="@Model.CurrentSort"
        asp-route-pageIndex="@(Model.Food.PageIndex + 1)"
        asp-route-currentFilter="@Model.CurrentFilter"
+       asp-route-currentCategory="@Model.CurrentCategory"
        class="btn btn-dark text-light @nextDisabled">
         Next
     </a>

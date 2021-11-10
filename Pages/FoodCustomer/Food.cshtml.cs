@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using FoodKept.ViewModels;
 
 namespace FoodKept.Pages
 {
@@ -29,6 +31,8 @@ namespace FoodKept.Pages
 
         [BindProperty]
         public PaginatedList<Food> Food { get; set; }
+        [BindProperty]
+        public List<SelectListItem> FoodCategory { get; set; }
         public string id { get; set; }
         public string NameSort { get; set; }
         public string RestaurantSort { get; set; }
@@ -38,11 +42,19 @@ namespace FoodKept.Pages
         public string FoodCategorySort { get; set; }
         public string CurrentFilter { get; set; }
         public string CurrentSort { get; set; }
+        public string CurrentCategory { get; set; }
 
-        public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString, int? pageIndex)
+        public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString, string currentCategory, int? pageIndex)
         {
             //Lazy Initialization
             //Lazy<List<Food>> getFood = new Lazy<List<Food>>(() => _context.FoodData.ToList());
+
+            //Load food categories
+            FoodCategory = Enum.GetValues(typeof(FoodCategories.Category)).Cast<FoodCategories.Category>().Select(v => new SelectListItem
+            {
+                Text = v.ToString(),
+                Value = v.ToString()
+            }).ToList();
 
             //Sorting system
             CurrentSort = sortOrder;
@@ -63,6 +75,7 @@ namespace FoodKept.Pages
             }
 
             CurrentFilter = searchString;
+            CurrentCategory = currentCategory;
 
             IQueryable<Food> foodIQ = from s in _context.FoodData
                                              select s;
@@ -70,6 +83,11 @@ namespace FoodKept.Pages
             if(!string.IsNullOrEmpty(searchString))
             {
                 foodIQ = foodIQ.Where(s => s.FoodName.Contains(searchString) || s.ApplicationUser.RestaurantName.Contains(searchString));
+            }
+            else if (!string.IsNullOrEmpty(CurrentCategory))
+            {
+                if(CurrentCategory != "None")
+                    foodIQ = foodIQ.Where(s => s.FoodCategory.Contains(CurrentCategory));
             }
 
             switch (sortOrder)
