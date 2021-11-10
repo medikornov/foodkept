@@ -100,7 +100,6 @@
         {
             var user = userManager.GetUserAsync(User).Result;
             var role = userManager.GetRolesAsync(user).Result[0];
-
             @if (role == "Customer")
             {
                 <div class="fruit_container">
