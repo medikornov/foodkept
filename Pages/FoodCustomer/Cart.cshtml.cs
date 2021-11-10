@@ -69,7 +69,8 @@ namespace FoodKept.Pages.FoodCustomer
                     FoodId = food.ID,
                     ApplicationUserId = _userManager.GetUserId(User),
                     Quantity = 1,
-                    Reserved = false
+                    Reserved = false,
+                    Customer = await _userManager.GetUserAsync(User)
                 };
 
                 _context.Cart.Add(cart);

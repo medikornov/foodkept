@@ -10,9 +10,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using FoodKept.Helpers;
+using System.Web;
 
 namespace FoodKept.Pages
 {
+    [ValidateAntiForgeryToken]
     public class RegisterModel : PageModel
     {
         private UserManager<ApplicationUser> userManager { get; }
@@ -75,7 +78,6 @@ namespace FoodKept.Pages
                     ModelState.AddModelError("", error.Description);
                 }
             }
-
             return Page();
         }
 
@@ -99,6 +101,12 @@ namespace FoodKept.Pages
 
                 var result = await userManager.CreateAsync(user, ResRegModel.Password);
 
+                var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmationLink = "https://localhost:5001/Register?handler=ConfirmEmail&token="
+                    + HttpUtility.UrlEncode(token) + "&email=" + user.Email;
+
+                EmailSender emailSender = new EmailSender();
+                emailSender.sendEmail(user.Email, confirmationLink);
 
                 if (!await roleManager.RoleExistsAsync("Restaurant"))
                 {
@@ -121,7 +129,17 @@ namespace FoodKept.Pages
 
             return Page();
         }
+        
+        public async Task<IActionResult> OnGetConfirmEmailAsync(string token, string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+                return RedirectToPage("./Register");
+            var result = await userManager.ConfirmEmailAsync(user, token);
+            return RedirectToPage("./index");
+        }
     }
+
 
     //Model State Extension method for handling multiple form validation (skips errors)
     public static class ModelStateExtensions

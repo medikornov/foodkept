@@ -18,6 +18,9 @@ namespace FoodKept.Pages.FoodPages
         private readonly ShopContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         public IList<ShoppingCart> cart;
+
+        [BindProperty(SupportsGet = true)]
+        public string searchString { get; set; }
         public ReservationsModel(ShopContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
@@ -28,12 +31,29 @@ namespace FoodKept.Pages.FoodPages
             ApplicationUser applicationUser = await _userManager.GetUserAsync(User);
             
             var restaurantsFoods = applicationUser.FoodList;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                cart = getCartFromDataBase(restaurantsFoods, searchString);
+            }
+            else
+            {
+                cart = getCartFromDataBase(restaurantsFoods);
+            }
+        }
+        public IList<ShoppingCart> getCartFromDataBase(IList<Food> restaurantsFoods, string searchString = null)
+        {
             var result = from a in restaurantsFoods
                          join b in _context.Cart.ToList()
                          on a.ID equals b.FoodId
-                         where b.Reserved = true
+                         where b.Reserved = true &&
+                            (searchString is not null && (
+                             b.Customer.FirstName.Contains(searchString) ||
+                             b.Customer.LastName.Contains(searchString) ||
+                             b.Food.FoodName.Contains(searchString)) ||
+                             searchString is null)
                          select b;
-            cart = result.ToList();
+            return result.ToList();
         }
     }
 }

@@ -50,6 +50,7 @@
         <tbody>
             @foreach (var food in Model.Food)
             {
+                @if (food.Quantity == 0) continue;
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => food.FoodName)
