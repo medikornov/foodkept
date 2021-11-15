@@ -37,6 +37,7 @@ namespace FoodKept.Helpers
         private static void AddDiscountToFood(TimeSpan CurrentTime, Food Food)
         {
             Food.CurrentPrice.OldPrice = Food.Price;
+            Food.RestaurantName = Food.ApplicationUser.RestaurantName;
             Food.CurrentPrice.IsDiscount = false;
 
             foreach (var discount in Food.DiscountList)
@@ -46,6 +47,7 @@ namespace FoodKept.Helpers
                     Food.CurrentPrice.DiscountPrice = discount.DiscountPrice;
                     Food.CurrentPrice.DiscountPercent = discount.DiscountPercent;
                     Food.CurrentPrice.IsDiscount = true;
+                    Food.Discount = discount.DiscountPercent;
 
                     break;
                 }

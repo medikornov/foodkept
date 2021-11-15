@@ -101,12 +101,12 @@ namespace FoodKept.Pages
 
                 var result = await userManager.CreateAsync(user, ResRegModel.Password);
 
-                var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                /*var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
                 var confirmationLink = "https://localhost:5001/Register?handler=ConfirmEmail&token="
                     + HttpUtility.UrlEncode(token) + "&email=" + user.Email;
 
                 EmailSender emailSender = new EmailSender();
-                emailSender.sendEmail(user.Email, confirmationLink);
+                emailSender.sendEmail(user.Email, confirmationLink);*/
 
                 if (!await roleManager.RoleExistsAsync("Restaurant"))
                 {

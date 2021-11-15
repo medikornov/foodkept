@@ -52,11 +52,11 @@ namespace FoodKept.Pages.FoodPages
 
             //Sorting system
             CurrentSort = sortOrder;
-            NameSort = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            PriceSort = sortOrder == "Price" ? "price_desc" : "Price";
-            DiscountSort = sortOrder == "Discount" ? "discount_desc" : "Discount";
-            QuantitySort = sortOrder == "Quantity" ? "quantity_desc" : "Quantity";
-            FoodCategorySort = string.IsNullOrEmpty(sortOrder) ? "category_desc" : "Category";
+            NameSort = string.IsNullOrEmpty(sortOrder) ? "_FoodName" : "FoodName";
+            PriceSort = sortOrder == "Price" ? "_Price" : "Price";
+            DiscountSort = sortOrder == "Discount" ? "_Discount" : "Discount";
+            QuantitySort = sortOrder == "Quantity" ? "_Quantity" : "Quantity";
+            FoodCategorySort = string.IsNullOrEmpty(sortOrder) ? "_FoodCategory" : "FoodCategory";
 
             if (searchString != null)
             {
@@ -85,38 +85,20 @@ namespace FoodKept.Pages.FoodPages
                     foodIQ = foodIQ.Where(s => s.FoodCategory.Contains(CurrentCategory));
             }
 
-            switch (sortOrder)
+            //Sort everything
+            FoodSortHelper sortHelper = new FoodSortHelper();
+
+            if (sortOrder == null)
             {
-                case "name_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.FoodName);
-                    break;
-                case "Price":
-                    foodIQ = foodIQ.OrderBy(s => s.Price);
-                    break;
-                case "price_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.Price);
-                    break;
-                case "Discount":
-                    foodIQ = foodIQ.OrderBy(s => s.CurrentPrice.DiscountPercent);
-                    break;
-                case "discount_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.CurrentPrice.DiscountPercent);
-                    break;
-                case "Quantity":
-                    foodIQ = foodIQ.OrderBy(s => s.Quantity);
-                    break;
-                case "quantity_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.Quantity);
-                    break;
-                case "Category":
-                    foodIQ = foodIQ.OrderBy(s => s.FoodCategory);
-                    break;
-                case "category_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.FoodCategory);
-                    break;
-                default:
-                    foodIQ = foodIQ.OrderBy(s => s.FoodName);
-                    break;
+                foodIQ = sortHelper.SortCommandHandler["FoodName"]("FoodName", foodIQ);
+            }
+            else if (sortOrder[0] == '_')
+            {
+                foodIQ = sortHelper.SortCommandHandler[sortOrder](sortOrder.Substring(1), foodIQ);
+            }
+            else
+            {
+                foodIQ = sortHelper.SortCommandHandler[sortOrder](sortOrder, foodIQ);
             }
 
             //Calculate Discounts

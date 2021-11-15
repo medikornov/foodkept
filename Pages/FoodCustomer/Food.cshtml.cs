@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using FoodKept.ViewModels;
+using System.Linq.Expressions;
 
 namespace FoodKept.Pages
 {
@@ -58,12 +59,12 @@ namespace FoodKept.Pages
 
             //Sorting system
             CurrentSort = sortOrder;
-            NameSort = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            RestaurantSort = string.IsNullOrEmpty(sortOrder) ? "resName_desc" : "Restaurant";
-            PriceSort = sortOrder == "Price" ? "price_desc" : "Price";
-            DiscountSort = sortOrder == "Discount" ? "discount_desc" : "Discount";
-            QuantitySort = sortOrder == "Quantity" ? "quantity_desc" : "Quantity";
-            FoodCategorySort = string.IsNullOrEmpty(sortOrder) ? "category_desc" : "Category";
+            NameSort = string.IsNullOrEmpty(sortOrder) ? "_FoodName" : "FoodName";
+            RestaurantSort = string.IsNullOrEmpty(sortOrder) ? "_RestaurantName" : "RestaurantName";
+            PriceSort = sortOrder == "Price" ? "_Price" : "Price";
+            DiscountSort = sortOrder == "Discount" ? "_Discount" : "Discount";
+            QuantitySort = sortOrder == "Quantity" ? "_Quantity" : "Quantity";
+            FoodCategorySort = string.IsNullOrEmpty(sortOrder) ? "_FoodCategory" : "FoodCategory";
 
             if(searchString != null)
             {
@@ -80,7 +81,10 @@ namespace FoodKept.Pages
             IQueryable<Food> foodIQ = from s in _context.FoodData
                                              select s;
 
-            if(!string.IsNullOrEmpty(searchString))
+            //Calculate Discounts
+            Task calculate = Task.Run(async () => CalculateCurrentPrice.CalculatePriceForFoodList(Food: await foodIQ.ToListAsync()));
+
+            if (!string.IsNullOrEmpty(searchString))
             {
                 foodIQ = foodIQ.Where(s => s.FoodName.Contains(searchString) || s.ApplicationUser.RestaurantName.Contains(searchString));
             }
@@ -90,52 +94,29 @@ namespace FoodKept.Pages
                     foodIQ = foodIQ.Where(s => s.FoodCategory.Contains(CurrentCategory));
             }
 
-            switch (sortOrder)
+            //Sort everything
+            FoodSortHelper sortHelper = new FoodSortHelper();
+
+            if(sortOrder == null)
             {
-                case "name_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.FoodName);
-                    break;
-                case "Restaurant":
-                    foodIQ = foodIQ.OrderBy(s => s.ApplicationUser.RestaurantName);
-                    break;
-                case "resName_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.ApplicationUser.RestaurantName);
-                    break;
-                case "Price":
-                    foodIQ = foodIQ.OrderBy(s => s.Price);
-                    break;
-                case "price_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.Price);
-                    break;
-                case "Discount":
-                    foodIQ = foodIQ.OrderBy(s => s.CurrentPrice.DiscountPercent);
-                    break;
-                case "discount_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.CurrentPrice.DiscountPercent);
-                    break;
-                case "Quantity":
-                    foodIQ = foodIQ.OrderBy(s => s.Quantity);
-                    break;
-                case "quantity_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.Quantity);
-                    break;
-                case "Category":
-                    foodIQ = foodIQ.OrderBy(s => s.FoodCategory);
-                    break;
-                case "category_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.FoodCategory);
-                    break;
-                default:
-                    foodIQ = foodIQ.OrderBy(s => s.FoodName);
-                    break;
+                foodIQ = sortHelper.SortCommandHandler["FoodName"]("FoodName", foodIQ);
+            }
+            else if(sortOrder[0] == '_')
+            {
+                foodIQ = sortHelper.SortCommandHandler[sortOrder](sortOrder.Substring(1), foodIQ);
+            }
+            else
+            {
+                foodIQ = sortHelper.SortCommandHandler[sortOrder](sortOrder, foodIQ);
             }
 
-            //Calculate Discounts
-            CalculateCurrentPrice.CalculatePriceForFoodList(Food: await foodIQ.ToListAsync());
+            calculate.Wait();
 
             Food = await PaginatedList<Food>.CreateAsync(foodIQ, pageIndex ?? 1, 5);
 
             id = _userManager.GetUserId(User);
         }
     }
+
+    
 }
