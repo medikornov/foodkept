@@ -86,25 +86,24 @@ namespace FoodKept.Pages.FoodPages
             }
 
             //Sort everything
-            FoodSortHelper sortHelper = new FoodSortHelper();
-
             if (sortOrder == null)
             {
-                foodIQ = sortHelper.SortCommandHandler["FoodName"]("FoodName", foodIQ);
+                foodIQ = FoodSortHelper.SortCommandHandler["FoodName"]("FoodName", foodIQ);
             }
             else if (sortOrder[0] == '_')
             {
-                foodIQ = sortHelper.SortCommandHandler[sortOrder](sortOrder.Substring(1), foodIQ);
+                foodIQ = FoodSortHelper.SortCommandHandler[sortOrder](sortOrder.Substring(1), foodIQ);
             }
             else
             {
-                foodIQ = sortHelper.SortCommandHandler[sortOrder](sortOrder, foodIQ);
+                foodIQ = FoodSortHelper.SortCommandHandler[sortOrder](sortOrder, foodIQ);
             }
 
-            //Calculate Discounts
-            CalculateCurrentPrice.CalculatePriceForFoodList(Food: await foodIQ.ToListAsync());
-
+            
             Food = await PaginatedList<Food>.CreateAsync(foodIQ, pageIndex ?? 1, 5);
+
+            //Calculate Discounts
+            Food = await CalculateCurrentPrice.CalculatePriceForFoodListAsync(Food: Food);
         }
     }
 }

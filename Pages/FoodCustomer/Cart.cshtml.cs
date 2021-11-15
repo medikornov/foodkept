@@ -37,7 +37,11 @@ namespace FoodKept.Pages.FoodCustomer
         public void OnGet()
         {
             var userId = _userManager.GetUserId(User);
-            Cart = _context.Cart.Include(c => c.Food).Where(c => (c.ApplicationUserId == userId) && (c.Reserved == false)).ToList();
+            Cart = _context.Cart.Include(c => c.Food)
+                .Include(c => c.Food.CurrentPrice)
+                .Include(c => c.Food.ApplicationUser)
+                .Include(c => c.Food.DiscountList)
+                .Where(c => (c.ApplicationUserId == userId) && (c.Reserved == false)).ToList();
 
             foreach (var cartItem in Cart)
             {

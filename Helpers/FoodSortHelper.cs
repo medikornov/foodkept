@@ -10,14 +10,14 @@ using FoodKept.Models;
 
 namespace FoodKept.Helpers
 {
-    public class FoodSortHelper
+    public static class FoodSortHelper
     {
-        public Dictionary<string, Func<string, IQueryable<Food>, IQueryable<Food>>> SortCommandHandler { get; set; }
+        public static Dictionary<string, Func<string, IQueryable<Food>, IQueryable<Food>>> SortCommandHandler { get; set; }
 
         static Func<string, IQueryable<Food>, IQueryable<Food>> OrderBy = (stringOrder, foodIQ) => foodIQ.OrderBy(stringOrder);
         static Func<string, IQueryable<Food>, IQueryable<Food>> OrderByDescending = (stringOrder, foodIQ) => foodIQ.OrderByDescending(stringOrder);
 
-        public FoodSortHelper()
+        static FoodSortHelper()
         {
             SortCommandHandler = new Dictionary<string, Func<string, IQueryable<Food>, IQueryable<Food>>>()
                 {

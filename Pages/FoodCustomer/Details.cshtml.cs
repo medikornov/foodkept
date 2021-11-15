@@ -33,7 +33,12 @@ namespace FoodKept.Pages.FoodCustomer
                 return NotFound();
             }
 
-            Food = await _context.FoodData.FirstOrDefaultAsync(m => m.ID == id);
+            Food = await _context.FoodData
+                .Include(f => f.CurrentPrice)
+                .Include(f => f.ApplicationUser)
+                .Include(f => f.DiscountList)
+                .FirstOrDefaultAsync(m => m.ID == id);
+
             CalculateCurrentPrice.CalculatePriceForFood(Food);
 
             if (Food == null)

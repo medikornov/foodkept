@@ -32,7 +32,7 @@ namespace FoodKept
             services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
 
             services.AddDbContext<ShopContext>(options =>
-                    options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("ShopContext")));
+                    options.UseSqlServer(Configuration.GetConnectionString("ShopContext")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(
                 options =>

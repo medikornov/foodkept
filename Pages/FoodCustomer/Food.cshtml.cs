@@ -81,9 +81,6 @@ namespace FoodKept.Pages
             IQueryable<Food> foodIQ = from s in _context.FoodData
                                              select s;
 
-            //Calculate Discounts
-            Task calculate = Task.Run(async () => CalculateCurrentPrice.CalculatePriceForFoodList(Food: await foodIQ.ToListAsync()));
-
             if (!string.IsNullOrEmpty(searchString))
             {
                 foodIQ = foodIQ.Where(s => s.FoodName.Contains(searchString) || s.ApplicationUser.RestaurantName.Contains(searchString));
@@ -95,24 +92,23 @@ namespace FoodKept.Pages
             }
 
             //Sort everything
-            FoodSortHelper sortHelper = new FoodSortHelper();
-
             if(sortOrder == null)
             {
-                foodIQ = sortHelper.SortCommandHandler["FoodName"]("FoodName", foodIQ);
+                foodIQ = FoodSortHelper.SortCommandHandler["FoodName"]("FoodName", foodIQ);
             }
             else if(sortOrder[0] == '_')
             {
-                foodIQ = sortHelper.SortCommandHandler[sortOrder](sortOrder.Substring(1), foodIQ);
+                foodIQ = FoodSortHelper.SortCommandHandler[sortOrder](sortOrder.Substring(1), foodIQ);
             }
             else
             {
-                foodIQ = sortHelper.SortCommandHandler[sortOrder](sortOrder, foodIQ);
+                foodIQ = FoodSortHelper.SortCommandHandler[sortOrder](sortOrder, foodIQ);
             }
 
-            calculate.Wait();
-
             Food = await PaginatedList<Food>.CreateAsync(foodIQ, pageIndex ?? 1, 5);
+
+            //Calculate Discounts
+            Food = await CalculateCurrentPrice.CalculatePriceForFoodListAsync(Food: Food);
 
             id = _userManager.GetUserId(User);
         }
