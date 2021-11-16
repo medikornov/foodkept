@@ -6,9 +6,10 @@
 @Html.AntiForgeryToken()
 
 <div class="container container_mt">
-    <form class="form-inline">
+    <form class="form-inline" asp-page="./Food" method="get">
         <p>
-            Food Name: <input class="form-control" type="text" asp-for="SearchString"/>
+            Food Name: <input class="form-control" type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <select asp-for="CurrentCategory" asp-items="Model.FoodCategory" class="form-control"></select>
             <input class="btn btn-dark pl-3 pr-3 mt-0 mb-0" type="submit" value="Filter" />
         </p>
     </form>
@@ -17,24 +18,42 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Food[0].FoodName)
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.NameSort"
+                       asp-route-currentFilter="@Model.CurrentFilter"
+                       asp-route-currentCategory="@Model.CurrentCategory">
+                        @Html.DisplayNameFor(model => model.Food[0].FoodName)
+                    </a>
                 </th>
                 <th>
-                    Restaurant
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.RestaurantSort"
+                       asp-route-currentFilter="@Model.CurrentFilter"
+                       asp-route-currentCategory="@Model.CurrentCategory">
+                        Restaurant
+                    </a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Food[0].Price)
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.PriceSort"
+                       asp-route-currentCategory="@Model.CurrentCategory">
+                        @Html.DisplayNameFor(model => model.Food[0].Price)
+                    </a>
                 </th>
                 <th>
-                    Discount
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.DiscountSort"
+                       asp-route-currentCategory="@Model.CurrentCategory">
+                        Discount
+                    </a>
                 </th>
                 <th>
-                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.QuantitySort">
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.QuantitySort"
+                       asp-route-currentCategory="@Model.CurrentCategory">
                         @Html.DisplayNameFor(model => model.Food[0].Quantity)
                     </a>
                 </th>
                 <th>
-                    Food Category
+                    <a class="text-dark" asp-page="./Food" asp-route-sortOrder="@Model.FoodCategorySort"
+                       asp-route-currentCategory="@Model.CurrentCategory">
+                        Food Category
+                    </a>
                 </th>
                 <th>
                     Food Image
@@ -98,19 +117,41 @@
                     <td>
                         @if (food.FoodImage != null)
                         {
-                            <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(food.FoodImage)" width="80" height="80" />
+                            <img src="data:image/jpg/png;base64,@System.Convert.ToBase64String(food.FoodImage)" width="100" height="100" />
                         }
                     </td>
                     <td>
                         <a class="btn btn-light" asp-page="./Details" asp-route-id="@food.ID">Details</a>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-dark text-light" id="addToCart" onclick="addToCart(@food.ID)" value="@food.ID">Add to Cart @food.ID</button>
+                        <button type="button" class="btn btn-dark text-light" id="addToCart" onclick="addToCart(@food.ID)" value="@food.ID">Add to Cart</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    @{
+        var prevDisabled = !Model.Food.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.Food.HasNextPage ? "disabled" : "";
+    }
+
+    <a asp-page="./Food"
+       asp-route-sortOrder="@Model.CurrentSort"
+       asp-route-pageIndex="@(Model.Food.PageIndex - 1)"
+       asp-route-currentFilter="@Model.CurrentFilter"
+       asp-route-currentCategory="@Model.CurrentCategory"
+       class="btn btn-dark text-light @prevDisabled">
+        Previous
+    </a>
+    <a asp-page="./Food"
+       asp-route-sortOrder="@Model.CurrentSort"
+       asp-route-pageIndex="@(Model.Food.PageIndex + 1)"
+       asp-route-currentFilter="@Model.CurrentFilter"
+       asp-route-currentCategory="@Model.CurrentCategory"
+       class="btn btn-dark text-light @nextDisabled">
+        Next
+    </a>
 </div>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

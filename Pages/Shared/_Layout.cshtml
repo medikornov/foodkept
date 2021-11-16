@@ -26,6 +26,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     @if (signInManager.IsSignedIn(User))
                     {
+                        
                         @if (User != null)
                         {
                             var user = userManager.GetUserAsync(User).Result;
@@ -64,12 +65,14 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-light" asp-area="" asp-page="/FoodCustomer/Cart">Shoppping Cart</a>
                                     </li>
-
                                 </ul>
                             }
 
                         }
                         <ul class="navbar-nav d-flex">
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-page="/FeedbackPage/FeedbackLogged">Feedback</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="btn text-light btn-outline-light" id="btn-custom-nav" asp-area="" asp-page="/Logout">Logout</a>
                             </li>
@@ -83,6 +86,9 @@
                             </li>
                             <li class="nav-item">
                                 <a asp-page="/Register" class="btn text-light">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-page="/FeedbackPage/Feedback">Feedback</a>
                             </li>
                         </ul>
                     }
