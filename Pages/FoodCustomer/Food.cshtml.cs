@@ -19,15 +19,13 @@ namespace FoodKept.Pages
     [Authorize(Roles = "Customer, Admin")]
     public class FoodModel : PageModel
     {
-        private readonly FoodKept.Data.ShopContext _context;
+        private readonly IFoodRepository _foodRepository;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IConfiguration _configuration;
 
-        public FoodModel(FoodKept.Data.ShopContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public FoodModel(IFoodRepository foodRepository, UserManager<ApplicationUser> userManager)
         {
-            _context = context;
+            _foodRepository = foodRepository;
             _userManager = userManager;
-            _configuration = configuration;
         }
 
         [BindProperty]
@@ -78,8 +76,7 @@ namespace FoodKept.Pages
             CurrentFilter = searchString;
             CurrentCategory = currentCategory;
 
-            IQueryable<Food> foodIQ = from s in _context.FoodData
-                                             select s;
+            IQueryable<Food> foodIQ = _foodRepository.GetAllFood().AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
             {

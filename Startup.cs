@@ -58,7 +58,7 @@ namespace FoodKept
                 .AddEntityFrameworkStores<ShopContext>()
                 .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider);*/
 
-
+            services.AddScoped<IFoodRepository, SQLFoodRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

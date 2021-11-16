@@ -19,12 +19,12 @@ namespace FoodKept.Pages.FoodPages
     [Authorize(Roles ="Admin, Restaurant")]
     public class IndexModel : PageModel
     {
-        private readonly FoodKept.Data.ShopContext _context;
+        private readonly IFoodRepository _foodRepository;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public IndexModel(FoodKept.Data.ShopContext context, UserManager<ApplicationUser> userManager)
+        public IndexModel(IFoodRepository foodRepository, UserManager<ApplicationUser> userManager)
         {
-            _context = context;
+            _foodRepository = foodRepository;
             _userManager = userManager;
         }
 
@@ -72,7 +72,7 @@ namespace FoodKept.Pages.FoodPages
 
             //Query for food from current user
             ApplicationUser applicationUser = await _userManager.GetUserAsync(User);
-            IQueryable<Food> foodIQ = _context.FoodData.Include(c => c.ApplicationUser).Where(c => c.ApplicationUserId == applicationUser.Id);
+            IQueryable<Food> foodIQ = _foodRepository.GetAllFood().AsQueryable().Include(c => c.ApplicationUser).Where(c => c.ApplicationUserId == applicationUser.Id);
 
             //Filter food
             if (!string.IsNullOrEmpty(searchString))
