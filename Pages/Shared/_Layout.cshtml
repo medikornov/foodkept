@@ -26,7 +26,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     @if (signInManager.IsSignedIn(User))
                     {
-                        
+
                         @if (User != null)
                         {
                             var user = userManager.GetUserAsync(User).Result;
@@ -63,7 +63,12 @@
 
                                 <ul style="padding-left: 30px; padding-right: 35px;" class="navbar-nav d-flex">
                                     <li class="nav-item">
-                                        <a class="nav-link text-light" asp-area="" asp-page="/FoodCustomer/Cart">Shoppping Cart</a>
+                                        <div class="dropdown">
+                                            <a class="nav-link text-light dropbtn" asp-area="" asp-page="/FoodCustomer/Cart" onmouseover="showCart()">Shoppping Cart</a>
+                                            <div id="dropdown-component" class="dropdown-content">
+                                                
+                                            </div>
+                                        </div>
                                     </li>
                                 </ul>
                             }
@@ -97,9 +102,9 @@
         </nav>
     </header>
     <div class="container-fluid">
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
     </div>
 
     <footer class="border-top footer text-muted">
@@ -114,7 +119,44 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
 
+        var currentCart;
+
+        async function showCart() {
+            let getData;
+            try {
+                getData = await getCart().then(data => JSON.parse(data))
+            } catch (error) {
+                getData = null;
+                console.log(error)
+            }
+            if (JSON.stringify(currentCart) != JSON.stringify(getData)) {
+                currentCart = getData;
+                var html = document.getElementById('dropdown-component')
+                html.innerHTML = "";
+                console.log(getData)
+                if (getData != null) {
+                    var str = ""
+                    getData.map(el => {
+                        str += "<a href='#'>" + el.foodName + "  " + el.quantity + "</a>";
+                    })
+                    html.innerHTML += str
+                }
+            }
+        }
+
+
+        async function getCart() {
+            return Promise.resolve($.ajax({
+                async: true,
+                type: "GET",
+                url: "/api/base",
+            }));
+           };
+
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
