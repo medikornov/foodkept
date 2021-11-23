@@ -18,7 +18,7 @@ namespace FoodKept.Helpers
             smtpClient = createClient();
         }
 
-        public void sendEmail(string email, string body)
+        public async Task<bool> sendEmailAsync(string email, string body)
         {
             MailMessage mail = new MailMessage();
             mail.IsBodyHtml = true;
@@ -29,11 +29,12 @@ namespace FoodKept.Helpers
             mail.Body = body;
             try
             {
-                smtpClient.Send(message: mail);
+                await Task.Run(() => smtpClient.Send(message: mail));
+                return true;
             }
             catch (Exception)
             {
-
+                return false;
             }
         }
 

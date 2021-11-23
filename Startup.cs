@@ -58,6 +58,7 @@ namespace FoodKept
                 .AddEntityFrameworkStores<ShopContext>()
                 .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>(TokenOptions.DefaultProvider);
 
+            services.AddControllers();
 
         }
 
@@ -85,9 +86,14 @@ namespace FoodKept
 
             app.UseAuthorization();
 
+
+            //app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Base}/{action=Index}");
             });
 
         }
