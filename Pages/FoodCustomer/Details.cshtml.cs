@@ -39,15 +39,15 @@ namespace FoodKept.Pages.FoodCustomer
                 .Include(f => f.DiscountList)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
-            CalculateCurrentPrice.CalculatePriceForFood(Food);
-
             if (Food == null)
             {
                 return NotFound();
             }
 
+            CalculateCurrentPrice.CalculatePriceForFood(Food);
+
             //Configure Lat Lng
-            if(Food.ApplicationUser.Lat != 0 && Food.ApplicationUser.Lng != 0)
+            if (Food.ApplicationUser.Lat != 0 && Food.ApplicationUser.Lng != 0)
             {
                 //Here happens type widening (float -> double)
                 //Reason: Food.ApplicationUser.Lat and Food.ApplicationUser.Lng variables are float type and

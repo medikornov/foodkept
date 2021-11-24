@@ -86,20 +86,17 @@ namespace FoodKept.Pages.FoodPages
             }
 
             //Sort everything
-            if (sortOrder == null)
+            Lazy<FoodSortHelper> foodSort = new Lazy<FoodSortHelper>(() => new FoodSortHelper());
+
+            if (sortOrder != null && sortOrder[0] == '_')
             {
-                foodIQ = FoodSortHelper.SortCommandHandler["FoodName"]("FoodName", foodIQ);
+                foodIQ = foodSort.Value.SortCommandHandler[sortOrder](sortOrder.Substring(1), foodIQ);
             }
-            else if (sortOrder[0] == '_')
+            else if (sortOrder != null)
             {
-                foodIQ = FoodSortHelper.SortCommandHandler[sortOrder](sortOrder.Substring(1), foodIQ);
-            }
-            else
-            {
-                foodIQ = FoodSortHelper.SortCommandHandler[sortOrder](sortOrder, foodIQ);
+                foodIQ = foodSort.Value.SortCommandHandler[sortOrder](sortOrder, foodIQ);
             }
 
-            
             Food = await PaginatedList<Food>.CreateAsync(foodIQ, pageIndex ?? 1, 5);
 
             //Calculate Discounts

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using FoodKept.Data;
 using FoodKept.Helpers;
@@ -52,6 +53,7 @@ namespace FoodKept.Pages.FoodCustomer
 
         public async Task<IActionResult> OnPostAddToCart(string id)
         {
+            var cartt = Cart;
             Food food = _context.FoodData.FirstOrDefault(db => db.ID.ToString() == id);
             ShoppingCart result = _context.Cart.FirstOrDefault(c =>
                     c.ApplicationUserId == _userManager.GetUserId(User) &&
@@ -173,11 +175,32 @@ namespace FoodKept.Pages.FoodCustomer
             {
                 smtpClient.Send(message: mail);
             }
-            catch (Exception)
+            catch (SmtpFailedRecipientsException ex)
             {
+                SmtpStatusCode status = ex.InnerExceptions[0].StatusCode;
+
+                if (status == SmtpStatusCode.MailboxBusy || status == SmtpStatusCode.MailboxUnavailable)
+                {
+                    ViewData["Message"] = string.Format("Delivery failed - retrying again");
+                    Thread.Sleep(1000);
+                    smtpClient.Send(mail);
+                }
+                else
+                {
+                    ViewData["Message"] = string.Format("Failed to deliver message to {0}", ex.InnerExceptions[0].FailedRecipient);
+                }
                 
+                return Page();
             }
+            catch (Exception ex)
+            {
+                ViewData["Message"] = string.Format("Unable to send reservation to your email. Please try again. Error: {0}", ex.ToString());
+                return Page();
+            }
+
             OnGet();
+            ViewData["Message"] = string.Format("Succesfully reserved your order!");
+
             return Page();
         }
 

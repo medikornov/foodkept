@@ -10,16 +10,11 @@ using FoodKept.Models;
 
 namespace FoodKept.Helpers
 {
-    public static class FoodSortHelper
+    public class FoodSortHelper
     {
-        public static Dictionary<string, Func<string, IQueryable<Food>, IQueryable<Food>>> SortCommandHandler { get; set; }
-
-        static Func<string, IQueryable<Food>, IQueryable<Food>> OrderBy = (stringOrder, foodIQ) => foodIQ.OrderBy(stringOrder);
-        static Func<string, IQueryable<Food>, IQueryable<Food>> OrderByDescending = (stringOrder, foodIQ) => foodIQ.OrderByDescending(stringOrder);
-
-        static FoodSortHelper()
-        {
-            SortCommandHandler = new Dictionary<string, Func<string, IQueryable<Food>, IQueryable<Food>>>()
+        private Lazy<Dictionary<string, Func<string, IQueryable<Food>, IQueryable<Food>>>> _sortCommandHelper =
+            new Lazy<Dictionary<string, Func<string, IQueryable<Food>, IQueryable<Food>>>>(
+                () => new Dictionary<string, Func<string, IQueryable<Food>, IQueryable<Food>>>
                 {
                     {"_FoodName", OrderByDescending},
                     {"_RestaurantName", OrderByDescending},
@@ -33,8 +28,17 @@ namespace FoodKept.Helpers
                     {"_FoodCategory", OrderByDescending},
                     {"FoodCategory", OrderBy},
                     {"FoodName", OrderBy}
-                };
+                });
+        public Dictionary<string, Func<string, IQueryable<Food>, IQueryable<Food>>> SortCommandHandler
+        {
+            get
+            {
+                return _sortCommandHelper.Value;
+            }
         }
+
+        static Func<string, IQueryable<Food>, IQueryable<Food>> OrderBy = (stringOrder, foodIQ) => foodIQ.OrderBy(stringOrder);
+        static Func<string, IQueryable<Food>, IQueryable<Food>> OrderByDescending = (stringOrder, foodIQ) => foodIQ.OrderByDescending(stringOrder);
     }
 
     public static class IQueryableExtensions

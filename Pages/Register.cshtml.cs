@@ -106,7 +106,7 @@ namespace FoodKept.Pages
                     + HttpUtility.UrlEncode(token) + "&email=" + user.Email;
 
                 EmailSender emailSender = new EmailSender();
-                emailSender.sendEmail(user.Email, confirmationLink);*/
+                var emailResult = emailSender.sendEmailAsync(user.Email, confirmationLink);*/
 
                 if (!await roleManager.RoleExistsAsync("Restaurant"))
                 {
