@@ -76,8 +76,8 @@ namespace FoodKept.Pages
 
                 if (result.Succeeded && assign_role.Succeeded)
                 {
-                    await signInManager.SignInAsync(user, false);
-                    return RedirectToPage("Index");
+                    //await signInManager.SignInAsync(user, false);
+                    return RedirectToPage("User/RestaurantConfirmationEmail");
                 }
 
                 foreach (var error in result.Errors)
@@ -124,8 +124,8 @@ namespace FoodKept.Pages
 
                 if (result.Succeeded && assign_role.Succeeded && emailResult.Result)
                 {
-                    await signInManager.SignInAsync(user, false);
-                    return RedirectToPage("Index");
+                    //await signInManager.SignInAsync(user, false);
+                    return RedirectToPage("User/ConfirmationEmail");
                 }
 
                 foreach (var error in result.Errors)
@@ -143,6 +143,7 @@ namespace FoodKept.Pages
             if (user == null)
                 return RedirectToPage("./Register");
             var result = await userManager.ConfirmEmailAsync(user, token);
+            await signInManager.SignInAsync(user, false);
             return RedirectToPage("./index");
         }
     }
