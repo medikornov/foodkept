@@ -14,29 +14,29 @@ namespace FoodKept.Pages.FoodPages
     [Authorize(Roles = "Admin, Restaurant")]
     public class DetailsModel : PageModel
     {
-        private readonly FoodKept.Data.ShopContext _context;
+        private readonly IFoodRepository _foodRepository;
 
-        public DetailsModel(FoodKept.Data.ShopContext context)
+        public DetailsModel(IFoodRepository foodRepository)
         {
-            _context = context;
+            _foodRepository = foodRepository;
         }
 
         public Food Food { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public void OnGet(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                NotFound();
             }
 
-            Food = await _context.FoodData.FirstOrDefaultAsync(m => m.ID == id);
+            Food = _foodRepository.GetFood((int)id);
 
             if (Food == null)
             {
-                return NotFound();
+                NotFound();
             }
-            return Page();
+            Page();
         }
     }
 }

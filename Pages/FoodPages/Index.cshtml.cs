@@ -19,12 +19,12 @@ namespace FoodKept.Pages.FoodPages
     [Authorize(Roles ="Admin, Restaurant")]
     public class IndexModel : PageModel
     {
-        private readonly FoodKept.Data.ShopContext _context;
+        private readonly IFoodRepository _foodRepository;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public IndexModel(FoodKept.Data.ShopContext context, UserManager<ApplicationUser> userManager)
+        public IndexModel(IFoodRepository foodRepository, UserManager<ApplicationUser> userManager)
         {
-            _context = context;
+            _foodRepository = foodRepository;
             _userManager = userManager;
         }
 
@@ -52,11 +52,11 @@ namespace FoodKept.Pages.FoodPages
 
             //Sorting system
             CurrentSort = sortOrder;
-            NameSort = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            PriceSort = sortOrder == "Price" ? "price_desc" : "Price";
-            DiscountSort = sortOrder == "Discount" ? "discount_desc" : "Discount";
-            QuantitySort = sortOrder == "Quantity" ? "quantity_desc" : "Quantity";
-            FoodCategorySort = string.IsNullOrEmpty(sortOrder) ? "category_desc" : "Category";
+            NameSort = string.IsNullOrEmpty(sortOrder) ? "_FoodName" : "FoodName";
+            PriceSort = sortOrder == "Price" ? "_Price" : "Price";
+            DiscountSort = sortOrder == "Discount" ? "_Discount" : "Discount";
+            QuantitySort = sortOrder == "Quantity" ? "_Quantity" : "Quantity";
+            FoodCategorySort = string.IsNullOrEmpty(sortOrder) ? "_FoodCategory" : "FoodCategory";
 
             if (searchString != null)
             {
@@ -72,7 +72,7 @@ namespace FoodKept.Pages.FoodPages
 
             //Query for food from current user
             ApplicationUser applicationUser = await _userManager.GetUserAsync(User);
-            IQueryable<Food> foodIQ = _context.FoodData.Include(c => c.ApplicationUser).Where(c => c.ApplicationUserId == applicationUser.Id);
+            IQueryable<Food> foodIQ = _foodRepository.GetAllFood().AsQueryable().Include(c => c.ApplicationUser).Where(c => c.ApplicationUserId == applicationUser.Id);
 
             //Filter food
             if (!string.IsNullOrEmpty(searchString))
@@ -85,44 +85,22 @@ namespace FoodKept.Pages.FoodPages
                     foodIQ = foodIQ.Where(s => s.FoodCategory.Contains(CurrentCategory));
             }
 
-            switch (sortOrder)
+            //Sort everything
+            Lazy<FoodSortHelper> foodSort = new Lazy<FoodSortHelper>(() => new FoodSortHelper());
+
+            if (sortOrder != null && sortOrder[0] == '_')
             {
-                case "name_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.FoodName);
-                    break;
-                case "Price":
-                    foodIQ = foodIQ.OrderBy(s => s.Price);
-                    break;
-                case "price_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.Price);
-                    break;
-                case "Discount":
-                    foodIQ = foodIQ.OrderBy(s => s.CurrentPrice.DiscountPercent);
-                    break;
-                case "discount_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.CurrentPrice.DiscountPercent);
-                    break;
-                case "Quantity":
-                    foodIQ = foodIQ.OrderBy(s => s.Quantity);
-                    break;
-                case "quantity_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.Quantity);
-                    break;
-                case "Category":
-                    foodIQ = foodIQ.OrderBy(s => s.FoodCategory);
-                    break;
-                case "category_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.FoodCategory);
-                    break;
-                default:
-                    foodIQ = foodIQ.OrderBy(s => s.FoodName);
-                    break;
+                foodIQ = foodSort.Value.SortCommandHandler[sortOrder](sortOrder.Substring(1), foodIQ);
+            }
+            else if (sortOrder != null)
+            {
+                foodIQ = foodSort.Value.SortCommandHandler[sortOrder](sortOrder, foodIQ);
             }
 
-            //Calculate Discounts
-            CalculateCurrentPrice.CalculatePriceForFoodList(Food: await foodIQ.ToListAsync());
-
             Food = await PaginatedList<Food>.CreateAsync(foodIQ, pageIndex ?? 1, 5);
+
+            //Calculate Discounts
+            Food = await CalculateCurrentPrice.CalculatePriceForFoodListAsync(Food: Food);
         }
     }
 }

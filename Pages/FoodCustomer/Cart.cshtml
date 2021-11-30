@@ -12,6 +12,14 @@
             </div>
         </form>
     </div>
+    @if (ViewData["Message"] != null)
+    {
+        <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewData["Message"]");
+            };
+        </script>
+    }
     <table class="table">
         <thead>
             <tr>

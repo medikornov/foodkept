@@ -71,6 +71,11 @@ namespace FoodKept.Pages.FoodPages
             //Initialize CurrentPrice
             Food.CurrentPrice = new CurrentPrice();
 
+            //Get current application user restaurant name
+            ApplicationUser applicationUser = await _userManager.GetUserAsync(User);
+            Food.RestaurantName = applicationUser.RestaurantName;
+
+            //Initialize to DB
             _context.FoodData.Add(Food);
             await _context.SaveChangesAsync();
 

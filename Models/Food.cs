@@ -32,6 +32,8 @@ namespace FoodKept.Models
             }
         }
         public string FoodCategory { get; set; }
+        public string RestaurantName { get; set; }
+        public int Discount { get; set; }
         public byte[] FoodImage { get; set; }
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }

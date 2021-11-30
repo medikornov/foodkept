@@ -12,21 +12,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using FoodKept.ViewModels;
+using System.Linq.Expressions;
 
 namespace FoodKept.Pages
 {
     [Authorize(Roles = "Customer, Admin")]
     public class FoodModel : PageModel
     {
-        private readonly FoodKept.Data.ShopContext _context;
+        private readonly IFoodRepository _foodRepository;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IConfiguration _configuration;
 
-        public FoodModel(FoodKept.Data.ShopContext context, UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public FoodModel(IFoodRepository foodRepository, UserManager<ApplicationUser> userManager)
         {
-            _context = context;
+            _foodRepository = foodRepository;
             _userManager = userManager;
-            _configuration = configuration;
         }
 
         [BindProperty]
@@ -46,9 +45,6 @@ namespace FoodKept.Pages
 
         public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString, string currentCategory, int? pageIndex)
         {
-            //Lazy Initialization
-            //Lazy<List<Food>> getFood = new Lazy<List<Food>>(() => _context.FoodData.ToList());
-
             //Load food categories
             FoodCategory = Enum.GetValues(typeof(FoodCategories.Category)).Cast<FoodCategories.Category>().Select(v => new SelectListItem
             {
@@ -58,12 +54,12 @@ namespace FoodKept.Pages
 
             //Sorting system
             CurrentSort = sortOrder;
-            NameSort = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            RestaurantSort = string.IsNullOrEmpty(sortOrder) ? "resName_desc" : "Restaurant";
-            PriceSort = sortOrder == "Price" ? "price_desc" : "Price";
-            DiscountSort = sortOrder == "Discount" ? "discount_desc" : "Discount";
-            QuantitySort = sortOrder == "Quantity" ? "quantity_desc" : "Quantity";
-            FoodCategorySort = string.IsNullOrEmpty(sortOrder) ? "category_desc" : "Category";
+            NameSort = string.IsNullOrEmpty(sortOrder) ? "_FoodName" : "FoodName";
+            RestaurantSort = string.IsNullOrEmpty(sortOrder) ? "_RestaurantName" : "RestaurantName";
+            PriceSort = sortOrder == "Price" ? "_Price" : "Price";
+            DiscountSort = sortOrder == "Discount" ? "_Discount" : "Discount";
+            QuantitySort = sortOrder == "Quantity" ? "_Quantity" : "Quantity";
+            FoodCategorySort = string.IsNullOrEmpty(sortOrder) ? "_FoodCategory" : "FoodCategory";
 
             if(searchString != null)
             {
@@ -77,10 +73,9 @@ namespace FoodKept.Pages
             CurrentFilter = searchString;
             CurrentCategory = currentCategory;
 
-            IQueryable<Food> foodIQ = from s in _context.FoodData
-                                             select s;
+            IQueryable<Food> foodIQ = _foodRepository.GetAllFood().AsQueryable();
 
-            if(!string.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 foodIQ = foodIQ.Where(s => s.FoodName.Contains(searchString) || s.ApplicationUser.RestaurantName.Contains(searchString));
             }
@@ -90,52 +85,26 @@ namespace FoodKept.Pages
                     foodIQ = foodIQ.Where(s => s.FoodCategory.Contains(CurrentCategory));
             }
 
-            switch (sortOrder)
+            //Sort everything
+            Lazy<FoodSortHelper> foodSort = new Lazy<FoodSortHelper>(() => new FoodSortHelper());
+
+            if(sortOrder != null && sortOrder[0] == '_')
             {
-                case "name_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.FoodName);
-                    break;
-                case "Restaurant":
-                    foodIQ = foodIQ.OrderBy(s => s.ApplicationUser.RestaurantName);
-                    break;
-                case "resName_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.ApplicationUser.RestaurantName);
-                    break;
-                case "Price":
-                    foodIQ = foodIQ.OrderBy(s => s.Price);
-                    break;
-                case "price_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.Price);
-                    break;
-                case "Discount":
-                    foodIQ = foodIQ.OrderBy(s => s.CurrentPrice.DiscountPercent);
-                    break;
-                case "discount_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.CurrentPrice.DiscountPercent);
-                    break;
-                case "Quantity":
-                    foodIQ = foodIQ.OrderBy(s => s.Quantity);
-                    break;
-                case "quantity_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.Quantity);
-                    break;
-                case "Category":
-                    foodIQ = foodIQ.OrderBy(s => s.FoodCategory);
-                    break;
-                case "category_desc":
-                    foodIQ = foodIQ.OrderByDescending(s => s.FoodCategory);
-                    break;
-                default:
-                    foodIQ = foodIQ.OrderBy(s => s.FoodName);
-                    break;
+                foodIQ = foodSort.Value.SortCommandHandler[sortOrder](sortOrder.Substring(1), foodIQ);
+            }
+            else if(sortOrder != null)
+            {
+                foodIQ = foodSort.Value.SortCommandHandler[sortOrder](sortOrder, foodIQ);
             }
 
-            //Calculate Discounts
-            CalculateCurrentPrice.CalculatePriceForFoodList(Food: await foodIQ.ToListAsync());
-
             Food = await PaginatedList<Food>.CreateAsync(foodIQ, pageIndex ?? 1, 5);
+
+            //Calculate Discounts
+            Food = await CalculateCurrentPrice.CalculatePriceForFoodListAsync(Food: Food);
 
             id = _userManager.GetUserId(User);
         }
     }
+
+    
 }
