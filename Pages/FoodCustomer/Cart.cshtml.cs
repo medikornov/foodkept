@@ -116,14 +116,16 @@ namespace FoodKept.Pages.FoodCustomer
             SmtpClient smtpClient = new SmtpClient();
             smtpClient.Credentials = new System.Net.NetworkCredential("foodkepterino@gmail.com", "foodkept4");
 
+            var user = _userManager.GetUserAsync(User).Result;
+
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.EnableSsl = true;
             MailMessage mail = new MailMessage();
             mail.IsBodyHtml = true;
             mail.From = new MailAddress("foodkepterino@gmail.com", "FoodKept");
-            mail.To.Add(new MailAddress("foodkepterino@gmail.com"));
-            mail.CC.Add(new MailAddress("foodkepterino@gmail.com"));
-            mail.Subject = _userManager.GetUserAsync(User).Result.FirstName + " reservation"; 
+            mail.To.Add(new MailAddress(user.Email));
+            //mail.CC.Add(new MailAddress(user.Email));
+            mail.Subject = user.FirstName + " reservation"; 
             smtpClient.Port = 587;
             smtpClient.Host = "smtp.gmail.com";
 

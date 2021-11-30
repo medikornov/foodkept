@@ -34,7 +34,7 @@ namespace FoodKept.API
             var Cart = _context.Cart.Where(c => c.ApplicationUserId == userId).ToList();
 
             var query = from cart in _context.Cart
-                        where cart.ApplicationUserId == userId
+                        where cart.ApplicationUserId == userId && !cart.Reserved
                         select new
                         {
                             id = cart.Id,

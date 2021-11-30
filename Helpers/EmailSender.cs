@@ -23,8 +23,8 @@ namespace FoodKept.Helpers
             MailMessage mail = new MailMessage();
             mail.IsBodyHtml = true;
             mail.From = new MailAddress("foodkepterino@gmail.com", "FoodKept");
-            mail.To.Add(new MailAddress("foodkepterino@gmail.com"));
-            mail.CC.Add(new MailAddress("foodkepterino@gmail.com"));
+            mail.To.Add(new MailAddress(email));
+            //mail.CC.Add(new MailAddress(email));
             mail.Subject = "Confirmation link";
             mail.Body = body;
             try

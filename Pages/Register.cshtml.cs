@@ -77,7 +77,7 @@ namespace FoodKept.Pages
                 if (result.Succeeded && assign_role.Succeeded)
                 {
                     //await signInManager.SignInAsync(user, false);
-                    return RedirectToPage("User/RestaurantConfirmationEmail");
+                    return RedirectToPage("User/ConfirmationEmail");
                 }
 
                 foreach (var error in result.Errors)
@@ -113,7 +113,7 @@ namespace FoodKept.Pages
                     + HttpUtility.UrlEncode(token) + "&email=" + user.Email;
 
                 EmailSender emailSender = new EmailSender();
-                var emailResult = emailSender.sendEmailAsync(user.Email, confirmationLink);
+                var emailResult = emailSender.sendEmailAsync("foodkepterino@gmail.com", confirmationLink);
 
                 if (!await roleManager.RoleExistsAsync("Restaurant"))
                 {
@@ -125,7 +125,7 @@ namespace FoodKept.Pages
                 if (result.Succeeded && assign_role.Succeeded && emailResult.Result)
                 {
                     //await signInManager.SignInAsync(user, false);
-                    return RedirectToPage("User/ConfirmationEmail");
+                    return RedirectToPage("User/RestaurantConfirmationEmail");
                 }
 
                 foreach (var error in result.Errors)
