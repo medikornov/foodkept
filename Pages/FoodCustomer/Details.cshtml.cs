@@ -61,5 +61,17 @@ namespace FoodKept.Pages.FoodCustomer
 
             return Page();
         }
+
+        public async Task<IActionResult> OnPostRating(int id, int fid)
+        {
+            StarRating starRating = new StarRating();
+            starRating.Rate = id;
+            starRating.FoodId = fid;
+
+            _context.StarRating.Add(starRating);
+            await _context.SaveChangesAsync();
+
+            return new JsonResult("You rated this " + id.ToString() + "star(s)");
+        }
     }
 }

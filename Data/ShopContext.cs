@@ -20,6 +20,7 @@ namespace FoodKept.Data
         public DbSet<ShoppingCart> Cart { get; set; }
         public DbSet<Discount> DiscountData { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<StarRating> StarRating { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +30,7 @@ namespace FoodKept.Data
             modelBuilder.Entity<ShoppingCart>().ToTable("ShoppingCart");
             modelBuilder.Entity<Discount>().ToTable("Discount");
             modelBuilder.Entity<Feedback>().ToTable("Feedback");
+            modelBuilder.Entity<StarRating>().ToTable("StarRating");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

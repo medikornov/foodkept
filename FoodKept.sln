@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodKept.Tests", "..\FoodKept.Tests\FoodKept.Tests.csproj", "{F6B729BE-7448-4A53-B842-402DDB043A63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{8697648B-7441-4E19-A4BB-38945059ECA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8697648B-7441-4E19-A4BB-38945059ECA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8697648B-7441-4E19-A4BB-38945059ECA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6B729BE-7448-4A53-B842-402DDB043A63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6B729BE-7448-4A53-B842-402DDB043A63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6B729BE-7448-4A53-B842-402DDB043A63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6B729BE-7448-4A53-B842-402DDB043A63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
