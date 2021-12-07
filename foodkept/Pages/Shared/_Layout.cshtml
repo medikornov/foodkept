@@ -55,7 +55,7 @@
                             </ul>
                             <ul class="navbar-nav col-md-auto justify-content-end text-light">
                                 <li class="nav-item">
-                                    <a class="nav-link text-light" asp-area="" asp-page="/Profile">@user.UserName</a>
+                                    <a class="nav-link text-light" asp-area="" asp-page="/User/Profile">@user.UserName</a>
                                 </li>
                             </ul>
                             @if (role == "Customer")
@@ -79,7 +79,7 @@
                                 <a class="nav-link text-light" asp-area="" asp-page="/FeedbackPage/FeedbackLogged">Feedback</a>
                             </li>
                             <li class="nav-item">
-                                <a class="btn text-light btn-outline-light" id="btn-custom-nav" asp-area="" asp-page="/Logout">Logout</a>
+                                <a class="btn text-light btn-outline-light" id="btn-custom-nav" asp-area="" asp-page="/User/Logout">Logout</a>
                             </li>
                         </ul>
                     }
@@ -87,10 +87,10 @@
                     {
                         <ul class="navbar-nav d-flex justify-content-end flex-grow-1">
                             <li class="nav-item">
-                                <a class="btn text-light btn-outline-light" id="btn-custom-nav" asp-page="/Login">Login</a>
+                                <a class="btn text-light btn-outline-light" id="btn-custom-nav" asp-page="/User/Login">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a asp-page="/Register" class="btn text-light">Register</a>
+                                <a asp-page="/User/Register" class="btn text-light">Register</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-page="/FeedbackPage/Feedback">Feedback</a>

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using FoodKept.Helpers;
 using System.Web;
 
-namespace FoodKept.Pages
+namespace FoodKept.Pages.User
 {
     [ValidateAntiForgeryToken]
     public class RegisterModel : PageModel
@@ -76,7 +76,7 @@ namespace FoodKept.Pages
 
                 if (result.Succeeded && assign_role.Succeeded)
                 {
-                    return RedirectToPage("User/ConfirmationEmail");
+                    return RedirectToPage("./ConfirmationEmail");
                 }
 
                 foreach (var error in result.Errors)
@@ -123,7 +123,7 @@ namespace FoodKept.Pages
 
                 if (result.Succeeded && assign_role.Succeeded && emailResult.Result)
                 {
-                    return RedirectToPage("User/RestaurantConfirmationEmail");
+                    return RedirectToPage("./RestaurantConfirmationEmail");
                 }
 
                 foreach (var error in result.Errors)
@@ -142,7 +142,7 @@ namespace FoodKept.Pages
                 return RedirectToPage("./Register");
             var result = await userManager.ConfirmEmailAsync(user, token);
             await signInManager.SignInAsync(user, false);
-            return RedirectToPage("./index");
+            return RedirectToPage("../index");
         }
     }
 
