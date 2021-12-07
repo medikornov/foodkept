@@ -14,7 +14,7 @@
         </p>
     </form>
 
-    <table class="table">
+    <table class="table" id="foodTable">
         <thead>
             <tr>
                 <th>
@@ -72,7 +72,19 @@
                 @if (food.Quantity == 0) continue;
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => food.FoodName)
+                        @Html.DisplayFor(modelItem => food.FoodName) <br />
+                        <img src="/images/EmptyStar.png" alt="Star Rating" align="middle" id="1" class="rating" mid="@food.ID" />
+                        <img src="/images/EmptyStar.png" alt="Star Rating" align="middle" id="2" class="rating" mid="@food.ID" />
+                        <img src="/images/EmptyStar.png" alt="Star Rating" align="middle" id="3" class="rating" mid="@food.ID" />
+                        <img src="/images/EmptyStar.png" alt="Star Rating" align="middle" id="4" class="rating" mid="@food.ID" />
+                        <img src="/images/EmptyStar.png" alt="Star Rating" align="middle" id="5" class="rating" mid="@food.ID" />
+                        @if (food.Ratings != null)
+                        {
+                            <span> (@food.Ratings.Count) </span>
+                            @if (food.Ratings.Count > 0)
+                                { decimal a = food.Ratings.Sum(m => m.Rate) / food.RateCount; <span class="avr"> @a</span> } <br />
+                        }
+                        <div class="result"></div>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => food.ApplicationUser.RestaurantName)
@@ -173,4 +185,63 @@
             }
         })
     }
+
+    $(function () {
+
+        $("img.rating").mouseover(function () {
+            giveRating($(this), "FilledStar.png");
+            $(this).css("cursor", "pointer");
+        });
+
+        $("img.rating").mouseout(function () {
+            giveRating($(this), "EmptyStar.png");
+            refilRating($(this));
+        });
+
+        $('#foodTable > tbody  > tr').each(function () {
+            var av = $(this).find("span.avr").text();
+            if (av != "" || av != null)
+            {
+                // alert(av)
+                // fillRating(parseInt(av));
+                var img = $(this).find("img[id='" + parseInt(av) + "']");
+                img.attr("src", "/images/FilledStar.png").prevAll("img.rating").attr("src", "/images/FilledStar.png");
+            }
+        });
+
+
+        $("img.rating").click(function (e) {
+            $(this).css('color', 'red');
+            $.ajax({
+                type: "POST",
+                url: "/FoodCustomer/Details?handler=Rating",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: { "id": parseInt($(this).attr("id")), "fid": parseInt($(this).attr("mid")) },
+                success: function (response) {
+                    alert("Rated. " + response);
+                    $(e.currentTarget).closest('tr').find('div.result').text(data).css('color', 'red');
+                    $("#result").text(data);
+                },
+                error: function (error) {
+                    alert("error " + error);
+                }
+            })
+        });
+    });
+
+    function giveRating(img, image) {
+        img.attr("src", "/Images/" + image)
+            .prevAll("img.rating").attr("src", "/Images/" + image);
+    }
+
+    function refilRating(img1)
+    {
+        var rt = $(img1).closest('tr').find("span.avr").text();
+        var img = $(img1).closest('tr').find("img[id='" + parseInt(rt) + "']");
+        img.attr("src", "/images/FilledStar.png").prevAll("img.rating").attr("src", "/images/FilledStar.png");
+    }
+
 </script>

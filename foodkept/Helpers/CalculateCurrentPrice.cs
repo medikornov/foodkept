@@ -33,6 +33,7 @@ namespace FoodKept.Helpers
                     .Include(f => f.CurrentPrice)
                     .Include(f => f.ApplicationUser)
                     .Include(f => f.DiscountList)
+                    .Include(f => f.Ratings)
                     .FirstOrDefault(m => m.ID == item.ID);
                     
                 tasks.Add(Task.Run(() => AddDiscountToFood(newContextItem)));

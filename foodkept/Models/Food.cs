@@ -35,10 +35,19 @@ namespace FoodKept.Models
         public string RestaurantName { get; set; }
         public int Discount { get; set; }
         public byte[] FoodImage { get; set; }
+        public int RateCount
+        {
+            get { return Ratings.Count; }
+        }
+        public int RateTotal
+        {
+            get { return (Ratings.Sum(m => m.Rate)); }
+        }
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual IList<Discount> DiscountList { get; set; }
         public virtual CurrentPrice CurrentPrice { get; set; }
+        public virtual IList<StarRating> Ratings { get; set; }
 
         //Compare Food by quantity
         public int CompareTo(Food other)

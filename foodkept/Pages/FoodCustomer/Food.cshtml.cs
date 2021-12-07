@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using FoodKept.ViewModels;
 using System.Linq.Expressions;
+using FoodKept.Data;
 
 namespace FoodKept.Pages
 {
@@ -20,12 +21,14 @@ namespace FoodKept.Pages
     public class FoodModel : PageModel
     {
         private readonly IFoodRepository _foodRepository;
+        private readonly ShopContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public FoodModel(IFoodRepository foodRepository, UserManager<ApplicationUser> userManager)
+        public FoodModel(IFoodRepository foodRepository, UserManager<ApplicationUser> userManager, ShopContext context)
         {
             _foodRepository = foodRepository;
             _userManager = userManager;
+            _context = context;
         }
 
         [BindProperty]
@@ -73,7 +76,7 @@ namespace FoodKept.Pages
             CurrentFilter = searchString;
             CurrentCategory = currentCategory;
 
-            IQueryable<Food> foodIQ = _foodRepository.GetAllFood().AsQueryable();
+            IQueryable<Food> foodIQ = _foodRepository.GetAllFood().AsQueryable().Include(s => s.Ratings);
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -104,7 +107,18 @@ namespace FoodKept.Pages
 
             id = _userManager.GetUserId(User);
         }
-    }
 
-    
+        
+        public async Task<IActionResult> OnPostRating(int id, int fid)
+        {
+            StarRating starRating = new StarRating();
+            starRating.Rate = id;
+            starRating.FoodId = fid;
+
+            _context.StarRating.Add(starRating);
+            await  _context.SaveChangesAsync();
+
+            return new JsonResult("You rated this " + id.ToString() + "star(s)");
+        }
+    }
 }
