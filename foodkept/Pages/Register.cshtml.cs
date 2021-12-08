@@ -59,12 +59,12 @@ namespace FoodKept.Pages
 
                 var result = await userManager.CreateAsync(user, CusRegModel.Password);
 
-               /* var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
                 var confirmationLink = "https://localhost:5001/Register?handler=ConfirmEmail&token="
                     + HttpUtility.UrlEncode(token) + "&email=" + user.Email;
 
                 EmailSender emailSender = new EmailSender();
-                var emailResult = await emailSender.sendEmailAsync(user.Email, confirmationLink);*/
+                var emailResult = await emailSender.sendEmailAsync(user.Email, confirmationLink);
 
 
                 if (!await roleManager.RoleExistsAsync("Customer"))
@@ -76,8 +76,7 @@ namespace FoodKept.Pages
 
                 if (result.Succeeded && assign_role.Succeeded)
                 {
-                    await signInManager.SignInAsync(user, false);
-                    return RedirectToPage("Index");
+                    return RedirectToPage("User/ConfirmationEmail");
                 }
 
                 foreach (var error in result.Errors)
@@ -108,12 +107,12 @@ namespace FoodKept.Pages
 
                 var result = await userManager.CreateAsync(user, ResRegModel.Password);
 
-                /*var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
                 var confirmationLink = "https://localhost:5001/Register?handler=ConfirmEmail&token="
                     + HttpUtility.UrlEncode(token) + "&email=" + user.Email;
 
                 EmailSender emailSender = new EmailSender();
-                var emailResult = emailSender.sendEmailAsync(user.Email, confirmationLink);*/
+                var emailResult = emailSender.sendEmailAsync("foodkepterino@gmail.com", confirmationLink);
 
                 if (!await roleManager.RoleExistsAsync("Restaurant"))
                 {
@@ -122,10 +121,9 @@ namespace FoodKept.Pages
                 var assign_role = await userManager.AddToRoleAsync(user, "Restaurant");
 
 
-                if (result.Succeeded && assign_role.Succeeded) //&& emailResult.Result)
+                if (result.Succeeded && assign_role.Succeeded && emailResult.Result)
                 {
-                    await signInManager.SignInAsync(user, false);
-                    return RedirectToPage("Index");
+                    return RedirectToPage("User/RestaurantConfirmationEmail");
                 }
 
                 foreach (var error in result.Errors)
@@ -143,6 +141,7 @@ namespace FoodKept.Pages
             if (user == null)
                 return RedirectToPage("./Register");
             var result = await userManager.ConfirmEmailAsync(user, token);
+            await signInManager.SignInAsync(user, false);
             return RedirectToPage("./index");
         }
     }
