@@ -12,6 +12,10 @@ using Microsoft.EntityFrameworkCore;
 using FoodKept.Data;
 using Microsoft.AspNetCore.Identity;
 using FoodKept.Models;
+using Serilog;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Serilog.Formatting.Json;
 
 namespace FoodKept
 {
@@ -24,9 +28,21 @@ namespace FoodKept
 
         public IConfiguration Configuration { get; }
 
+        public ILifetimeScope AutofacContainer { get; private set; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .WriteTo.File(new JsonFormatter(), "Logs/log-.json", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            services.AddSingleton(x => Log.Logger);
             services.AddRazorPages().AddRazorRuntimeCompilation();
 
             services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
@@ -63,6 +79,11 @@ namespace FoodKept
 
         }
 
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.Register(x => Log.Logger).SingleInstance();
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -78,8 +99,12 @@ namespace FoodKept
                 app.UseHsts();
             }
 
+            this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseSerilogRequestLogging();
 
             app.UseRouting();
 
@@ -87,8 +112,6 @@ namespace FoodKept
 
             app.UseAuthorization();
 
-
-            //app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();

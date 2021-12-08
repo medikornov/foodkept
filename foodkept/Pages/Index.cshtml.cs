@@ -12,10 +12,10 @@ namespace FoodKept.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly Serilog.ILogger _logger;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public IndexModel(ILogger<IndexModel> logger, UserManager<ApplicationUser> userManager)
+        public IndexModel(Serilog.ILogger logger, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             _userManager = userManager;
@@ -24,7 +24,6 @@ namespace FoodKept.Pages
 
         public void OnGet()
         {
-
            
         }
 
