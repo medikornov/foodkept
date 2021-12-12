@@ -25,7 +25,7 @@ namespace FoodKept.Pages
         public async Task<IActionResult> OnPostLogoutAsync()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToPage("Login");
+            return RedirectToPage("/User/Login");
         }
 
         public IActionResult OnPostDontLogoutAsync()

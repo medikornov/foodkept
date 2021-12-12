@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace FoodKept.Pages
+namespace FoodKept.Pages.User
 {
     
     public class LoginModel : PageModel
@@ -38,7 +38,7 @@ namespace FoodKept.Pages
                 {
                     if(returnUrl == null || returnUrl == "/")
                     {
-                        return RedirectToPage("Index");
+                        return RedirectToPage("../Index");
                     }
                     else
                     {

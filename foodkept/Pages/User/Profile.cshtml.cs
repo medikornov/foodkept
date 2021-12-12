@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace FoodKept.Pages
+namespace FoodKept.Pages.User
 {
     [Authorize(Roles = "Admin, Restaurant, Customer")]
     public class ProfileModel : PageModel
@@ -47,7 +47,7 @@ namespace FoodKept.Pages
             IdentityResult result = await _userManager.UpdateAsync(user);
 
             if (result.Succeeded)
-                return RedirectToPage("./Index");
+                return RedirectToPage("../Index");
 
             return RedirectToPage("/Profile");
         }
